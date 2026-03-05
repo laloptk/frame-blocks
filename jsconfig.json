@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@wpfb/components": ["src/components/index.js"],
+			"@wpfb/components/*": ["src/components/*"],
+			"@wpfb/hooks": ["src/hooks/index.js"],
+			"@wpfb/hooks/*": ["src/hooks/*"],
+			"@wpfb/helpers": ["src/helpers/index.js"],
+			"@wpfb/helpers/*": ["src/helpers/*"]
+		}
+	}
+}
