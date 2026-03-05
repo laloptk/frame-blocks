@@ -7,15 +7,15 @@ This file is built by reverse engineering the current `levelupwp/code-window` im
 ```text
 You are a senior WordPress Gutenberg engineer working in a block theme.
 
-Build a static Gutenberg block named `levelupwp/code-window` that renders a stylized code editor window with syntax-highlighted code.
+Build a static Gutenberg block named `wpframeblocks/code-syntax-heighlighter` that renders stylized syntax-highlighted code.
 
 Use this architecture exactly:
-- `blocks/code-window/block.json`
-- `blocks/code-window/index.js`
-- `blocks/code-window/edit.js`
-- `blocks/code-window/save.js`
-- `blocks/code-window/style.scss`
-- `blocks/code-window/editor.scss`
+- `blocks/code-syntax-highlighter/block.json`
+- `blocks/code-syntax-highlighter/index.js`
+- `blocks/code-syntax-highlighter/edit.js`
+- `blocks/code-syntax-highlighter/save.js`
+- `blocks/code-syntax-highlighter/style.scss`
+- `blocks/code-syntax-highlighter/editor.scss`
 - `src/components/CodeHighlighter.js`
 - `src/components/CodeEditorLine.js`
 - `src/components/hooks/useTokens.js`
@@ -23,23 +23,17 @@ Use this architecture exactly:
 
 Functional requirements:
 1) Attributes
-- `window_title` string default "functions.php - levelupwp-theme"
 - `language` string default `php`
 - `theme` string default `github-dark`
 - `tokens` array default `[]`
 - `bg` string default `#0F172A`
 - `code` string default sample PHP snippet
-- `corner_top_left` string default "component.hero [1440x900]"
-- `corner_bottom_right` string default "v2.4.1 - Gutenberg Ready"
 
 2) Editor controls
 - Inspector controls for:
-  - window title
   - language select
   - theme select
   - code textarea
-  - top-left label
-  - bottom-right label
 
 3) Tokenization and performance
 - Use Shiki web bundle.

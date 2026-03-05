@@ -1,0 +1,128 @@
+/**
+ * Code Syntax Highlighter — shared frontend + editor styles
+ * BEM ctx: `code`  |  root: .wp-block-frames-code
+ * REF_W: 900 (matches vscode context)
+ *
+ * Supplementary tokens are marked (* supplementary — not yet in design-system.html)
+ */
+
+:root {
+	/* Backgrounds */
+	--frames-code-bg: #0f172a; /* (*) */
+
+	/* Text / line numbers */
+	--frames-code-line-num-color: rgba(255, 255, 255, 0.3); /* (*) */
+	--frames-code-status-color: rgba(255, 255, 255, 0.4); /* (*) */
+
+	/* Cursor */
+	--frames-code-cursor-color: rgba(174, 175, 173, 1); /* (*) */
+
+	/* Typography */
+	--frames-code-font: "Fira Code", "Source Code Pro", Consolas, monospace; /* (*) */
+	--frames-code-font-size: 13px; /* (*) */
+	--frames-code-line-h: 1.65; /* (*) */
+}
+
+.wp-block-frames-code {
+	background: var(--frames-code-bg);
+	border-radius: var(--frames-radius-lg);
+	box-shadow: var(--frames-shadow-xl);
+	overflow: hidden;
+	font-family: var(--frames-code-font);
+	container-type: inline-size;
+
+	// ── Body / scroll area ────────────────────────────────────
+	&__body {
+		overflow-x: auto;
+		padding: var(--frames-space-3) 0;
+	}
+
+	// ── Code listing ──────────────────────────────────────────
+	&__pre {
+		margin: 0;
+		padding: 0;
+		overflow: visible;
+	}
+
+	&__code {
+		display: block;
+		font-family: var(--frames-code-font);
+		font-size: var(--frames-code-font-size);
+		line-height: var(--frames-code-line-h);
+	}
+
+	// ── Per-line layout ───────────────────────────────────────
+	&__line {
+		display: flex;
+		align-items: baseline;
+		padding: 0 var(--frames-space-4);
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.03);
+		}
+	}
+
+	&__line-num {
+		flex: 0 0 auto;
+		width: 3ch;
+		margin-right: var(--frames-space-5);
+		padding-right: var(--frames-space-3);
+		border-right: 1px solid rgba(255, 255, 255, 0.08);
+		color: var(--frames-code-line-num-color);
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+		font-size: 0.9em;
+		user-select: none;
+	}
+
+	&__line-tokens {
+		flex: 1;
+		white-space: pre;
+		display: inline-flex;
+		align-items: baseline;
+	}
+
+	// ── Cursor ────────────────────────────────────────────────
+	&__cursor {
+		display: inline-block;
+		width: 2px;
+		height: 1.1em;
+		background: var(--frames-code-cursor-color);
+		vertical-align: text-bottom;
+		animation: wp-block-frames-code-blink 1.2s step-end infinite;
+	}
+
+	// ── Status / warning messages ─────────────────────────────
+	&__status {
+		padding: var(--frames-space-3) var(--frames-space-5);
+		color: var(--frames-code-status-color);
+		font-family: "Segoe UI", system-ui, sans-serif;
+		font-size: 13px;
+		font-style: italic;
+
+		&--error {
+			color: #f97583;
+		}
+	}
+
+	&__warning {
+		margin: 0;
+		padding: var(--frames-space-2) var(--frames-space-5);
+		color: #febc2e;
+		font-family: "Segoe UI", system-ui, sans-serif;
+		font-size: 12px;
+		background: rgba(254, 188, 46, 0.1);
+		border-left: 3px solid #febc2e;
+	}
+}
+
+@keyframes wp-block-frames-code-blink {
+	0%,
+	100% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+}

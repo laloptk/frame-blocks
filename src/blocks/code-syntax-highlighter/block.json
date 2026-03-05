@@ -1,0 +1,42 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpframeblocks/code-syntax-highlighter",
+	"version": "0.1.0",
+	"title": "Code Syntax Highlighter",
+	"category": "text",
+	"icon": "editor-code",
+	"description": "Renders syntax-highlighted code with Shiki tokenization. Tokens are pre-computed in the editor and served as static HTML on the frontend.",
+	"keywords": [ "code", "syntax", "highlight", "shiki", "frame" ],
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ]
+	},
+	"attributes": {
+		"language": {
+			"type": "string",
+			"default": "php"
+		},
+		"theme": {
+			"type": "string",
+			"default": "github-dark"
+		},
+		"tokens": {
+			"type": "array",
+			"default": []
+		},
+		"bg": {
+			"type": "string",
+			"default": "#0F172A"
+		},
+		"code": {
+			"type": "string",
+			"default": "<?php\n\nfunction greet( string $name ): string {\n    return \"Hello, {$name}!\";\n}\n\necho greet( 'World' );\n"
+		}
+	},
+	"textdomain": "wpframeblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}

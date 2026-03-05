@@ -12,6 +12,9 @@
 		"start": "wp-scripts start"
 	},
 	"main": "build/index.js",
+	"dependencies": {
+		"shiki": "^1.0.0"
+	},
 	"devDependencies": {
 		"@wordpress/scripts": "^30.0.0"
 	}

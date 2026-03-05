@@ -1,0 +1,15 @@
+/**
+ * Code Syntax Highlighter — editor-only styles
+ */
+
+.wp-block-frames-code {
+	// Ensure the block has a visible minimum height in the editor canvas
+	// even before code is entered.
+	min-height: 80px;
+
+	// Suppress the blinking cursor animation while editing — less distracting.
+	.wp-block-frames-code__cursor {
+		animation: none;
+		opacity: 1;
+	}
+}
