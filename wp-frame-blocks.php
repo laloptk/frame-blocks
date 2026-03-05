@@ -24,3 +24,17 @@ function wpframeblocks_block_init() {
 	);
 }
 add_action( 'init', 'wpframeblocks_block_init' );
+
+/**
+ * Enqueue Font Awesome for block icons (editor + frontend).
+ * Required by any block that uses fa-* icon classes in its markup.
+ */
+function wpframeblocks_enqueue_block_assets() {
+	wp_enqueue_style(
+		'wpframeblocks-font-awesome',
+		'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css',
+		[],
+		'6.5.0'
+	);
+}
+add_action( 'enqueue_block_assets', 'wpframeblocks_enqueue_block_assets' );

@@ -1,14 +1,137 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, InspectorControls, InnerBlocks } from '@wordpress/block-editor';
+import {
+	useBlockProps,
+	InspectorControls,
+	InnerBlocks,
+} from '@wordpress/block-editor';
 import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
 
 import './editor.scss';
 
+function SafariChrome( { url, tabTitle } ) {
+	return (
+		<div className="wp-block-frames-safari__chrome">
+			<div className="wp-block-frames-safari__toolbar">
+				<div className="wp-block-frames-safari__traffic">
+					<div className="wp-block-frames-safari__btn wp-block-frames-safari__btn--close">
+						<i className="fa-solid fa-xmark"></i>
+					</div>
+					<div className="wp-block-frames-safari__btn wp-block-frames-safari__btn--min">
+						<i className="fa-solid fa-minus"></i>
+					</div>
+					<div className="wp-block-frames-safari__btn wp-block-frames-safari__btn--max">
+						<i className="fa-solid fa-up-right-and-down-left-from-center"></i>
+					</div>
+				</div>
+
+				<div className="wp-block-frames-safari__nav">
+					<i className="fa-solid fa-chevron-left"></i>
+					<i className="fa-solid fa-chevron-right"></i>
+				</div>
+
+				<div className="wp-block-frames-safari__tabs">
+					<div className="wp-block-frames-safari__tab wp-block-frames-safari__tab--active">
+						<i className="fa-solid fa-lock"></i>
+						<span>{ tabTitle || __( 'My Page', 'wpframeblocks' ) }</span>
+					</div>
+				</div>
+
+				<div className="wp-block-frames-safari__toolbar-right">
+					<i className="fa-solid fa-share-from-square"></i>
+					<i className="fa-solid fa-plus"></i>
+					<i className="fa-regular fa-clone"></i>
+				</div>
+			</div>
+
+			<div className="wp-block-frames-safari__addressbar">
+				<i className="wp-block-frames-safari__bar-icon fa-solid fa-shield-halved"></i>
+				<i className="wp-block-frames-safari__bar-icon fa-solid fa-text-slash"></i>
+				<div className="wp-block-frames-safari__address">
+					<i className="fa-solid fa-lock"></i>
+					<span>{ url || 'example.com' }</span>
+					<i className="fa-solid fa-rotate wp-block-frames-safari__address-reload"></i>
+				</div>
+				<i className="wp-block-frames-safari__bar-icon fa-regular fa-bookmark"></i>
+			</div>
+		</div>
+	);
+}
+
+function ChromeChrome( { url, tabTitle } ) {
+	return (
+		<div className="wp-block-frames-chrome__chrome">
+			<div className="wp-block-frames-chrome__tabstrip">
+				<div className="wp-block-frames-chrome__tabs">
+					<div className="wp-block-frames-chrome__tab wp-block-frames-chrome__tab--active">
+						<div className="wp-block-frames-chrome__tab-favicon wp-block-frames-chrome__tab-favicon--google">
+							<i className="fa-brands fa-google"></i>
+						</div>
+						<span className="wp-block-frames-chrome__tab-title">
+							{ tabTitle || __( 'My Page', 'wpframeblocks' ) }
+						</span>
+						<div className="wp-block-frames-chrome__tab-close">
+							<i className="fa-solid fa-xmark"></i>
+						</div>
+					</div>
+				</div>
+
+				<div className="wp-block-frames-chrome__tab-new">
+					<i className="fa-solid fa-plus"></i>
+				</div>
+
+				<div className="wp-block-frames-chrome__win-controls">
+					<div className="wp-block-frames-chrome__win-btn wp-block-frames-chrome__win-btn--min">
+						<i className="fa-solid fa-minus"></i>
+					</div>
+					<div className="wp-block-frames-chrome__win-btn wp-block-frames-chrome__win-btn--max">
+						<i className="fa-regular fa-square"></i>
+					</div>
+					<div className="wp-block-frames-chrome__win-btn wp-block-frames-chrome__win-btn--close">
+						<i className="fa-solid fa-xmark"></i>
+					</div>
+				</div>
+			</div>
+
+			<div className="wp-block-frames-chrome__toolbar">
+				<div className="wp-block-frames-chrome__nav">
+					<div className="wp-block-frames-chrome__nav-btn wp-block-frames-chrome__nav-btn--disabled">
+						<i className="fa-solid fa-arrow-left"></i>
+					</div>
+					<div className="wp-block-frames-chrome__nav-btn wp-block-frames-chrome__nav-btn--disabled">
+						<i className="fa-solid fa-arrow-right"></i>
+					</div>
+					<div className="wp-block-frames-chrome__nav-btn">
+						<i className="fa-solid fa-rotate-right"></i>
+					</div>
+				</div>
+
+				<div className="wp-block-frames-chrome__omnibox">
+					<i className="wp-block-frames-chrome__omnibox-lock fa-solid fa-lock"></i>
+					<span className="wp-block-frames-chrome__omnibox-url">
+						{ url || 'example.com' }
+					</span>
+					<i className="wp-block-frames-chrome__omnibox-star fa-regular fa-star"></i>
+				</div>
+
+				<div className="wp-block-frames-chrome__toolbar-right">
+					<div className="wp-block-frames-chrome__toolbar-icon">
+						<i className="fa-solid fa-puzzle-piece"></i>
+					</div>
+					<div className="wp-block-frames-chrome__profile">G</div>
+					<div className="wp-block-frames-chrome__toolbar-icon">
+						<i className="fa-solid fa-ellipsis-vertical"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}
+
 export default function Edit( { attributes, setAttributes } ) {
-	const { url, browserTheme } = attributes;
+	const { browserVariant, url, tabTitle } = attributes;
 
 	const blockProps = useBlockProps( {
-		className: `wpf-browser-frame wpf-browser-frame--${ browserTheme }`,
+		className: `wp-block-frames-${ browserVariant }`,
 	} );
 
 	return (
@@ -16,35 +139,43 @@ export default function Edit( { attributes, setAttributes } ) {
 			<InspectorControls>
 				<PanelBody title={ __( 'Browser Settings', 'wpframeblocks' ) }>
 					<SelectControl
-						label={ __( 'Theme', 'wpframeblocks' ) }
-						value={ browserTheme }
+						label={ __( 'Browser', 'wpframeblocks' ) }
+						value={ browserVariant }
 						options={ [
-							{ label: __( 'Light', 'wpframeblocks' ), value: 'light' },
-							{ label: __( 'Dark', 'wpframeblocks' ), value: 'dark' },
+							{ label: 'Safari', value: 'safari' },
+							{ label: 'Chrome', value: 'chrome' },
 						] }
-						onChange={ ( value ) => setAttributes( { browserTheme: value } ) }
+						onChange={ ( value ) =>
+							setAttributes( { browserVariant: value } )
+						}
 					/>
 					<TextControl
 						label={ __( 'URL', 'wpframeblocks' ) }
 						value={ url }
-						placeholder="https://example.com"
+						placeholder="example.com"
 						onChange={ ( value ) => setAttributes( { url: value } ) }
+					/>
+					<TextControl
+						label={ __( 'Tab Title', 'wpframeblocks' ) }
+						value={ tabTitle }
+						placeholder={ __( 'My Page', 'wpframeblocks' ) }
+						onChange={ ( value ) =>
+							setAttributes( { tabTitle: value } )
+						}
 					/>
 				</PanelBody>
 			</InspectorControls>
 
 			<div { ...blockProps }>
-				<div className="wpf-browser-frame__chrome">
-					<div className="wpf-browser-frame__dots">
-						<span></span>
-						<span></span>
-						<span></span>
-					</div>
-					<div className="wpf-browser-frame__address-bar">
-						{ url || 'https://example.com' }
-					</div>
-				</div>
-				<div className="wpf-browser-frame__content">
+				{ browserVariant === 'safari' ? (
+					<SafariChrome url={ url } tabTitle={ tabTitle } />
+				) : (
+					<ChromeChrome url={ url } tabTitle={ tabTitle } />
+				) }
+
+				<div
+					className={ `wp-block-frames-${ browserVariant }__viewport` }
+				>
 					<InnerBlocks />
 				</div>
 			</div>

@@ -1,3 +1,8 @@
-.wpf-browser-frame {
-	// Editor-only overrides
+// Browser Frame — Editor-only overrides
+
+// The viewport uses overflow:auto on the frontend so content scrolls inside the frame.
+// In the editor we unset it so InnerBlocks selection outlines are never clipped.
+.wp-block-frames-safari__viewport,
+.wp-block-frames-chrome__viewport {
+	overflow: visible;
 }

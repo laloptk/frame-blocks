@@ -6,21 +6,25 @@
 	"title": "Browser Frame",
 	"category": "media",
 	"icon": "desktop",
-	"description": "Display content inside a browser window frame.",
-	"keywords": ["browser", "frame", "window", "mockup", "screenshot"],
+	"description": "Display content inside a browser window frame. Choose between Safari and Chrome styles.",
+	"keywords": ["browser", "frame", "window", "mockup", "safari", "chrome", "screenshot"],
 	"example": {},
 	"supports": {
 		"html": false,
 		"align": ["wide", "full"]
 	},
 	"attributes": {
+		"browserVariant": {
+			"type": "string",
+			"default": "safari"
+		},
 		"url": {
 			"type": "string",
-			"default": ""
+			"default": "example.com"
 		},
-		"browserTheme": {
+		"tabTitle": {
 			"type": "string",
-			"default": "light"
+			"default": "My Page"
 		}
 	},
 	"textdomain": "wpframeblocks",
