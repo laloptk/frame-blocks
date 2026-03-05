@@ -1,0 +1,55 @@
+.wpf-browser-frame {
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+
+	&__chrome {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 10px 16px;
+		background: #e8e8e8;
+	}
+
+	&__dots {
+		display: flex;
+		gap: 6px;
+
+		span {
+			display: block;
+			width: 12px;
+			height: 12px;
+			border-radius: 50%;
+			background: #ccc;
+
+			&:nth-child(1) { background: #ff5f57; }
+			&:nth-child(2) { background: #febc2e; }
+			&:nth-child(3) { background: #28c840; }
+		}
+	}
+
+	&__address-bar {
+		flex: 1;
+		padding: 4px 10px;
+		background: #fff;
+		border-radius: 4px;
+		font-size: 12px;
+		color: #666;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	&__content {
+		background: #fff;
+	}
+
+	&--dark &__chrome {
+		background: #2d2d2d;
+	}
+
+	&--dark &__address-bar {
+		background: #1a1a1a;
+		color: #aaa;
+	}
+}

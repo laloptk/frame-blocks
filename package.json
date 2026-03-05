@@ -1,0 +1,18 @@
+{
+	"name": "wp-frame-blocks",
+	"version": "0.1.0",
+	"description": "WP Frame Blocks - A collection of frame blocks for WordPress.",
+	"scripts": {
+		"build": "wp-scripts build && wp-scripts build-blocks-manifest --input build/blocks",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start"
+	},
+	"main": "build/index.js",
+	"devDependencies": {
+		"@wordpress/scripts": "^30.0.0"
+	}
+}

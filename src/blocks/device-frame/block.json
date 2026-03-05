@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpframeblocks/device-frame",
+	"version": "0.1.0",
+	"title": "Device Frame",
+	"category": "media",
+	"icon": "smartphone",
+	"description": "Display content inside a device frame (phone, tablet, desktop).",
+	"keywords": ["device", "frame", "phone", "tablet", "mockup"],
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"]
+	},
+	"attributes": {
+		"deviceType": {
+			"type": "string",
+			"default": "mobile"
+		}
+	},
+	"textdomain": "wpframeblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}

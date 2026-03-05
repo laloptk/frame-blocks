@@ -1,0 +1,12 @@
+.wpf-code-editor-frame {
+	// Editor-only overrides
+	&__body .components-textarea-control__input {
+		font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+		font-size: 13px;
+		background: transparent;
+		color: inherit;
+		border: none;
+		resize: vertical;
+		width: 100%;
+	}
+}

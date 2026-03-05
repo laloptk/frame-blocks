@@ -1,0 +1,78 @@
+.wpf-code-editor-frame {
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+	font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+
+	&__titlebar {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 10px 16px;
+	}
+
+	&__dots {
+		display: flex;
+		gap: 6px;
+
+		span {
+			display: block;
+			width: 12px;
+			height: 12px;
+			border-radius: 50%;
+
+			&:nth-child(1) { background: #ff5f57; }
+			&:nth-child(2) { background: #febc2e; }
+			&:nth-child(3) { background: #28c840; }
+		}
+	}
+
+	&__filename {
+		flex: 1;
+		font-size: 13px;
+	}
+
+	&__language {
+		font-size: 11px;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		opacity: 0.6;
+	}
+
+	&__body {
+		padding: 16px;
+
+		pre {
+			margin: 0;
+			overflow-x: auto;
+		}
+
+		code {
+			font-family: inherit;
+			font-size: 14px;
+			line-height: 1.6;
+		}
+	}
+
+	// Dark theme (default)
+	&--dark {
+		background: #1e1e1e;
+		color: #d4d4d4;
+
+		.wpf-code-editor-frame__titlebar {
+			background: #2d2d2d;
+			color: #ccc;
+		}
+	}
+
+	// Light theme
+	&--light {
+		background: #fafafa;
+		color: #333;
+
+		.wpf-code-editor-frame__titlebar {
+			background: #e8e8e8;
+			color: #555;
+		}
+	}
+}

@@ -1,0 +1,34 @@
+.wpf-device-frame {
+	display: flex;
+	justify-content: center;
+
+	&__shell {
+		position: relative;
+		border: 2px solid #ccc;
+		border-radius: 16px;
+		overflow: hidden;
+		background: #fff;
+	}
+
+	&__screen {
+		overflow: hidden;
+	}
+
+	&--mobile &__shell {
+		width: 320px;
+		min-height: 568px;
+		border-radius: 32px;
+	}
+
+	&--tablet &__shell {
+		width: 768px;
+		min-height: 480px;
+		border-radius: 20px;
+	}
+
+	&--desktop &__shell {
+		width: 100%;
+		min-height: 400px;
+		border-radius: 8px;
+	}
+}

@@ -1,0 +1,59 @@
+const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
+const path = require( 'path' );
+const fs = require( 'fs' );
+
+const blocksDir = path.resolve( __dirname, 'src/blocks' );
+
+/**
+ * Auto-discovers blocks in src/blocks/[block-name]/ and builds entry points.
+ * Each block must have a block.json and an index.js.
+ * Optionally includes view.js if present.
+ */
+function getBlockEntries() {
+	if ( ! fs.existsSync( blocksDir ) ) {
+		return {};
+	}
+
+	return fs
+		.readdirSync( blocksDir )
+		.filter( ( name ) => {
+			const blockPath = path.join( blocksDir, name );
+			return (
+				fs.statSync( blockPath ).isDirectory() &&
+				fs.existsSync( path.join( blockPath, 'block.json' ) )
+			);
+		} )
+		.reduce( ( entries, blockName ) => {
+			const blockPath = path.join( blocksDir, blockName );
+
+			if ( fs.existsSync( path.join( blockPath, 'index.js' ) ) ) {
+				entries[ `blocks/${ blockName }/index` ] = path.join(
+					blockPath,
+					'index.js'
+				);
+			}
+
+			if ( fs.existsSync( path.join( blockPath, 'view.js' ) ) ) {
+				entries[ `blocks/${ blockName }/view` ] = path.join(
+					blockPath,
+					'view.js'
+				);
+			}
+
+			return entries;
+		}, {} );
+}
+
+module.exports = {
+	...defaultConfig,
+	entry: getBlockEntries(),
+	resolve: {
+		...defaultConfig.resolve,
+		alias: {
+			...( defaultConfig.resolve?.alias ?? {} ),
+			'@wpfb/components': path.resolve( __dirname, 'src/components' ),
+			'@wpfb/hooks': path.resolve( __dirname, 'src/hooks' ),
+			'@wpfb/helpers': path.resolve( __dirname, 'src/helpers' ),
+		},
+	},
+};

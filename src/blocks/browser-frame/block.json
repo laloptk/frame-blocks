@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpframeblocks/browser-frame",
+	"version": "0.1.0",
+	"title": "Browser Frame",
+	"category": "media",
+	"icon": "desktop",
+	"description": "Display content inside a browser window frame.",
+	"keywords": ["browser", "frame", "window", "mockup", "screenshot"],
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"]
+	},
+	"attributes": {
+		"url": {
+			"type": "string",
+			"default": ""
+		},
+		"browserTheme": {
+			"type": "string",
+			"default": "light"
+		}
+	},
+	"textdomain": "wpframeblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}

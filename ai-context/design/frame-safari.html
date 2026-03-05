@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safari Browser – Frames Mockup</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8e8e8;
+    background-image:
+      radial-gradient(ellipse at 30% 40%, rgba(180,180,200,.4) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 70%, rgba(160,160,180,.3) 0%, transparent 55%);
+    padding: 32px 24px;
+    font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  }
+
+  /* ── TOKENS ── */
+  :root {
+    --frames-safari-toolbar-top:       #f7f7f7;
+    --frames-safari-toolbar-bot:       #ebebeb;
+    --frames-safari-border:            #d0d0d0;
+    --frames-safari-tab-active:        #ffffff;
+    --frames-safari-tab-inactive:      #dcdcdc;
+    --frames-safari-tab-strip:         #e0e0e0;
+    --frames-safari-input-bg:          #ffffff;
+    --frames-safari-input-border:      #c8c8c8;
+    --frames-safari-text:              #333333;
+    --frames-safari-url-text:          #1a1a1a;
+    --frames-safari-url-domain:        #000000;
+    --frames-safari-icon:              #555555;
+    --frames-safari-btn-close:         #ff5f57;
+    --frames-safari-btn-close-border:  #e0443e;
+    --frames-safari-btn-min:           #febc2e;
+    --frames-safari-btn-min-border:    #d4a017;
+    --frames-safari-btn-max:           #28c840;
+    --frames-safari-btn-max-border:    #1aab29;
+    /* Supplementary — not yet in design-system.html */
+    --frames-safari-nav-color:  #3c3c3c; /* (*) */
+    --frames-safari-icon-dim:   #888888; /* (*) */
+  }
+
+  /* ══════════════════════════════════════════
+     BROWSER STAGE  –  4:2.7  (macOS window ratio)
+     Scales in both axes via aspect-ratio + clamp.
+     No transform: scale() used anywhere.
+  ══════════════════════════════════════════ */
+  .wp-block-frames-safari {
+    width: min(94vw, calc(94vh * (4 / 2.7)));
+    aspect-ratio: 4 / 2.7;
+    position: relative;
+    container-type: size;
+
+    border-radius: 12px;
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,.18),
+      0 2px 4px rgba(0,0,0,.12),
+      0 20px 60px rgba(0,0,0,.35),
+      0 6px 16px rgba(0,0,0,.2);
+    overflow: hidden;
+    background: transparent;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── WINDOW CHROME (title bar area) ── */
+  .wp-block-frames-safari__chrome {
+    flex-shrink: 0;
+    background: linear-gradient(180deg, var(--frames-safari-toolbar-top) 0%, var(--frames-safari-toolbar-bot) 100%);
+    border-bottom: 1px solid var(--frames-safari-border);
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0;
+  }
+
+  /* ── TOP ROW: traffic lights + nav + tabs + right icons ── */
+  .wp-block-frames-safari__toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: clamp(6px, 1.4cqw, 14px) clamp(8px, 1.6cqw, 18px);
+  }
+
+  /* Traffic lights */
+  .wp-block-frames-safari__traffic {
+    display: flex;
+    align-items: center;
+    gap: clamp(4px, .55cqw, 7px);
+    flex-shrink: 0;
+    margin-right: clamp(10px, 1.8cqw, 24px);
+  }
+  .wp-block-frames-safari__btn {
+    width:  clamp(9px, 1.05cqw, 14px);
+    height: clamp(9px, 1.05cqw, 14px);
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: clamp(5px, .6cqw, 8px);
+    color: rgba(0,0,0,0);
+    transition: color .15s;
+  }
+  .wp-block-frames-safari__btn:hover { color: rgba(0,0,0,.5); }
+  .wp-block-frames-safari__btn--close { background: var(--frames-safari-btn-close); border-color: var(--frames-safari-btn-close-border); }
+  .wp-block-frames-safari__btn--min   { background: var(--frames-safari-btn-min);   border-color: var(--frames-safari-btn-min-border); }
+  .wp-block-frames-safari__btn--max   { background: var(--frames-safari-btn-max);   border-color: var(--frames-safari-btn-max-border); }
+
+  /* Back / Forward */
+  .wp-block-frames-safari__nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(0px, .5cqw, 8px);
+    flex-shrink: 0;
+    margin-right: clamp(6px, 1cqw, 14px);
+    color: var(--frames-safari-nav-color);
+    font-size: clamp(11px, 1.3cqw, 17px);
+  }
+  .wp-block-frames-safari__nav i {
+    padding: clamp(2px, .4cqw, 6px);
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: .5;
+  }
+  .wp-block-frames-safari__nav i:last-child { opacity: 1; }
+  .wp-block-frames-safari__nav i:hover { background: rgba(0,0,0,.08); opacity: 1; }
+
+  /* Tab strip */
+  .wp-block-frames-safari__tabs {
+    display: flex;
+    align-items: stretch;
+    flex: 0 0 auto;
+    height: clamp(22px, 2.6cqw, 34px);
+    gap: clamp(1px, .2cqw, 3px);
+    margin-right: clamp(6px, 1cqw, 14px);
+    overflow: hidden;
+  }
+  .wp-block-frames-safari__tab {
+    display: flex;
+    align-items: center;
+    gap: clamp(3px, .4cqw, 6px);
+    padding: 0 clamp(6px, .9cqw, 14px);
+    background: var(--frames-safari-tab-inactive);
+    border-radius: clamp(4px, .5cqw, 8px) clamp(4px, .5cqw, 8px) 0 0;
+    font-size: clamp(8px, .9cqw, 12px);
+    color: var(--frames-safari-text);
+    cursor: pointer;
+    white-space: nowrap;
+    border: 1px solid rgba(0,0,0,.1);
+    border-bottom: none;
+    min-width: 0;
+    max-width: clamp(80px, 12cqw, 200px);
+  }
+  .wp-block-frames-safari__tab--active {
+    background: var(--frames-safari-tab-active);
+    color: var(--frames-safari-url-text);
+    z-index: 1;
+  }
+  .wp-block-frames-safari__tab i { font-size: clamp(7px, .85cqw, 11px); color: var(--frames-safari-icon-dim); flex-shrink: 0; }
+  .wp-block-frames-safari__tab span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Address bar row */
+  .wp-block-frames-safari__addressbar {
+    display: flex;
+    align-items: center;
+    gap: clamp(4px, .7cqw, 10px);
+    padding: clamp(4px, .6cqw, 8px) clamp(8px, 1.6cqw, 18px);
+    padding-top: 0;
+  }
+
+  /* Shield / reader icon (left of bar) */
+  .wp-block-frames-safari__bar-icon {
+    color: var(--frames-safari-icon);
+    font-size: clamp(10px, 1.1cqw, 15px);
+    flex-shrink: 0;
+    cursor: pointer;
+    padding: clamp(2px, .3cqw, 5px);
+    border-radius: 4px;
+  }
+  .wp-block-frames-safari__bar-icon:hover { background: rgba(0,0,0,.08); }
+
+  /* Address / search field */
+  .wp-block-frames-safari__address {
+    flex: 1;
+    height: clamp(22px, 2.6cqw, 32px);
+    background: var(--frames-safari-input-bg);
+    border: 1px solid var(--frames-safari-input-border);
+    border-radius: clamp(5px, .7cqw, 8px);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(4px, .5cqw, 7px);
+    cursor: text;
+    padding: 0 clamp(6px, .9cqw, 12px);
+    min-width: 0;
+  }
+  .wp-block-frames-safari__address i {
+    font-size: clamp(8px, .9cqw, 12px);
+    color: var(--frames-safari-icon);
+    flex-shrink: 0;
+  }
+  .wp-block-frames-safari__address span {
+    font-size: clamp(9px, 1cqw, 13px);
+    color: var(--frames-safari-url-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .wp-block-frames-safari__address-reload {
+    margin-left: auto;
+    font-size: clamp(8px, .9cqw, 12px);
+    color: var(--frames-safari-icon-dim);
+  }
+
+  /* Right-side toolbar icons */
+  .wp-block-frames-safari__toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: clamp(2px, .4cqw, 8px);
+    flex-shrink: 0;
+    color: var(--frames-safari-nav-color);
+    font-size: clamp(10px, 1.25cqw, 17px);
+  }
+  .wp-block-frames-safari__toolbar-right i {
+    padding: clamp(2px, .35cqw, 5px);
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: .75;
+  }
+  .wp-block-frames-safari__toolbar-right i:hover { background: rgba(0,0,0,.08); opacity: 1; }
+
+  /* ── CONTENT VIEWPORT (transparent) ── */
+  .wp-block-frames-safari__viewport {
+    flex: 1;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .wp-block-frames-safari__viewport::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        45deg,
+        rgba(0,0,0,.015) 0px,
+        rgba(0,0,0,.015) 1px,
+        transparent 1px,
+        transparent 20px
+      );
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="wp-block-frames-safari">
+
+  <!-- ── CHROME ── -->
+  <div class="wp-block-frames-safari__chrome">
+
+    <!-- Toolbar row: traffic lights + nav + tabs + right icons -->
+    <div class="wp-block-frames-safari__toolbar">
+
+      <!-- Traffic lights -->
+      <div class="wp-block-frames-safari__traffic">
+        <div class="wp-block-frames-safari__btn wp-block-frames-safari__btn--close"><i class="fa-solid fa-xmark"></i></div>
+        <div class="wp-block-frames-safari__btn wp-block-frames-safari__btn--min"><i class="fa-solid fa-minus"></i></div>
+        <div class="wp-block-frames-safari__btn wp-block-frames-safari__btn--max"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></div>
+      </div>
+
+      <!-- Back / Forward -->
+      <div class="wp-block-frames-safari__nav">
+        <i class="fa-solid fa-chevron-left"></i>
+        <i class="fa-solid fa-chevron-right"></i>
+      </div>
+
+      <!-- Tab strip -->
+      <div class="wp-block-frames-safari__tabs">
+        <div class="wp-block-frames-safari__tab">
+          <i class="fa-regular fa-square"></i>
+          <span>New Tab</span>
+        </div>
+        <div class="wp-block-frames-safari__tab wp-block-frames-safari__tab--active">
+          <i class="fa-solid fa-lock"></i>
+          <span>masterclass.com</span>
+        </div>
+      </div>
+
+      <!-- Right icons -->
+      <div class="wp-block-frames-safari__toolbar-right" style="margin-left:auto;">
+        <i class="fa-solid fa-share-from-square" title="Share"></i>
+        <i class="fa-solid fa-plus" title="New Tab"></i>
+        <i class="fa-regular fa-clone" title="Tab Overview"></i>
+      </div>
+    </div>
+
+    <!-- Address bar row -->
+    <div class="wp-block-frames-safari__addressbar">
+
+      <i class="wp-block-frames-safari__bar-icon fa-solid fa-shield-halved" title="Privacy Report"></i>
+      <i class="wp-block-frames-safari__bar-icon fa-solid fa-text-slash" title="Reader"></i>
+
+      <div class="wp-block-frames-safari__address">
+        <i class="fa-solid fa-lock"></i>
+        <span>masterclass.com</span>
+        <i class="fa-solid fa-rotate wp-block-frames-safari__address-reload"></i>
+      </div>
+
+      <i class="wp-block-frames-safari__bar-icon fa-regular fa-bookmark" title="Add Bookmark"></i>
+    </div>
+
+  </div><!-- /safari__chrome -->
+
+  <!-- ── TRANSPARENT VIEWPORT ── -->
+  <div class="wp-block-frames-safari__viewport"></div>
+
+</div><!-- /wp-block-frames-safari -->
+
+</body>
+</html>

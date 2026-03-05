@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VS Code – Frames Mockup</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1a1a2e;
+    background-image:
+      radial-gradient(ellipse at 25% 40%, rgba(0,122,204,.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 75% 70%, rgba(40,40,80,.25) 0%, transparent 55%);
+    padding: 24px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+
+  /* ══════════════════════════════════════════════
+     DESIGN SYSTEM TOKENS — VS Code (Dark+)
+     Source: Frames Design System :root
+     Supplementary tokens marked with (*)
+  ══════════════════════════════════════════════ */
+  :root {
+    /* Backgrounds */
+    --frames-vscode-bg:              #1e1e1e;
+    --frames-vscode-titlebar:        #3c3c3c;
+    --frames-vscode-activity:        #333333;
+    --frames-vscode-activity-border: #252526;
+    --frames-vscode-sidebar:         #252526;
+    --frames-vscode-sidebar-border:  #3c3c3c;
+    --frames-vscode-sidebar-header:  #bbbbbb;
+    --frames-vscode-explorer-hover:  rgba(255,255,255,0.05);
+    --frames-vscode-explorer-active: #094771;
+    --frames-vscode-tabstrip:        #2d2d2d;
+    --frames-vscode-tab-active-bg:   #1e1e1e;
+    --frames-vscode-tab-active-top:  #007acc;
+    --frames-vscode-tab-inactive:    #2d2d2d;
+    --frames-vscode-tab-border:      #252526;
+    --frames-vscode-editor-bg:       #1e1e1e;
+    /* Text */
+    --frames-vscode-text:            #d4d4d4;
+    --frames-vscode-text-dim:        #858585;
+    --frames-vscode-line-num:        #858585;
+    --frames-vscode-line-num-active: #c6c6c6;
+    /* Icons */
+    --frames-vscode-icon-active:     #ffffff;
+    --frames-vscode-icon-inactive:   #858585;
+    /* Status bar */
+    --frames-vscode-statusbar:       #007acc;
+    --frames-vscode-statusbar-text:  rgba(255,255,255,0.85);
+    /* Syntax tokens */
+    --frames-vscode-syn-keyword:     #569cd6;
+    --frames-vscode-syn-string:      #ce9178;
+    --frames-vscode-syn-comment:     #6a9955;
+    --frames-vscode-syn-function:    #dcdcaa;
+    --frames-vscode-syn-variable:    #9cdcfe;
+    --frames-vscode-syn-number:      #b5cea8;
+    --frames-vscode-syn-type:        #4ec9b0;
+
+    /* (*) Supplementary — not yet in design-system.html */
+    --frames-vscode-border:          #474747;
+    --frames-vscode-text-subtle:     #6e6e6e;
+    --frames-vscode-terminal-path:   #13a10e;
+    --frames-vscode-terminal-host:   #3a96dd;
+    --frames-vscode-icon-ts:         #3178c6;
+    --frames-vscode-icon-js:         #e8c84d;
+    --frames-vscode-icon-folder:     #dcb67a;
+  }
+
+  /* ══════════════════════════════════════════════
+     BLOCK ROOT — wp-block-frames-vscode
+     16:10 aspect-ratio stage + flex window merged.
+     container-type:size enables cqw units on all
+     descendants. No transform:scale() anywhere.
+  ══════════════════════════════════════════════ */
+  .wp-block-frames-vscode {
+    width: min(96vw, calc(96vh * (16 / 10)));
+    aspect-ratio: 16 / 10;
+    container-type: size;
+    border-radius: 8px;
+    box-shadow:
+      0 0 0 1.5px #3a3a3c,
+      0 32px 80px rgba(0,0,0,.75),
+      0 8px 24px rgba(0,0,0,.5);
+    overflow: hidden;
+    /* Window layout */
+    display: flex;
+    flex-direction: column;
+    background: var(--frames-vscode-bg);
+    color: var(--frames-vscode-text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: clamp(10px, 1.02cqw, 13px);
+  }
+
+  /* ── TITLE BAR ── */
+  .wp-block-frames-vscode__titlebar {
+    flex-shrink: 0;
+    height: clamp(22px, 2.34cqw, 30px);
+    background: var(--frames-vscode-titlebar);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 0 clamp(6px, 0.94cqw, 12px);
+    user-select: none;
+    gap: clamp(4px, 0.63cqw, 8px);
+  }
+  .wp-block-frames-vscode__titlebar-left {
+    display: flex;
+    align-items: center;
+    gap: clamp(5px, 0.78cqw, 10px);
+    flex-shrink: 0;
+  }
+  .wp-block-frames-vscode__logo {
+    color: var(--frames-vscode-statusbar);
+    font-size: clamp(10px, 1.25cqw, 16px);
+  }
+  .wp-block-frames-vscode__menubar {
+    display: flex;
+    align-items: center;
+  }
+  .wp-block-frames-vscode__menu-item {
+    padding: 2px clamp(4px, 0.63cqw, 8px);
+    font-size: clamp(9px, 0.94cqw, 12px);
+    color: var(--frames-vscode-text);
+    cursor: pointer;
+    border-radius: 3px;
+    white-space: nowrap;
+    line-height: clamp(18px, 2.03cqw, 26px);
+  }
+  .wp-block-frames-vscode__menu-item:hover { background: rgba(255,255,255,.1); }
+  .wp-block-frames-vscode__menu-item--muted { color: var(--frames-vscode-text-dim); }
+  .wp-block-frames-vscode__search {
+    flex: 1;
+    max-width: clamp(160px, 32.81cqw, 420px);
+    height: clamp(16px, 1.72cqw, 22px);
+    background: var(--frames-vscode-bg);
+    border: 1px solid var(--frames-vscode-border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: clamp(3px, 0.47cqw, 6px);
+    padding: 0 clamp(5px, 0.78cqw, 10px);
+    cursor: text;
+    min-width: 80px;
+  }
+  .wp-block-frames-vscode__search i   { color: var(--frames-vscode-text-dim); font-size: clamp(8px, 0.86cqw, 11px); flex-shrink: 0; }
+  .wp-block-frames-vscode__search span{ font-size: clamp(9px, 0.94cqw, 12px); color: var(--frames-vscode-text-dim); }
+  .wp-block-frames-vscode__win-controls { display: flex; align-items: center; flex-shrink: 0; }
+  .wp-block-frames-vscode__win-btn {
+    width: clamp(30px, 3.59cqw, 46px);
+    height: clamp(22px, 2.34cqw, 30px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--frames-vscode-text);
+    font-size: clamp(9px, 0.94cqw, 12px);
+    cursor: pointer;
+  }
+  .wp-block-frames-vscode__win-btn:hover            { background: rgba(255,255,255,.12); }
+  .wp-block-frames-vscode__win-btn--close:hover     { background: #e81123; color: #fff; }
+
+  /* ── BODY ROW ── */
+  .wp-block-frames-vscode__body { flex: 1; display: flex; overflow: hidden; min-height: 0; }
+
+  /* ── ACTIVITY BAR ── */
+  .wp-block-frames-vscode__activity {
+    flex-shrink: 0;
+    width: clamp(32px, 3.75cqw, 48px);
+    background: var(--frames-vscode-activity);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4px 0;
+    border-right: 1px solid var(--frames-vscode-activity-border);
+    transition: width .2s ease, opacity .2s ease;
+    overflow: hidden;
+  }
+  .wp-block-frames-vscode__activity--collapsed { width: 0; opacity: 0; border-right: none; }
+  .wp-block-frames-vscode__activity-top    { display: flex; flex-direction: column; align-items: center; flex: 1; }
+  .wp-block-frames-vscode__activity-bottom { display: flex; flex-direction: column; align-items: center; }
+  .wp-block-frames-vscode__activity-btn {
+    width:  clamp(32px, 3.75cqw, 48px);
+    height: clamp(32px, 3.75cqw, 48px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--frames-vscode-icon-inactive);
+    font-size: clamp(14px, 1.72cqw, 22px);
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    flex-shrink: 0;
+  }
+  .wp-block-frames-vscode__activity-btn:hover    { color: var(--frames-vscode-icon-active); }
+  .wp-block-frames-vscode__activity-btn--active  { color: var(--frames-vscode-icon-active); border-left-color: var(--frames-vscode-icon-active); }
+
+  /* ── SIDEBAR ── */
+  .wp-block-frames-vscode__sidebar {
+    flex-shrink: 0;
+    width: clamp(140px, 17.19cqw, 220px);
+    background: var(--frames-vscode-sidebar);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-right: 1px solid var(--frames-vscode-border);
+    transition: width .2s ease, opacity .2s ease;
+  }
+  .wp-block-frames-vscode__sidebar--collapsed { width: 0; opacity: 0; border-right: none; }
+  .wp-block-frames-vscode__explorer-title {
+    flex-shrink: 0;
+    padding: clamp(6px, 0.78cqw, 10px) clamp(8px, 0.94cqw, 12px) clamp(4px, 0.47cqw, 6px);
+    font-size: clamp(8px, 0.86cqw, 11px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    color: var(--frames-vscode-text);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    white-space: nowrap;
+  }
+  .wp-block-frames-vscode__explorer-title i { font-size: clamp(10px, 1.09cqw, 14px); color: var(--frames-vscode-text-dim); cursor: pointer; }
+  .wp-block-frames-vscode__tree {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: clamp(9px, 0.98cqw, 12.5px);
+    line-height: 1;
+    scrollbar-width: thin;
+    scrollbar-color: #424242 transparent;
+  }
+  .wp-block-frames-vscode__tree::-webkit-scrollbar       { width: 6px; }
+  .wp-block-frames-vscode__tree::-webkit-scrollbar-thumb { background: #424242; border-radius: 3px; }
+  .wp-block-frames-vscode__tree-item {
+    display: flex;
+    align-items: center;
+    height: clamp(16px, 1.72cqw, 22px);
+    padding-right: clamp(4px, 0.63cqw, 8px);
+    cursor: pointer;
+    white-space: nowrap;
+    color: var(--frames-vscode-text);
+    gap: 4px;
+  }
+  .wp-block-frames-vscode__tree-item:hover      { background: var(--frames-vscode-explorer-hover); }
+  .wp-block-frames-vscode__tree-item--active    { background: var(--frames-vscode-explorer-active); color: var(--frames-vscode-icon-active); }
+  /* Depth modifiers */
+  .wp-block-frames-vscode__tree-item--depth-0 { padding-left: clamp(4px,  0.63cqw,  8px); }
+  .wp-block-frames-vscode__tree-item--depth-1 { padding-left: clamp(12px, 1.56cqw, 20px); }
+  .wp-block-frames-vscode__tree-item--depth-2 { padding-left: clamp(20px, 2.66cqw, 34px); }
+  .wp-block-frames-vscode__tree-item--depth-3 { padding-left: clamp(28px, 3.75cqw, 48px); }
+  .wp-block-frames-vscode__tree-item--depth-4 { padding-left: clamp(36px, 4.84cqw, 62px); }
+  .wp-block-frames-vscode__tree-arrow { font-size: clamp(7px, 0.70cqw, 9px); color: var(--frames-vscode-text-dim); flex-shrink: 0; width: 14px; text-align: center; }
+  .wp-block-frames-vscode__tree-icon  { font-size: clamp(10px, 1.02cqw, 13px); flex-shrink: 0; width: 16px; text-align: center; }
+  .wp-block-frames-vscode__tree-label { font-size: clamp(9px, 0.98cqw, 12.5px); overflow: hidden; text-overflow: ellipsis; }
+  /* File-type icon color modifiers */
+  .wp-block-frames-vscode__tree-icon--ts,
+  .wp-block-frames-vscode__tab-icon--ts   { color: var(--frames-vscode-icon-ts); }
+  .wp-block-frames-vscode__tree-icon--tsx,
+  .wp-block-frames-vscode__tab-icon--tsx  { color: var(--frames-vscode-icon-ts); }
+  .wp-block-frames-vscode__tree-icon--js,
+  .wp-block-frames-vscode__tab-icon--js   { color: var(--frames-vscode-icon-js); }
+  .wp-block-frames-vscode__tree-icon--folder,
+  .wp-block-frames-vscode__tree-icon--folder-open { color: var(--frames-vscode-icon-folder); }
+
+  /* ── EDITOR AREA ── */
+  .wp-block-frames-vscode__editor { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+  /* ── TABS ── */
+  .wp-block-frames-vscode__tabs {
+    flex-shrink: 0;
+    height: clamp(24px, 2.73cqw, 35px);
+    background: var(--frames-vscode-tabstrip);
+    display: flex;
+    align-items: flex-end;
+    border-bottom: 1px solid var(--frames-vscode-border);
+    overflow: hidden;
+  }
+  .wp-block-frames-vscode__tab {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: clamp(3px, 0.47cqw, 6px);
+    padding: 0 clamp(6px, 0.78cqw, 10px) 0 clamp(8px, 0.94cqw, 12px);
+    font-size: clamp(9px, 0.98cqw, 12.5px);
+    color: var(--frames-vscode-text-dim);
+    background: var(--frames-vscode-tabstrip);
+    border-right: 1px solid var(--frames-vscode-border);
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .wp-block-frames-vscode__tab--active {
+    background: var(--frames-vscode-tab-active-bg);
+    color: var(--frames-vscode-text);
+    border-top: 1px solid var(--frames-vscode-tab-active-top);
+  }
+  .wp-block-frames-vscode__tab-icon  { font-size: clamp(9px, 0.94cqw, 12px); }
+  .wp-block-frames-vscode__tab-close { font-size: clamp(8px, 0.86cqw, 11px); padding: 2px; border-radius: 3px; }
+  .wp-block-frames-vscode__tab-close:hover { background: rgba(255,255,255,.15); }
+
+  /* ── BREADCRUMB ── */
+  .wp-block-frames-vscode__breadcrumb {
+    flex-shrink: 0;
+    height: clamp(17px, 1.88cqw, 24px);
+    background: var(--frames-vscode-bg);
+    display: flex;
+    align-items: center;
+    padding: 0 clamp(8px, 1.09cqw, 14px);
+    gap: 4px;
+    font-size: clamp(9px, 0.94cqw, 12px);
+    color: var(--frames-vscode-text-dim);
+    border-bottom: 1px solid var(--frames-vscode-sidebar-border);
+    overflow: hidden;
+  }
+  .wp-block-frames-vscode__breadcrumb i      { font-size: clamp(7px, 0.78cqw, 10px); }
+  .wp-block-frames-vscode__crumb             { cursor: pointer; white-space: nowrap; }
+  .wp-block-frames-vscode__crumb--active     { color: var(--frames-vscode-text); }
+  .wp-block-frames-vscode__crumb-sep         { color: var(--frames-vscode-text-subtle); }
+
+  /* ── CODE GUTTER ── */
+  .wp-block-frames-vscode__code {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    min-height: 0;
+    background: var(--frames-vscode-editor-bg);
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: clamp(13px, 1.25cqw, 16px);
+    line-height: clamp(19px, 1.875cqw, 24px);
+  }
+  .wp-block-frames-vscode__line-nums {
+    flex-shrink: 0;
+    padding: 6px 0;
+    min-width: clamp(30px, 3.44cqw, 44px);
+    text-align: right;
+    color: var(--frames-vscode-line-num);
+    font-size: clamp(12px, 1.09cqw, 14px);
+    line-height: clamp(19px, 1.875cqw, 24px);
+    user-select: none;
+    border-right: 1px solid var(--frames-vscode-sidebar-border);
+    background: var(--frames-vscode-editor-bg);
+    overflow: hidden;
+  }
+  .wp-block-frames-vscode__line-nums span { display: block; padding-right: clamp(8px, 1.09cqw, 14px); padding-left: 6px; }
+  .wp-block-frames-vscode__line-num--active { color: var(--frames-vscode-line-num-active); }
+  .wp-block-frames-vscode__code-content {
+    flex: 1;
+    overflow: auto;
+    padding: 6px 0 6px clamp(8px, 1.25cqw, 16px);
+    scrollbar-width: thin;
+    scrollbar-color: #424242 transparent;
+  }
+  .wp-block-frames-vscode__code-content::-webkit-scrollbar       { width: 6px; height: 6px; }
+  .wp-block-frames-vscode__code-content::-webkit-scrollbar-thumb { background: #424242; }
+  .wp-block-frames-vscode__code-pre {
+    margin: 0;
+    white-space: pre;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: var(--frames-vscode-text);
+    display: block;
+  }
+
+  /* ── SYNTAX TOKENS ── */
+  .wp-block-frames-vscode__syn-keyword  { color: var(--frames-vscode-syn-keyword); }
+  .wp-block-frames-vscode__syn-type     { color: var(--frames-vscode-syn-type); }
+  .wp-block-frames-vscode__syn-function { color: var(--frames-vscode-syn-function); }
+  .wp-block-frames-vscode__syn-variable { color: var(--frames-vscode-syn-variable); }
+  .wp-block-frames-vscode__syn-string   { color: var(--frames-vscode-syn-string); }
+  .wp-block-frames-vscode__syn-comment  { color: var(--frames-vscode-syn-comment); font-style: italic; }
+  .wp-block-frames-vscode__syn-number   { color: var(--frames-vscode-syn-number); }
+
+  /* ── PANEL ── */
+  .wp-block-frames-vscode__panel {
+    flex-shrink: 0;
+    height: clamp(110px, 14.06cqw, 180px);
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--frames-vscode-border);
+    background: var(--frames-vscode-bg);
+    min-height: 0;
+  }
+  .wp-block-frames-vscode__panel-tabs {
+    flex-shrink: 0;
+    height: clamp(22px, 2.34cqw, 30px);
+    background: var(--frames-vscode-sidebar);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(4px, 0.63cqw, 8px);
+    border-bottom: 1px solid var(--frames-vscode-border);
+    overflow: hidden;
+  }
+  .wp-block-frames-vscode__panel-tabs-left { display: flex; gap: 0; height: 100%; align-items: flex-end; }
+  .wp-block-frames-vscode__panel-tab {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 clamp(6px, 0.94cqw, 12px);
+    font-size: clamp(9px, 0.94cqw, 12px);
+    color: var(--frames-vscode-text-dim);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+  .wp-block-frames-vscode__panel-tab--active { color: var(--frames-vscode-text); border-bottom-color: var(--frames-vscode-statusbar); }
+  .wp-block-frames-vscode__panel-tab:hover   { color: var(--frames-vscode-text); }
+  .wp-block-frames-vscode__panel-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--frames-vscode-text-dim);
+    font-size: clamp(10px, 1.09cqw, 14px);
+  }
+  .wp-block-frames-vscode__panel-actions i { cursor: pointer; padding: 3px; border-radius: 3px; }
+  .wp-block-frames-vscode__panel-actions i:hover { background: rgba(255,255,255,.1); color: var(--frames-vscode-icon-active); }
+  .wp-block-frames-vscode__terminal {
+    flex: 1;
+    padding: clamp(4px, 0.47cqw, 6px) clamp(8px, 1.09cqw, 14px);
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: clamp(9px, 0.98cqw, 12.5px);
+    line-height: 1.6;
+    overflow-y: auto;
+    color: var(--frames-vscode-text);
+    scrollbar-width: thin;
+    scrollbar-color: #424242 transparent;
+  }
+  .wp-block-frames-vscode__terminal::-webkit-scrollbar       { width: 6px; }
+  .wp-block-frames-vscode__terminal::-webkit-scrollbar-thumb { background: #424242; }
+  .wp-block-frames-vscode__term-user   { color: var(--frames-vscode-terminal-path); }
+  .wp-block-frames-vscode__term-host   { color: var(--frames-vscode-terminal-host); }
+  .wp-block-frames-vscode__term-path   { color: var(--frames-vscode-terminal-host); }
+  .wp-block-frames-vscode__term-cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--frames-vscode-text);
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+  .wp-block-frames-vscode__term-italic { font-style: italic; color: var(--frames-vscode-text-dim); }
+  .wp-block-frames-vscode__term-link   { color: var(--frames-vscode-terminal-host); text-decoration: underline; cursor: pointer; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* ── STATUS BAR ── */
+  .wp-block-frames-vscode__statusbar {
+    flex-shrink: 0;
+    height: clamp(16px, 1.72cqw, 22px);
+    background: var(--frames-vscode-statusbar);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(4px, 0.63cqw, 8px);
+    font-size: clamp(8px, 0.90cqw, 11.5px);
+    color: var(--frames-vscode-icon-active);
+    overflow: hidden;
+  }
+  .wp-block-frames-vscode__status-left,
+  .wp-block-frames-vscode__status-right { display: flex; align-items: center; gap: clamp(4px, 0.94cqw, 12px); }
+  .wp-block-frames-vscode__status-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 0 4px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .wp-block-frames-vscode__status-item:hover { background: rgba(255,255,255,.15); }
+  .wp-block-frames-vscode__status-item i     { font-size: clamp(9px, 0.94cqw, 12px); }
+</style>
+</head>
+<body>
+
+<div class="wp-block-frames-vscode">
+
+  <!-- ── TITLE BAR ── -->
+  <div class="wp-block-frames-vscode__titlebar">
+    <div class="wp-block-frames-vscode__titlebar-left">
+      <i class="fa-brands fa-microsoft wp-block-frames-vscode__logo"></i>
+      <nav class="wp-block-frames-vscode__menubar">
+        <span class="wp-block-frames-vscode__menu-item">File</span>
+        <span class="wp-block-frames-vscode__menu-item">Edit</span>
+        <span class="wp-block-frames-vscode__menu-item">Selection</span>
+        <span class="wp-block-frames-vscode__menu-item">View</span>
+        <span class="wp-block-frames-vscode__menu-item">Go</span>
+        <span class="wp-block-frames-vscode__menu-item">Run</span>
+        <span class="wp-block-frames-vscode__menu-item wp-block-frames-vscode__menu-item--muted">···</span>
+      </nav>
+    </div>
+    <div class="wp-block-frames-vscode__search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <span>uigen</span>
+    </div>
+    <div class="wp-block-frames-vscode__win-controls">
+      <div class="wp-block-frames-vscode__win-btn wp-block-frames-vscode__win-btn--minimize"><i class="fa-solid fa-minus"></i></div>
+      <div class="wp-block-frames-vscode__win-btn wp-block-frames-vscode__win-btn--maximize"><i class="fa-regular fa-square"></i></div>
+      <div class="wp-block-frames-vscode__win-btn wp-block-frames-vscode__win-btn--close"><i class="fa-solid fa-xmark"></i></div>
+    </div>
+  </div>
+
+  <!-- ── BODY ── -->
+  <div class="wp-block-frames-vscode__body">
+
+    <!-- Activity bar -->
+    <div class="wp-block-frames-vscode__activity" id="activityBar">
+      <div class="wp-block-frames-vscode__activity-top">
+        <div class="wp-block-frames-vscode__activity-btn wp-block-frames-vscode__activity-btn--active"><i class="fa-regular fa-copy"></i></div>
+        <div class="wp-block-frames-vscode__activity-btn"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <div class="wp-block-frames-vscode__activity-btn"><i class="fa-solid fa-code-branch"></i></div>
+        <div class="wp-block-frames-vscode__activity-btn"><i class="fa-solid fa-bug"></i></div>
+        <div class="wp-block-frames-vscode__activity-btn"><i class="fa-solid fa-puzzle-piece"></i></div>
+        <div class="wp-block-frames-vscode__activity-btn"><i class="fa-solid fa-display"></i></div>
+      </div>
+      <div class="wp-block-frames-vscode__activity-bottom">
+        <div class="wp-block-frames-vscode__activity-btn"><i class="fa-regular fa-circle-user"></i></div>
+        <div class="wp-block-frames-vscode__activity-btn"><i class="fa-solid fa-gear"></i></div>
+      </div>
+    </div>
+
+    <!-- Sidebar / Explorer -->
+    <div class="wp-block-frames-vscode__sidebar" id="sidebar">
+      <div class="wp-block-frames-vscode__explorer-title">
+        <span>Explorer</span>
+        <i class="fa-solid fa-ellipsis"></i>
+      </div>
+      <div class="wp-block-frames-vscode__tree">
+
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-0">
+          <i class="fa-solid fa-chevron-down wp-block-frames-vscode__tree-arrow"></i>
+          <i class="fa-solid fa-folder-open wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder-open"></i>
+          <span class="wp-block-frames-vscode__tree-label" style="font-weight:700;text-transform:uppercase;font-size:clamp(8px,.90cqw,11.5px);">UIGEN</span>
+        </div>
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-1">
+          <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+          <i class="fa-solid fa-folder wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder"></i>
+          <span class="wp-block-frames-vscode__tree-label">.next</span>
+        </div>
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-1">
+          <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+          <i class="fa-solid fa-folder wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder"></i>
+          <span class="wp-block-frames-vscode__tree-label">node_modules</span>
+        </div>
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-1">
+          <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+          <i class="fa-solid fa-folder wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder"></i>
+          <span class="wp-block-frames-vscode__tree-label">prisma</span>
+        </div>
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-1">
+          <i class="fa-solid fa-chevron-down wp-block-frames-vscode__tree-arrow"></i>
+          <i class="fa-solid fa-folder-open wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder-open"></i>
+          <span class="wp-block-frames-vscode__tree-label">src</span>
+        </div>
+          <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-2">
+            <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+            <i class="fa-solid fa-folder wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder"></i>
+            <span class="wp-block-frames-vscode__tree-label">actions</span>
+          </div>
+          <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-2">
+            <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+            <i class="fa-solid fa-folder wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder"></i>
+            <span class="wp-block-frames-vscode__tree-label">app</span>
+          </div>
+          <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-2">
+            <i class="fa-solid fa-chevron-down wp-block-frames-vscode__tree-arrow"></i>
+            <i class="fa-solid fa-folder-open wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder-open"></i>
+            <span class="wp-block-frames-vscode__tree-label">components</span>
+          </div>
+            <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-3">
+              <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+              <i class="fa-solid fa-folder wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder"></i>
+              <span class="wp-block-frames-vscode__tree-label">auth</span>
+            </div>
+            <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-3">
+              <i class="fa-solid fa-chevron-down wp-block-frames-vscode__tree-arrow"></i>
+              <i class="fa-solid fa-folder-open wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder-open"></i>
+              <span class="wp-block-frames-vscode__tree-label">chat</span>
+            </div>
+              <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-4">
+                <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+                <i class="fa-solid fa-folder wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder"></i>
+                <span class="wp-block-frames-vscode__tree-label">__tests__</span>
+              </div>
+              <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-4 wp-block-frames-vscode__tree-item--active">
+                <i class="fa-solid fa-angle-right wp-block-frames-vscode__tree-arrow" style="opacity:0"></i>
+                <i class="fa-brands fa-react wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--tsx"></i>
+                <span class="wp-block-frames-vscode__tree-label">ChatInterface.tsx</span>
+              </div>
+              <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-4">
+                <i class="fa-solid fa-angle-right wp-block-frames-vscode__tree-arrow" style="opacity:0"></i>
+                <i class="fa-brands fa-react wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--tsx"></i>
+                <span class="wp-block-frames-vscode__tree-label">MarkdownRenderer.tsx</span>
+              </div>
+              <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-4">
+                <i class="fa-solid fa-angle-right wp-block-frames-vscode__tree-arrow" style="opacity:0"></i>
+                <i class="fa-brands fa-react wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--tsx"></i>
+                <span class="wp-block-frames-vscode__tree-label">MessageInput.tsx</span>
+              </div>
+              <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-4">
+                <i class="fa-solid fa-angle-right wp-block-frames-vscode__tree-arrow" style="opacity:0"></i>
+                <i class="fa-brands fa-react wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--tsx"></i>
+                <span class="wp-block-frames-vscode__tree-label">MessageList.tsx</span>
+              </div>
+            <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-3">
+              <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+              <i class="fa-solid fa-folder wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder"></i>
+              <span class="wp-block-frames-vscode__tree-label">editor</span>
+            </div>
+            <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-3">
+              <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+              <i class="fa-solid fa-folder wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder"></i>
+              <span class="wp-block-frames-vscode__tree-label">preview</span>
+            </div>
+            <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-3">
+              <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+              <i class="fa-solid fa-folder wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder"></i>
+              <span class="wp-block-frames-vscode__tree-label">ui</span>
+            </div>
+            <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-3">
+              <i class="fa-solid fa-angle-right wp-block-frames-vscode__tree-arrow" style="opacity:0"></i>
+              <i class="fa-brands fa-react wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--tsx"></i>
+              <span class="wp-block-frames-vscode__tree-label">HeaderActions.tsx</span>
+            </div>
+          <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-2">
+            <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+            <i class="fa-solid fa-folder wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder"></i>
+            <span class="wp-block-frames-vscode__tree-label">generated</span>
+          </div>
+          <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-2">
+            <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+            <i class="fa-solid fa-folder wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder"></i>
+            <span class="wp-block-frames-vscode__tree-label">hooks</span>
+          </div>
+          <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-2">
+            <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+            <i class="fa-solid fa-folder wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--folder"></i>
+            <span class="wp-block-frames-vscode__tree-label">lib</span>
+          </div>
+          <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-2">
+            <i class="fa-solid fa-angle-right wp-block-frames-vscode__tree-arrow" style="opacity:0"></i>
+            <i class="fa-brands fa-js wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--ts"></i>
+            <span class="wp-block-frames-vscode__tree-label">middleware.ts</span>
+          </div>
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-1">
+          <i class="fa-solid fa-angle-right wp-block-frames-vscode__tree-arrow" style="opacity:0"></i>
+          <i class="fa-solid fa-file wp-block-frames-vscode__tree-icon" style="color:var(--frames-vscode-icon-js)"></i>
+          <span class="wp-block-frames-vscode__tree-label">.env</span>
+        </div>
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-1">
+          <i class="fa-solid fa-angle-right wp-block-frames-vscode__tree-arrow" style="opacity:0"></i>
+          <i class="fa-solid fa-file-code wp-block-frames-vscode__tree-icon" style="color:var(--frames-vscode-icon-js)"></i>
+          <span class="wp-block-frames-vscode__tree-label">.eslintrc.json</span>
+        </div>
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-1">
+          <i class="fa-solid fa-angle-right wp-block-frames-vscode__tree-arrow" style="opacity:0"></i>
+          <i class="fa-solid fa-file wp-block-frames-vscode__tree-icon" style="color:var(--frames-vscode-text-dim)"></i>
+          <span class="wp-block-frames-vscode__tree-label">.gitignore</span>
+        </div>
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-1">
+          <i class="fa-solid fa-angle-right wp-block-frames-vscode__tree-arrow" style="opacity:0"></i>
+          <i class="fa-solid fa-file-code wp-block-frames-vscode__tree-icon" style="color:#519aba"></i>
+          <span class="wp-block-frames-vscode__tree-label">CLAUDE.md</span>
+        </div>
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-1">
+          <i class="fa-solid fa-angle-right wp-block-frames-vscode__tree-arrow" style="opacity:0"></i>
+          <i class="fa-solid fa-file-code wp-block-frames-vscode__tree-icon" style="color:var(--frames-vscode-icon-js)"></i>
+          <span class="wp-block-frames-vscode__tree-label">components.json</span>
+        </div>
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-1">
+          <i class="fa-solid fa-angle-right wp-block-frames-vscode__tree-arrow" style="opacity:0"></i>
+          <i class="fa-brands fa-js wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--js"></i>
+          <span class="wp-block-frames-vscode__tree-label">cross-env</span>
+        </div>
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-1">
+          <i class="fa-solid fa-angle-right wp-block-frames-vscode__tree-arrow" style="opacity:0"></i>
+          <i class="fa-brands fa-js wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--ts"></i>
+          <span class="wp-block-frames-vscode__tree-label">next-env.d.ts</span>
+        </div>
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-1">
+          <i class="fa-solid fa-angle-right wp-block-frames-vscode__tree-arrow" style="opacity:0"></i>
+          <i class="fa-brands fa-js wp-block-frames-vscode__tree-icon wp-block-frames-vscode__tree-icon--ts"></i>
+          <span class="wp-block-frames-vscode__tree-label">next.config.ts</span>
+        </div>
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-0" style="margin-top:4px;">
+          <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+          <span class="wp-block-frames-vscode__tree-label" style="font-weight:700;text-transform:uppercase;font-size:clamp(8px,.86cqw,11px);">OUTLINE</span>
+        </div>
+        <div class="wp-block-frames-vscode__tree-item wp-block-frames-vscode__tree-item--depth-0">
+          <i class="fa-solid fa-chevron-right wp-block-frames-vscode__tree-arrow"></i>
+          <span class="wp-block-frames-vscode__tree-label" style="font-weight:700;text-transform:uppercase;font-size:clamp(8px,.86cqw,11px);">TIMELINE</span>
+        </div>
+
+      </div><!-- /tree -->
+    </div><!-- /sidebar -->
+
+    <!-- Editor + Panel -->
+    <div class="wp-block-frames-vscode__editor">
+
+      <div class="wp-block-frames-vscode__tabs">
+        <div class="wp-block-frames-vscode__tab wp-block-frames-vscode__tab--active">
+          <i class="fa-brands fa-react wp-block-frames-vscode__tab-icon wp-block-frames-vscode__tab-icon--tsx"></i>
+          <span>ChatInterface.tsx</span>
+          <i class="fa-solid fa-xmark wp-block-frames-vscode__tab-close"></i>
+        </div>
+      </div>
+
+      <div class="wp-block-frames-vscode__breadcrumb">
+        <span class="wp-block-frames-vscode__crumb">src</span>
+        <span class="wp-block-frames-vscode__crumb-sep"><i class="fa-solid fa-chevron-right"></i></span>
+        <span class="wp-block-frames-vscode__crumb">components</span>
+        <span class="wp-block-frames-vscode__crumb-sep"><i class="fa-solid fa-chevron-right"></i></span>
+        <span class="wp-block-frames-vscode__crumb">chat</span>
+        <span class="wp-block-frames-vscode__crumb-sep"><i class="fa-solid fa-chevron-right"></i></span>
+        <span class="wp-block-frames-vscode__crumb wp-block-frames-vscode__crumb--active">ChatInterface.tsx</span>
+        <span class="wp-block-frames-vscode__crumb-sep"><i class="fa-solid fa-chevron-right"></i></span>
+        <span class="wp-block-frames-vscode__crumb" style="color:var(--frames-vscode-text-dim)">···</span>
+      </div>
+
+      <div class="wp-block-frames-vscode__code">
+        <div class="wp-block-frames-vscode__line-nums" id="lineNums"></div>
+        <div class="wp-block-frames-vscode__code-content">
+          <pre class="wp-block-frames-vscode__code-pre"><span class="wp-block-frames-vscode__syn-keyword">import</span> <span class="wp-block-frames-vscode__syn-type">React</span>, { <span class="wp-block-frames-vscode__syn-type">useState</span>, <span class="wp-block-frames-vscode__syn-type">useEffect</span>, <span class="wp-block-frames-vscode__syn-type">useRef</span>, <span class="wp-block-frames-vscode__syn-type">useCallback</span> } <span class="wp-block-frames-vscode__syn-keyword">from</span> <span class="wp-block-frames-vscode__syn-string">'react'</span>;
+<span class="wp-block-frames-vscode__syn-keyword">import</span> { <span class="wp-block-frames-vscode__syn-function">useChat</span> } <span class="wp-block-frames-vscode__syn-keyword">from</span> <span class="wp-block-frames-vscode__syn-string">'@/hooks/useChat'</span>;
+<span class="wp-block-frames-vscode__syn-keyword">import</span> { <span class="wp-block-frames-vscode__syn-function">useScrollAnchor</span> } <span class="wp-block-frames-vscode__syn-keyword">from</span> <span class="wp-block-frames-vscode__syn-string">'@/hooks/useScrollAnchor'</span>;
+<span class="wp-block-frames-vscode__syn-keyword">import</span> { <span class="wp-block-frames-vscode__syn-type">Message</span>, <span class="wp-block-frames-vscode__syn-type">ChatSession</span>, <span class="wp-block-frames-vscode__syn-type">StreamingState</span>, <span class="wp-block-frames-vscode__syn-type">MessageRole</span> } <span class="wp-block-frames-vscode__syn-keyword">from</span> <span class="wp-block-frames-vscode__syn-string">'@/types/chat'</span>;
+<span class="wp-block-frames-vscode__syn-keyword">import</span> { <span class="wp-block-frames-vscode__syn-type">ScrollArea</span> } <span class="wp-block-frames-vscode__syn-keyword">from</span> <span class="wp-block-frames-vscode__syn-string">'@/components/ui/scroll-area'</span>;
+<span class="wp-block-frames-vscode__syn-keyword">import</span> { <span class="wp-block-frames-vscode__syn-type">MessageList</span> } <span class="wp-block-frames-vscode__syn-keyword">from</span> <span class="wp-block-frames-vscode__syn-string">'./MessageList'</span>;
+<span class="wp-block-frames-vscode__syn-keyword">import</span> { <span class="wp-block-frames-vscode__syn-type">MessageInput</span> } <span class="wp-block-frames-vscode__syn-keyword">from</span> <span class="wp-block-frames-vscode__syn-string">'./MessageInput'</span>;
+<span class="wp-block-frames-vscode__syn-keyword">import</span> { <span class="wp-block-frames-vscode__syn-type">MarkdownRenderer</span> } <span class="wp-block-frames-vscode__syn-keyword">from</span> <span class="wp-block-frames-vscode__syn-string">'./MarkdownRenderer'</span>;
+<span class="wp-block-frames-vscode__syn-keyword">import</span> { <span class="wp-block-frames-vscode__syn-function">cn</span> } <span class="wp-block-frames-vscode__syn-keyword">from</span> <span class="wp-block-frames-vscode__syn-string">'@/lib/utils'</span>;
+
+<span class="wp-block-frames-vscode__syn-keyword">interface</span> <span class="wp-block-frames-vscode__syn-type">ChatInterfaceProps</span> {
+  <span class="wp-block-frames-vscode__syn-variable">sessionId</span>: <span class="wp-block-frames-vscode__syn-type">string</span>;
+  <span class="wp-block-frames-vscode__syn-variable">initialMessages</span>?: <span class="wp-block-frames-vscode__syn-type">Message</span>[];
+  <span class="wp-block-frames-vscode__syn-variable">onSessionUpdate</span>?: (session: <span class="wp-block-frames-vscode__syn-type">ChatSession</span>) =&gt; <span class="wp-block-frames-vscode__syn-type">void</span>;
+  <span class="wp-block-frames-vscode__syn-variable">className</span>?: <span class="wp-block-frames-vscode__syn-type">string</span>;
+}
+
+<span class="wp-block-frames-vscode__syn-keyword">export default function</span> <span class="wp-block-frames-vscode__syn-function">ChatInterface</span>({
+  <span class="wp-block-frames-vscode__syn-variable">sessionId</span>,
+  <span class="wp-block-frames-vscode__syn-variable">initialMessages</span> = [],
+  <span class="wp-block-frames-vscode__syn-variable">onSessionUpdate</span>,
+  <span class="wp-block-frames-vscode__syn-variable">className</span>,
+}: <span class="wp-block-frames-vscode__syn-type">ChatInterfaceProps</span>) {
+  <span class="wp-block-frames-vscode__syn-keyword">const</span> <span class="wp-block-frames-vscode__syn-variable">scrollAreaRef</span> = <span class="wp-block-frames-vscode__syn-function">useRef</span>&lt;<span class="wp-block-frames-vscode__syn-type">HTMLDivElement</span> | <span class="wp-block-frames-vscode__syn-keyword">null</span>&gt;(<span class="wp-block-frames-vscode__syn-keyword">null</span>);
+  <span class="wp-block-frames-vscode__syn-keyword">const</span> <span class="wp-block-frames-vscode__syn-variable">bottomRef</span> = <span class="wp-block-frames-vscode__syn-function">useRef</span>&lt;<span class="wp-block-frames-vscode__syn-type">HTMLDivElement</span> | <span class="wp-block-frames-vscode__syn-keyword">null</span>&gt;(<span class="wp-block-frames-vscode__syn-keyword">null</span>);
+  <span class="wp-block-frames-vscode__syn-keyword">const</span> [<span class="wp-block-frames-vscode__syn-variable">streamingState</span>, <span class="wp-block-frames-vscode__syn-function">setStreamingState</span>] = <span class="wp-block-frames-vscode__syn-function">useState</span>&lt;<span class="wp-block-frames-vscode__syn-type">StreamingState</span>&gt;(<span class="wp-block-frames-vscode__syn-string">'idle'</span>);
+  <span class="wp-block-frames-vscode__syn-keyword">const</span> [<span class="wp-block-frames-vscode__syn-variable">pendingMessage</span>, <span class="wp-block-frames-vscode__syn-function">setPendingMessage</span>] = <span class="wp-block-frames-vscode__syn-function">useState</span>&lt;<span class="wp-block-frames-vscode__syn-type">string</span>&gt;(<span class="wp-block-frames-vscode__syn-string">''</span>);
+  <span class="wp-block-frames-vscode__syn-keyword">const</span> [<span class="wp-block-frames-vscode__syn-variable">isComposing</span>, <span class="wp-block-frames-vscode__syn-function">setIsComposing</span>] = <span class="wp-block-frames-vscode__syn-function">useState</span>(<span class="wp-block-frames-vscode__syn-keyword">false</span>);
+
+  <span class="wp-block-frames-vscode__syn-keyword">const</span> { <span class="wp-block-frames-vscode__syn-variable">messages</span>, <span class="wp-block-frames-vscode__syn-function">sendMessage</span>, <span class="wp-block-frames-vscode__syn-variable">isLoading</span>, <span class="wp-block-frames-vscode__syn-variable">error</span>, <span class="wp-block-frames-vscode__syn-function">clearMessages</span> } = <span class="wp-block-frames-vscode__syn-function">useChat</span>({
+    <span class="wp-block-frames-vscode__syn-variable">sessionId</span>,
+    <span class="wp-block-frames-vscode__syn-variable">initialMessages</span>,
+    onUpdate: <span class="wp-block-frames-vscode__syn-variable">onSessionUpdate</span>,
+    streamingOptions: { enabled: <span class="wp-block-frames-vscode__syn-keyword">true</span>, chunkSize: <span class="wp-block-frames-vscode__syn-number">64</span>, delayMs: <span class="wp-block-frames-vscode__syn-number">12</span> },
+  });
+
+  <span class="wp-block-frames-vscode__syn-keyword">const</span> <span class="wp-block-frames-vscode__syn-function">scrollToBottom</span> = <span class="wp-block-frames-vscode__syn-function">useCallback</span>((<span class="wp-block-frames-vscode__syn-variable">behavior</span>: <span class="wp-block-frames-vscode__syn-type">ScrollBehavior</span> = <span class="wp-block-frames-vscode__syn-string">'smooth'</span>) =&gt; {
+    <span class="wp-block-frames-vscode__syn-variable">bottomRef</span>.current?.<span class="wp-block-frames-vscode__syn-function">scrollIntoView</span>({ <span class="wp-block-frames-vscode__syn-variable">behavior</span>, block: <span class="wp-block-frames-vscode__syn-string">'end'</span> });
+  }, []);
+
+  <span class="wp-block-frames-vscode__syn-function">useEffect</span>(() =&gt; {
+    <span class="wp-block-frames-vscode__syn-keyword">if</span> (<span class="wp-block-frames-vscode__syn-variable">messages</span>.length &gt; <span class="wp-block-frames-vscode__syn-number">0</span> &amp;&amp; <span class="wp-block-frames-vscode__syn-variable">streamingState</span> !== <span class="wp-block-frames-vscode__syn-string">'streaming'</span>) {
+      <span class="wp-block-frames-vscode__syn-function">scrollToBottom</span>();
+    }
+  }, [<span class="wp-block-frames-vscode__syn-variable">messages</span>, <span class="wp-block-frames-vscode__syn-variable">streamingState</span>, <span class="wp-block-frames-vscode__syn-function">scrollToBottom</span>]);
+
+  <span class="wp-block-frames-vscode__syn-keyword">const</span> <span class="wp-block-frames-vscode__syn-function">handleSubmit</span> = <span class="wp-block-frames-vscode__syn-function">useCallback</span>(
+    <span class="wp-block-frames-vscode__syn-keyword">async</span> (<span class="wp-block-frames-vscode__syn-variable">content</span>: <span class="wp-block-frames-vscode__syn-type">string</span>, <span class="wp-block-frames-vscode__syn-variable">attachments</span>?: <span class="wp-block-frames-vscode__syn-type">File</span>[]) =&gt; {
+      <span class="wp-block-frames-vscode__syn-keyword">if</span> (!<span class="wp-block-frames-vscode__syn-variable">content</span>.<span class="wp-block-frames-vscode__syn-function">trim</span>() || <span class="wp-block-frames-vscode__syn-variable">isLoading</span>) <span class="wp-block-frames-vscode__syn-keyword">return</span>;
+      <span class="wp-block-frames-vscode__syn-function">setStreamingState</span>(<span class="wp-block-frames-vscode__syn-string">'streaming'</span>);
+      <span class="wp-block-frames-vscode__syn-function">setPendingMessage</span>(<span class="wp-block-frames-vscode__syn-string">''</span>);
+      <span class="wp-block-frames-vscode__syn-keyword">try</span> {
+        <span class="wp-block-frames-vscode__syn-keyword">await</span> <span class="wp-block-frames-vscode__syn-function">sendMessage</span>({ role: <span class="wp-block-frames-vscode__syn-string">'user'</span> <span class="wp-block-frames-vscode__syn-keyword">as</span> <span class="wp-block-frames-vscode__syn-type">MessageRole</span>, content: <span class="wp-block-frames-vscode__syn-variable">content</span>, attachments: <span class="wp-block-frames-vscode__syn-variable">attachments</span> });
+      } <span class="wp-block-frames-vscode__syn-keyword">catch</span> (<span class="wp-block-frames-vscode__syn-variable">err</span>) {
+        console.<span class="wp-block-frames-vscode__syn-function">error</span>(<span class="wp-block-frames-vscode__syn-string">'[ChatInterface] sendMessage failed:'</span>, <span class="wp-block-frames-vscode__syn-variable">err</span>);
+        <span class="wp-block-frames-vscode__syn-function">setStreamingState</span>(<span class="wp-block-frames-vscode__syn-string">'error'</span>);
+      } <span class="wp-block-frames-vscode__syn-keyword">finally</span> {
+        <span class="wp-block-frames-vscode__syn-function">setStreamingState</span>(<span class="wp-block-frames-vscode__syn-string">'idle'</span>);
+      }
+    },
+    [<span class="wp-block-frames-vscode__syn-function">sendMessage</span>, <span class="wp-block-frames-vscode__syn-variable">isLoading</span>],
+  );
+
+  <span class="wp-block-frames-vscode__syn-keyword">return</span> (
+    &lt;<span class="wp-block-frames-vscode__syn-keyword">div</span> className={<span class="wp-block-frames-vscode__syn-function">cn</span>(<span class="wp-block-frames-vscode__syn-string">'flex h-full flex-col overflow-hidden bg-background'</span>, <span class="wp-block-frames-vscode__syn-variable">className</span>)}&gt;
+      &lt;<span class="wp-block-frames-vscode__syn-type">ScrollArea</span> ref={<span class="wp-block-frames-vscode__syn-variable">scrollAreaRef</span>} className=<span class="wp-block-frames-vscode__syn-string">"flex-1 px-4 py-2"</span>&gt;
+        &lt;<span class="wp-block-frames-vscode__syn-type">MessageList</span>
+          messages={<span class="wp-block-frames-vscode__syn-variable">messages</span>}
+          streamingState={<span class="wp-block-frames-vscode__syn-variable">streamingState</span>}
+          renderMessage={(<span class="wp-block-frames-vscode__syn-variable">msg</span>) =&gt; (
+            &lt;<span class="wp-block-frames-vscode__syn-type">MarkdownRenderer</span>
+              key={<span class="wp-block-frames-vscode__syn-variable">msg</span>.id}
+              content={<span class="wp-block-frames-vscode__syn-variable">msg</span>.content}
+              role={<span class="wp-block-frames-vscode__syn-variable">msg</span>.role}
+              timestamp={<span class="wp-block-frames-vscode__syn-variable">msg</span>.createdAt}
+            /&gt;
+          )}
+        /&gt;
+        &lt;<span class="wp-block-frames-vscode__syn-keyword">div</span> ref={<span class="wp-block-frames-vscode__syn-variable">bottomRef</span>} className=<span class="wp-block-frames-vscode__syn-string">"h-px w-full"</span> aria-hidden=<span class="wp-block-frames-vscode__syn-string">"true"</span> /&gt;
+      &lt;/<span class="wp-block-frames-vscode__syn-type">ScrollArea</span>&gt;
+      &lt;<span class="wp-block-frames-vscode__syn-type">MessageInput</span>
+        value={<span class="wp-block-frames-vscode__syn-variable">pendingMessage</span>}
+        onChange={<span class="wp-block-frames-vscode__syn-function">setPendingMessage</span>}
+        onSubmit={<span class="wp-block-frames-vscode__syn-function">handleSubmit</span>}
+        disabled={<span class="wp-block-frames-vscode__syn-variable">isLoading</span>}
+        isComposing={<span class="wp-block-frames-vscode__syn-variable">isComposing</span>}
+        onCompositionStart={() =&gt; <span class="wp-block-frames-vscode__syn-function">setIsComposing</span>(<span class="wp-block-frames-vscode__syn-keyword">true</span>)}
+        onCompositionEnd={() =&gt; <span class="wp-block-frames-vscode__syn-function">setIsComposing</span>(<span class="wp-block-frames-vscode__syn-keyword">false</span>)}
+        placeholder=<span class="wp-block-frames-vscode__syn-string">"Ask anything… (⌘ Enter to send)"</span>
+      /&gt;
+    &lt;/<span class="wp-block-frames-vscode__syn-keyword">div</span>&gt;
+  );
+}</pre>
+        </div>
+      </div>
+
+      <!-- Terminal panel -->
+      <div class="wp-block-frames-vscode__panel">
+        <div class="wp-block-frames-vscode__panel-tabs">
+          <div class="wp-block-frames-vscode__panel-tabs-left">
+            <div class="wp-block-frames-vscode__panel-tab">PROBLEMS</div>
+            <div class="wp-block-frames-vscode__panel-tab">OUTPUT</div>
+            <div class="wp-block-frames-vscode__panel-tab">DEBUG CONSOLE</div>
+            <div class="wp-block-frames-vscode__panel-tab wp-block-frames-vscode__panel-tab--active">TERMINAL</div>
+            <div class="wp-block-frames-vscode__panel-tab">PORTS</div>
+          </div>
+          <div class="wp-block-frames-vscode__panel-actions">
+            <i class="fa-solid fa-plus"></i>
+            <i class="fa-solid fa-chevron-down"></i>
+            <i class="fa-solid fa-grip-vertical"></i>
+            <i class="fa-solid fa-trash"></i>
+            <i class="fa-solid fa-ellipsis"></i>
+            <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+            <i class="fa-solid fa-xmark"></i>
+          </div>
+        </div>
+        <div class="wp-block-frames-vscode__terminal">
+          <div>
+            <span class="wp-block-frames-vscode__term-user">Lalo@LAPTOP-S057FH70</span>&nbsp;
+            <span class="wp-block-frames-vscode__term-host">MINGW64</span>&nbsp;
+            <span class="wp-block-frames-vscode__term-path">~/Downloads/uigen</span>
+          </div>
+          <div style="margin-top:2px;">
+            <span style="color:var(--frames-vscode-text)">$ </span>
+            <span class="wp-block-frames-vscode__term-cursor"></span>
+            <span style="color:var(--frames-vscode-text-dim)">&nbsp; <span class="wp-block-frames-vscode__term-italic">Open chat</span> <span style="color:var(--frames-vscode-text-subtle)">Ctrl</span>+<span style="color:var(--frames-vscode-text-subtle)">I</span>. <span class="wp-block-frames-vscode__term-italic">Show suggestions</span> <span style="color:var(--frames-vscode-text-subtle)">Ctrl</span>+<span style="color:var(--frames-vscode-text-subtle)">Space</span>. Start typing to dismiss or <span class="wp-block-frames-vscode__term-italic"><span class="wp-block-frames-vscode__term-link">don't show this again</span></span>.</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /editor -->
+  </div><!-- /body -->
+
+  <!-- Status bar -->
+  <div class="wp-block-frames-vscode__statusbar">
+    <div class="wp-block-frames-vscode__status-left">
+      <div class="wp-block-frames-vscode__status-item"><i class="fa-solid fa-code-branch"></i><span>main</span></div>
+      <div class="wp-block-frames-vscode__status-item">
+        <i class="fa-solid fa-circle-xmark"></i><span>0</span>
+        <i class="fa-solid fa-triangle-exclamation" style="margin-left:4px"></i><span>0</span>
+      </div>
+      <div class="wp-block-frames-vscode__status-item"><i class="fa-solid fa-bolt"></i><span>13</span></div>
+    </div>
+    <div class="wp-block-frames-vscode__status-right">
+      <div class="wp-block-frames-vscode__status-item"><span>Ln 1, Col 1</span></div>
+      <div class="wp-block-frames-vscode__status-item"><span>Spaces: 2</span></div>
+      <div class="wp-block-frames-vscode__status-item"><span>UTF-8</span></div>
+      <div class="wp-block-frames-vscode__status-item"><span>LF</span></div>
+      <div class="wp-block-frames-vscode__status-item"><span>TypeScript JSX</span></div>
+      <div class="wp-block-frames-vscode__status-item"><span>Copilot: OFF</span></div>
+    </div>
+  </div>
+
+</div><!-- /wp-block-frames-vscode -->
+
+<script>
+  // ── Line numbers ──
+  const lineNums = document.getElementById('lineNums');
+  for (let i = 1; i <= 92; i++) {
+    const s = document.createElement('span');
+    s.textContent = i;
+    if (i === 1) s.classList.add('wp-block-frames-vscode__line-num--active');
+    lineNums.appendChild(s);
+  }
+
+  // ── Sidebar collapse at small stage widths ──
+  const COLLAPSE_AT = 480;
+  const stage   = document.querySelector('.wp-block-frames-vscode');
+  const actBar  = document.getElementById('activityBar');
+  const sidebar = document.getElementById('sidebar');
+
+  function checkCollapse() {
+    const collapsed = stage.clientWidth < COLLAPSE_AT;
+    actBar.classList.toggle('wp-block-frames-vscode__activity--collapsed', collapsed);
+    sidebar.classList.toggle('wp-block-frames-vscode__sidebar--collapsed', collapsed);
+  }
+
+  checkCollapse();
+  new ResizeObserver(checkCollapse).observe(stage);
+</script>
+</body>
+</html>
