@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, TextareaControl } from '@wordpress/components';
-import { useEffect } from '@wordpress/element';
+import { PanelBody, SelectControl, TextControl, TextareaControl, ToggleControl } from '@wordpress/components';
+import { useEffect, useMemo } from '@wordpress/element';
 
 import CodeHighlighter from '@wpfb/components/CodeHighlighter';
 import useTokens from '@wpfb/components/hooks/useTokens';
@@ -26,6 +26,16 @@ const LANGUAGES = [
 	{ label: 'Markdown', value: 'markdown' },
 ];
 
+const TERMINAL_LANGUAGES = [
+	{ label: 'Bash / Shell', value: 'bash' },
+	{ label: 'Shell', value: 'shellsession' },
+	{ label: 'PowerShell', value: 'powershell' },
+	{ label: 'Fish', value: 'fish' },
+	{ label: 'Git Commit Message', value: 'git-commit' },
+	{ label: 'Git Rebase Message', value: 'git-rebase' },
+	{ label: 'SQL', value: 'sql' }
+];
+
 const THEMES = [
 	{ label: 'GitHub Dark', value: 'github-dark' },
 	{ label: 'GitHub Light', value: 'github-light' },
@@ -39,12 +49,11 @@ const THEMES = [
 ];
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { language, theme, tokens, bg, code } = attributes;
+	const { terminalLang, theme, tokens, bg, code, codeLang, isTerminal, terminalPrompt, terminalCommand } = attributes;
+	const toTokenize = isTerminal ? `${terminalPrompt} ${terminalCommand}` : code;
+	const activeLanguage = isTerminal ? terminalLang : codeLang;
+	const [ tokensData, loading, error ] = useTokens( toTokenize, activeLanguage, theme );
 
-	const [ tokensData, loading, error ] = useTokens( code, language, theme );
-
-	// Persist fresh tokens and bg into block attributes when tokenization succeeds.
-	// setAttributes is stable; tokensData only changes when new results arrive.
 	useEffect( () => {
 		if ( ! tokensData ) return;
 		setAttributes( {
@@ -53,7 +62,6 @@ export default function Edit( { attributes, setAttributes } ) {
 		} );
 	}, [ tokensData, setAttributes ] );
 
-	// Flags describing the current state.
 	const hasStoredTokens = tokens && tokens.length > 0;
 	const hasLiveTokens =
 		tokensData && tokensData.tokens && tokensData.tokens.length > 0;
@@ -64,15 +72,13 @@ export default function Edit( { attributes, setAttributes } ) {
 	const showEmpty =
 		! loading && ! error && ! hasLiveTokens && ! hasStoredTokens;
 
-	// Prefer live results; fall back to stored tokens when live are unavailable.
-	const renderTokensData = hasLiveTokens
-		? tokensData
-		: hasStoredTokens
-		? { tokens }
-		: null;
-
+	const renderTokensData = useMemo( () => {
+		if ( hasLiveTokens ) return tokensData;
+		if ( hasStoredTokens ) return { tokens };
+		return null;
+	}, [ hasLiveTokens, hasStoredTokens, tokensData, tokens ] );
 	const blockProps = useBlockProps( {
-		className: 'wp-block-frames-code',
+		className: `wp-block-frames-code ${isTerminal ? 'is-terminal-code' : ''}`,
 		style: { '--frames-code-bg': bg },
 	} );
 
@@ -84,10 +90,13 @@ export default function Edit( { attributes, setAttributes } ) {
 				>
 					<SelectControl
 						label={ __( 'Language', 'wpframeblocks' ) }
-						value={ language }
-						options={ LANGUAGES }
-						onChange={ ( value ) =>
-							setAttributes( { language: value } )
+						value={ activeLanguage }
+						options={ isTerminal ? TERMINAL_LANGUAGES : LANGUAGES }
+						onChange={ ( value ) => {
+								isTerminal 
+									? setAttributes({ terminalLang: value })
+									: setAttributes({ codeLang: value })
+							}
 						}
 					/>
 					<SelectControl
@@ -98,16 +107,33 @@ export default function Edit( { attributes, setAttributes } ) {
 							setAttributes( { theme: value } )
 						}
 					/>
+					<ToggleControl
+						label="Enable terminal syntax highlighting"
+						help={isTerminal ? 'Enabled' : 'Disabled'}
+						checked={isTerminal}
+						onChange={(val) => setAttributes({ isTerminal: val })}
+					/>
+					{
+						isTerminal &&
+							<TextControl 
+								label={ __('Terminal Prompt', 'wpframeblocks')}
+								value={ terminalPrompt }
+								onChange={ ( value ) =>
+									setAttributes( { terminalPrompt: value } )
+								}
+							/>
+					}
 					<TextareaControl
-						label={ __( 'Code', 'wpframeblocks' ) }
-						value={ code }
+						label={ isTerminal ? __( 'Command', 'wpframeblocks' ) : __( 'Code', 'wpframeblocks' ) }
+						value={ isTerminal ? terminalCommand : code }
 						rows={ 12 }
 						onChange={ ( value ) =>
-							setAttributes( { code: value } )
+							isTerminal 
+								? setAttributes( { terminalCommand: value } ) 
+								: setAttributes( { code: value } )
 						}
 					/>
 				</PanelBody>
-				{/* TODO: Create controls to choose between normal code and terminal higlighted*/}
 			</InspectorControls>
 
 			<div { ...blockProps }>
@@ -145,9 +171,9 @@ export default function Edit( { attributes, setAttributes } ) {
 						</p>
 					) }
 
-					{ renderTokensData && (
+					{ renderTokensData && 
 						<CodeHighlighter tokensData={ renderTokensData } />
-					) }
+				    }
 				</div>
 			</div>
 		</>

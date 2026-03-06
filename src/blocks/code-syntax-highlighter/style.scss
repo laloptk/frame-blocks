@@ -31,6 +31,15 @@
 	font-family: var(--frames-code-font);
 	container-type: inline-size;
 
+	&.is-terminal-code {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		.wp-block-frames-code__line-num {
+			display: none;
+		}
+	}
+
 	// ── Body / scroll area ────────────────────────────────────
 	&__body {
 		overflow-x: auto;

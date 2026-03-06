@@ -14,10 +14,6 @@
 		"align": [ "wide", "full" ]
 	},
 	"attributes": {
-		"language": {
-			"type": "string",
-			"default": "php"
-		},
 		"theme": {
 			"type": "string",
 			"default": "github-dark"
@@ -30,9 +26,29 @@
 			"type": "string",
 			"default": "#0F172A"
 		},
+		"isTerminal": {
+			"type": "boolean",
+			"default": false
+		},
+		"terminalLang": {
+			"type": "string",
+			"default": "bash"
+		},
+		"terminalPrompt": {
+			"type": "string",
+			"default": "user@LAPTOP-SO57FW60 MINGW64 ~"
+		},
+		"terminalCommand": {
+			"type": "string",
+			"default": "echo \"Hello World\" >> file-002.txt"
+		},
 		"code": {
 			"type": "string",
 			"default": "<?php\n\nfunction greet( string $name ): string {\n    return \"Hello, {$name}!\";\n}\n\necho greet( 'World' );\n"
+		},
+		"codeLang": {
+			"type": "string",
+			"default": "javascript"
 		}
 	},
 	"textdomain": "wpframeblocks",
