@@ -11,7 +11,7 @@
 	--frames-code-bg: #0f172a; /* (*) */
 
 	/* Text / line numbers */
-	--frames-code-line-num-color: rgba(255, 255, 255, 0.3); /* (*) */
+	--frames-code-line-num-color: #888888; /* (*) */
 	--frames-code-status-color: rgba(255, 255, 255, 0.4); /* (*) */
 
 	/* Cursor */
@@ -64,7 +64,9 @@
 	&__line {
 		display: flex;
 		align-items: baseline;
-		padding: 0 var(--frames-space-4);
+		// Left padding lives on __line-num so sticky positioning works at left:0.
+		// Right padding is kept here for trailing space after tokens.
+		padding: 0 var(--frames-space-4) 0 0;
 
 		&:hover {
 			background: rgba(255, 255, 255, 0.03);
@@ -73,15 +75,27 @@
 
 	&__line-num {
 		flex: 0 0 auto;
-		width: 3ch;
+		// Stretch to the full row height so border-right is continuous and
+		// the sticky background leaves no gaps between lines.
+		align-self: stretch;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		width: 5ch;
 		margin-right: var(--frames-space-5);
-		padding-right: var(--frames-space-3);
+		padding-right: var(--frames-space-4);
+		// Left padding moved here from __line so sticky left:0 matches natural position.
+		padding-left: var(--frames-space-7);
 		border-right: 1px solid rgba(255, 255, 255, 0.08);
 		color: var(--frames-code-line-num-color);
-		text-align: right;
 		font-variant-numeric: tabular-nums;
 		font-size: 0.9em;
 		user-select: none;
+		// Horizontal sticky: stays visible while code scrolls right.
+		position: sticky;
+		left: 0;
+		z-index: 1;
+		background: var(--frames-code-bg); // covers tokens scrolling underneath
 	}
 
 	&__line-tokens {
