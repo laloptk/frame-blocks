@@ -329,8 +329,8 @@
 	align-items: center;
 }
 
-// ── Sidebar — core/list, grid-area: sidebar (LEFT column, all 5 rows) ──────
-.wp-block-frames-vscode__inner-zones > .wp-block-list {
+// ── Sidebar — file-tree block, grid-area: sidebar (LEFT column, all 5 rows) ─
+.wp-block-frames-vscode__inner-zones > .wp-block-frames-file-tree {
 	grid-area: sidebar;
 	background: var(--frames-vscode-sidebar);
 	border-right: 1px solid var(--frames-vscode-border);
@@ -339,7 +339,10 @@
 	scrollbar-width: thin;
 	scrollbar-color: var(--frames-vscode-border) transparent;
 
-	// "EXPLORER" section header via pseudo-element
+	&::-webkit-scrollbar { width: 6px; }
+	&::-webkit-scrollbar-thumb { background: var(--frames-vscode-border); border-radius: var(--frames-radius-xs); }
+
+	// "EXPLORER" section header — belongs to the frame, not the tree block itself
 	&::before {
 		content: "EXPLORER";
 		display: flex;
@@ -354,52 +357,22 @@
 	}
 }
 
-// Strip default list chrome
-.wp-block-frames-vscode__inner-zones > .wp-block-list,
-.wp-block-frames-vscode__inner-zones > .wp-block-list ul {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-
-// Each <li> is a file-tree row
-.wp-block-frames-vscode__inner-zones > .wp-block-list li {
-	display: flex;
-	align-items: center;
+// Fluid item sizing within the vscode frame
+.wp-block-frames-vscode .wp-block-frames-file-tree__item {
 	height: clamp(16px, 1.72cqw, 22px);
-	font-size: clamp(9px, 0.98cqw, 12.5px);
-	color: var(--frames-vscode-text);
-	cursor: pointer;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	padding-left: clamp(12px, 1.56cqw, 20px); // default depth-1
-
-	&:hover {
-		background: var(--frames-vscode-explorer-hover);
-	}
 }
 
-.wp-block-frames-vscode__inner-zones > .wp-block-list li > * {
-	display: flex;
-	align-items: center;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
+// Fluid depth indentation within the vscode frame (overrides standalone px values)
+.wp-block-frames-vscode .wp-block-frames-file-tree__item--depth-0 { padding-left: clamp(4px,  0.63cqw,  8px); }
+.wp-block-frames-vscode .wp-block-frames-file-tree__item--depth-1 { padding-left: clamp(12px, 1.56cqw, 20px); }
+.wp-block-frames-vscode .wp-block-frames-file-tree__item--depth-2 { padding-left: clamp(20px, 2.66cqw, 34px); }
+.wp-block-frames-vscode .wp-block-frames-file-tree__item--depth-3 { padding-left: clamp(28px, 3.75cqw, 48px); }
+.wp-block-frames-vscode .wp-block-frames-file-tree__item--depth-4 { padding-left: clamp(36px, 4.84cqw, 62px); }
 
-// Depth modifier classes — apply via Advanced panel on list items
-.wp-block-frames-vscode__tree-item--depth-0 { padding-left: clamp(4px,  0.63cqw,  8px) !important; }
-.wp-block-frames-vscode__tree-item--depth-1 { padding-left: clamp(12px, 1.56cqw, 20px) !important; }
-.wp-block-frames-vscode__tree-item--depth-2 { padding-left: clamp(20px, 2.66cqw, 34px) !important; }
-.wp-block-frames-vscode__tree-item--depth-3 { padding-left: clamp(28px, 3.75cqw, 48px) !important; }
-.wp-block-frames-vscode__tree-item--depth-4 { padding-left: clamp(36px, 4.84cqw, 62px) !important; }
-
-// Active tree item
-.wp-block-frames-vscode__tree-item--active {
-	background: var(--frames-vscode-explorer-active) !important;
-	color: var(--frames-vscode-icon-active) !important;
-}
+// Fluid icon + label sizing within the vscode frame
+.wp-block-frames-vscode .wp-block-frames-file-tree__arrow { font-size: clamp(7px, 0.70cqw, 9px); }
+.wp-block-frames-vscode .wp-block-frames-file-tree__icon  { font-size: clamp(10px, 1.02cqw, 13px); }
+.wp-block-frames-vscode .wp-block-frames-file-tree__label { font-size: clamp(9px, 0.98cqw, 12.5px); }
 
 // ── Code editor zone — grid-area: code ────────────────────────────────────
 .wp-block-frames-vscode__inner-zones > .wp-block-frames-vscode__code-zone {
@@ -615,7 +588,7 @@
 			". terminal";
 	}
 
-	.wp-block-frames-vscode__inner-zones > .wp-block-list {
+	.wp-block-frames-vscode__inner-zones > .wp-block-frames-file-tree {
 		display: none;
 	}
 }

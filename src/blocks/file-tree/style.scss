@@ -1,0 +1,108 @@
+// =============================================================================
+// File Tree — style.scss (frontend + editor shared)
+// BEM root : wp-block-frames-file-tree
+// Standalone: bare file/folder tree, no sidebar chrome.
+// When inside code-editor-frame, code-editor-frame/style.scss overrides
+// sizing with fluid clamp() values relative to the vscode container.
+// =============================================================================
+
+// ── Fallback tokens — active when used outside code-editor-frame ────────────
+// These forward to vscode tokens if the frame stylesheet is also loaded.
+:root {
+	--frames-file-tree-bg: var(--frames-vscode-sidebar, #252526); /* (*) */
+	--frames-file-tree-text: var(--frames-vscode-text, #d4d4d4); /* (*) */
+	--frames-file-tree-text-dim: var(--frames-vscode-text-dim, #858585); /* (*) */
+	--frames-file-tree-hover: var(--frames-vscode-explorer-hover, rgba(255, 255, 255, 0.05)); /* (*) */
+	--frames-file-tree-active-bg: var(--frames-vscode-explorer-active, #094771); /* (*) */
+	--frames-file-tree-active-text: var(--frames-vscode-icon-active, #ffffff); /* (*) */
+	--frames-file-tree-icon-folder: var(--frames-vscode-icon-folder, #dcb67a); /* (*) */
+	--frames-file-tree-icon-ts: var(--frames-vscode-icon-ts, #3178c6); /* (*) */
+	--frames-file-tree-icon-js: var(--frames-vscode-icon-js, #e8c84d); /* (*) */
+	--frames-file-tree-scrollbar: var(--frames-vscode-border, #474747); /* (*) */
+}
+
+// ── Block root ──────────────────────────────────────────────────────────────
+.wp-block-frames-file-tree {
+	font-family: "Segoe UI", system-ui, sans-serif;
+	font-size: 13px;
+	color: var(--frames-file-tree-text);
+	background: var(--frames-file-tree-bg);
+	overflow-y: auto;
+	overflow-x: hidden;
+	scrollbar-width: thin;
+	scrollbar-color: var(--frames-file-tree-scrollbar) transparent;
+
+	&::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: var(--frames-file-tree-scrollbar);
+		border-radius: 3px;
+	}
+}
+
+// ── Tree item row ───────────────────────────────────────────────────────────
+.wp-block-frames-file-tree__item {
+	display: flex;
+	align-items: center;
+	height: 22px;
+	padding-right: 8px;
+	cursor: pointer;
+	white-space: nowrap;
+	color: var(--frames-file-tree-text);
+	gap: 4px;
+
+	&:hover {
+		background: var(--frames-file-tree-hover);
+	}
+
+	// Depth modifiers — plain px for standalone (no container query needed)
+	&--depth-0 { padding-left: 4px; }
+	&--depth-1 { padding-left: 16px; }
+	&--depth-2 { padding-left: 28px; }
+	&--depth-3 { padding-left: 40px; }
+	&--depth-4 { padding-left: 52px; }
+
+	&--active {
+		background: var(--frames-file-tree-active-bg);
+		color: var(--frames-file-tree-active-text);
+	}
+}
+
+// ── Arrow — expand/collapse indicator ──────────────────────────────────────
+.wp-block-frames-file-tree__arrow {
+	font-size: 9px;
+	color: var(--frames-file-tree-text-dim);
+	flex-shrink: 0;
+	width: 14px;
+	text-align: center;
+
+	&--hidden {
+		opacity: 0;
+	}
+}
+
+// ── Icon — file type / folder ───────────────────────────────────────────────
+.wp-block-frames-file-tree__icon {
+	font-size: 13px;
+	flex-shrink: 0;
+	width: 16px;
+	text-align: center;
+
+	&--folder,
+	&--folder-open { color: var(--frames-file-tree-icon-folder); }
+
+	&--ts,
+	&--tsx { color: var(--frames-file-tree-icon-ts); }
+
+	&--js,
+	&--jsx { color: var(--frames-file-tree-icon-js); }
+}
+
+// ── Label ───────────────────────────────────────────────────────────────────
+.wp-block-frames-file-tree__label {
+	font-size: 12.5px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

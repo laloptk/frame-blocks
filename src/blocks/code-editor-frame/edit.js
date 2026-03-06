@@ -11,13 +11,7 @@ import { getFileIcon, parseBreadcrumb } from '@wpfb/helpers';
 import './editor.scss';
 
 const TEMPLATE = [
-	[
-		'core/list',
-		{
-			className: 'wp-block-frames-vscode__tree-list',
-			placeholder: 'Add files and folders…',
-		},
-	],
+	[ 'wpframeblocks/file-tree', {} ],
 	[
 		'wpframeblocks/code-syntax-highlighter',
 		{ className: 'wp-block-frames-vscode__code-zone' },

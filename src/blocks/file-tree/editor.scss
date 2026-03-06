@@ -1,0 +1,26 @@
+// File Tree — editor.scss (editor-only)
+
+.wp-block-frames-file-tree {
+	min-height: 60px;
+	padding: 4px 0 8px;
+
+	// Force the appender to always span the full width of the block,
+	// whether it is in the empty-state (label button) or the non-empty
+	// state (small "+" icon button).
+	.block-list-appender {
+		position: relative;
+		display: block;
+		width: 100%;
+		padding: 4px 0 0;
+	}
+
+	.block-editor-button-block-appender {
+		display: flex;
+		width: 90%;
+		justify-content: center;
+		padding: 6px 8px;
+		border-radius: 2px;
+		box-sizing: border-box;
+		margin: 15px auto;
+	}
+}

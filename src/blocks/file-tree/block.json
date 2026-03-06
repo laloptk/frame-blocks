@@ -1,0 +1,19 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpframeblocks/file-tree",
+	"version": "0.1.0",
+	"title": "File Tree",
+	"category": "text",
+	"icon": "category",
+	"description": "A VS Code-style file explorer tree. Add File Tree Item child blocks to build a folder/file structure up to four levels deep.",
+	"keywords": [ "file", "tree", "explorer", "folder", "vscode", "sidebar" ],
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wpframeblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}

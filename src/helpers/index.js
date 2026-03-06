@@ -37,6 +37,49 @@ export function getFileIcon( fileName ) {
 }
 
 /**
+ * Returns Font Awesome and BEM modifier classes for a file-tree-item.
+ * Used by wpframeblocks/file-tree-item edit.js and save.js.
+ *
+ * @param {string}  itemType  'file' | 'folder'
+ * @param {string}  fileExt   Extension string, e.g. 'ts', '.tsx', ''
+ * @param {boolean} isOpen    Whether a folder is expanded
+ * @return {{ iconFA: string, iconMod: string }}
+ */
+export function getTreeItemIcon( itemType, fileExt, isOpen ) {
+	if ( itemType === 'folder' ) {
+		return isOpen
+			? {
+					iconFA: 'fa-solid fa-folder-open',
+					iconMod: 'wp-block-frames-file-tree__icon--folder-open',
+			  }
+			: {
+					iconFA: 'fa-solid fa-folder',
+					iconMod: 'wp-block-frames-file-tree__icon--folder',
+			  };
+	}
+
+	const ext = ( fileExt || '' ).toLowerCase().replace( /^\./, '' );
+	switch ( ext ) {
+		case 'ts':
+			return { iconFA: 'fa-brands fa-js', iconMod: 'wp-block-frames-file-tree__icon--ts' };
+		case 'tsx':
+			return { iconFA: 'fa-brands fa-react', iconMod: 'wp-block-frames-file-tree__icon--tsx' };
+		case 'js':
+		case 'jsx':
+			return { iconFA: 'fa-brands fa-js', iconMod: 'wp-block-frames-file-tree__icon--js' };
+		case 'php':
+			return { iconFA: 'fa-brands fa-php', iconMod: '' };
+		case 'css':
+		case 'scss':
+			return { iconFA: 'fa-brands fa-css3-alt', iconMod: '' };
+		case 'html':
+			return { iconFA: 'fa-brands fa-html5', iconMod: '' };
+		default:
+			return { iconFA: 'fa-regular fa-file-code', iconMod: '' };
+	}
+}
+
+/**
  * Parses a slash-separated filePath + fileName into an ordered array of breadcrumb segments.
  *
  * @param {string} filePath  e.g. "src/components"

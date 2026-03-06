@@ -1,0 +1,45 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpframeblocks/file-tree-item",
+	"version": "0.1.0",
+	"title": "File Tree Item",
+	"category": "text",
+	"icon": "media-document",
+	"description": "A single file or folder row inside a File Tree block.",
+	"keywords": [ "file", "folder", "tree", "item", "explorer" ],
+	"parent": [ "wpframeblocks/file-tree" ],
+	"supports": {
+		"html": false,
+		"reusable": false
+	},
+	"attributes": {
+		"label": {
+			"type": "string",
+			"default": "untitled"
+		},
+		"itemType": {
+			"type": "string",
+			"default": "folder",
+			"enum": [ "file", "folder" ]
+		},
+		"depth": {
+			"type": "integer",
+			"default": 1
+		},
+		"isActive": {
+			"type": "boolean",
+			"default": false
+		},
+		"isOpen": {
+			"type": "boolean",
+			"default": false
+		},
+		"fileExt": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"textdomain": "wpframeblocks",
+	"editorScript": "file:./index.js"
+}
