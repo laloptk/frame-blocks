@@ -46,7 +46,10 @@ function getBlockEntries() {
 
 module.exports = {
 	...defaultConfig,
-	entry: getBlockEntries(),
+	entry: {
+		...getBlockEntries(),
+		'styles/global': path.resolve( __dirname, 'src/styles/index.js' ),
+	},
 	output: {
 		...defaultConfig.output,
 		// Prevent webpack's clean step from deleting blocks-manifest.php,

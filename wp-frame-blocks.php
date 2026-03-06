@@ -30,6 +30,15 @@ add_action( 'init', 'wpframeblocks_block_init' );
  * Required by any block that uses fa-* icon classes in its markup.
  */
 function wpframeblocks_enqueue_block_assets() {
+	// Global design-system tokens — loaded before any block style.
+	wp_enqueue_style(
+		'wpframeblocks-global',
+		plugin_dir_url( __FILE__ ) . 'build/styles/global.css',
+		[],
+		'0.1.0'
+	);
+
+	// Font Awesome 6.5 — required by blocks that use fa-* icon classes.
 	wp_enqueue_style(
 		'wpframeblocks-font-awesome',
 		'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css',

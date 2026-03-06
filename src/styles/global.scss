@@ -1,0 +1,75 @@
+// ─────────────────────────────────────────────────────────────
+// GLOBAL DESIGN TOKENS — WP Frame Blocks
+// Source of truth: ai-context/design/_frames-ref.md
+// Loaded on every page (frontend + editor) via wp-frame-blocks.php.
+// Block-specific tokens (--frames-vscode-*, --frames-code-*, etc.)
+// are declared in each block's own style.scss.
+// ─────────────────────────────────────────────────────────────
+
+:root {
+	// ── Spacing (base 4 px) ───────────────────────────────────
+	--frames-space-0: 0;
+	--frames-space-1: 4px;
+	--frames-space-2: 8px;
+	--frames-space-3: 12px;
+	--frames-space-4: 16px;
+	--frames-space-5: 20px;
+	--frames-space-6: 24px;
+	--frames-space-7: 28px;
+	--frames-space-8: 32px;
+	--frames-space-10: 40px;
+	--frames-space-12: 48px;
+	--frames-space-16: 64px;
+	--frames-space-20: 80px;
+	--frames-space-24: 96px;
+
+	// ── Border radius ─────────────────────────────────────────
+	--frames-radius-none: 0;
+	--frames-radius-xs: 2px;
+	--frames-radius-sm: 4px;
+	--frames-radius-md: 8px;
+	--frames-radius-lg: 12px;
+	--frames-radius-xl: 16px;
+	--frames-radius-2xl: 24px;
+	--frames-radius-3xl: 32px;
+	--frames-radius-pill: 9999px;
+	--frames-radius-round: 50%;
+
+	// ── Shadows ───────────────────────────────────────────────
+	--frames-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.08);
+	--frames-shadow-sm:
+		0 1px 4px rgba(0, 0, 0, 0.1),
+		0 1px 2px rgba(0, 0, 0, 0.06);
+	--frames-shadow-md:
+		0 4px 12px rgba(0, 0, 0, 0.12),
+		0 2px 4px rgba(0, 0, 0, 0.08);
+	--frames-shadow-lg:
+		0 8px 24px rgba(0, 0, 0, 0.16),
+		0 4px 8px rgba(0, 0, 0, 0.1);
+	--frames-shadow-xl:
+		0 16px 48px rgba(0, 0, 0, 0.2),
+		0 6px 16px rgba(0, 0, 0, 0.12);
+	--frames-shadow-device:
+		0 32px 80px rgba(0, 0, 0, 0.4),
+		0 8px 24px rgba(0, 0, 0, 0.22);
+	--frames-shadow-inset:
+		inset 0 1px 0 rgba(255, 255, 255, 0.12),
+		inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+
+	// ── Icon sizes ────────────────────────────────────────────
+	--frames-icon-xs: 12px;
+	--frames-icon-sm: 14px;
+	--frames-icon-md: 16px;
+	--frames-icon-lg: 20px;
+	--frames-icon-xl: 24px;
+	--frames-icon-2xl: 32px;
+	--frames-icon-3xl: 48px;
+
+	// ── Z-index ───────────────────────────────────────────────
+	--frames-z-base: 0;
+	--frames-z-raised: 10;
+	--frames-z-overlay: 20;
+	--frames-z-modal: 30;
+	--frames-z-toast: 40;
+	--frames-z-top: 50;
+}
