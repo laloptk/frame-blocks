@@ -1,12 +1,66 @@
-.wpf-code-editor-frame {
-	// Editor-only overrides
-	&__body .components-textarea-control__input {
-		font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
-		font-size: 13px;
-		background: transparent;
-		color: inherit;
-		border: none;
-		resize: vertical;
-		width: 100%;
+// Code Editor Frame — editor-only overrides
+
+// ── 1. Width ────────────────────────────────────────────────────────────────
+// On the frontend the block self-sizes with viewport units (min(96vw, ...)).
+// In the editor canvas, use 100% so the block fits the writing-flow column.
+// The aspect-ratio rule (from style.scss) still enforces 16:10 proportions.
+.wp-block-frames-vscode {
+	width: 100%;
+	max-width: 100%;
+}
+
+// ── 2. Grid fix — make InnerBlocks wrappers transparent to the CSS grid ─────
+//
+// InnerBlocks renders:
+//   .__inner-zones
+//     .block-editor-inner-blocks          ← display:contents (layout ghost)
+//       .block-editor-block-list__layout  ← display:contents (layout ghost)
+//         .wp-block  (core/list)          ← actual grid child #1
+//         .wp-block  (code-zone)          ← actual grid child #2
+//         .wp-block  (terminal-zone)      ← actual grid child #3
+//
+// After applying display:contents to the two wrapper divs, the .wp-block
+// elements become direct grid children. We then assign each its grid-area
+// by position. CSS selectors still work on display:contents elements
+// because they remain in the DOM tree.
+
+.wp-block-frames-vscode__inner-zones {
+
+	// Ghost the two Gutenberg wrapper divs.
+	> .block-editor-inner-blocks,
+	> .block-editor-inner-blocks > .block-editor-block-list__layout {
+		display: contents;
 	}
+
+	// core/list inner block → sidebar (LEFT column, all 5 rows)
+	> .block-editor-inner-blocks > .block-editor-block-list__layout > .wp-block:nth-child(1) {
+		grid-area: sidebar;
+		background: var(--frames-vscode-sidebar);
+		border-right: 1px solid var(--frames-vscode-border);
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+
+	// code-syntax-highlighter #1 → main code editor (row 3)
+	> .block-editor-inner-blocks > .block-editor-block-list__layout > .wp-block:nth-child(2) {
+		grid-area: code;
+		overflow: hidden; // inner __body scrolls; block clips to grid area
+		min-height: 0;
+	}
+
+	// code-syntax-highlighter #2 → terminal strip (row 5)
+	> .block-editor-inner-blocks > .block-editor-block-list__layout > .wp-block:nth-child(3) {
+		grid-area: terminal;
+		overflow: hidden;
+		min-height: clamp(80px, 11.11cqw, 140px);
+	}
+}
+
+// ── 3. Dashed zone outlines — visible in editor only ───────────────────────
+// Applied to the inner block root elements (inside their .wp-block wrappers).
+.wp-block-frames-vscode__tree-list,
+.wp-block-frames-vscode__code-zone,
+.wp-block-frames-vscode__terminal-zone {
+	outline: 1px dashed rgba(0, 122, 204, 0.4);
+	outline-offset: -1px;
 }

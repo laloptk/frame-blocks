@@ -1,78 +1,621 @@
-.wpf-code-editor-frame {
-	border-radius: 8px;
-	overflow: hidden;
-	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-	font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+// =============================================================================
+// Code Editor Frame — style.scss  (frontend + editor shared)
+// BEM root : wp-block-frames-vscode
+// REF_W    : 900   (all clamp values: native_px / 900 * 100cqw)
+// Layout   : activity-bar | [2-col × 5-row grid: sidebar(L) | tabs/crumb/code/panel-head/terminal]
+// =============================================================================
 
-	&__titlebar {
+// ── Design tokens ──────────────────────────────────────────────────────────
+:root {
+	// Canonical tokens from _frames-ref.md
+	--frames-vscode-bg: #1e1e1e;
+	--frames-vscode-titlebar: #3c3c3c;
+	--frames-vscode-menubar: #3c3c3c;
+	--frames-vscode-menubar-border: #2a2a2a;
+	--frames-vscode-activity: #333333;
+	--frames-vscode-activity-border: #252526;
+	--frames-vscode-sidebar: #252526;
+	--frames-vscode-sidebar-border: #3c3c3c;
+	--frames-vscode-sidebar-header: #bbbbbb;
+	--frames-vscode-explorer-hover: rgba(255, 255, 255, 0.05);
+	--frames-vscode-explorer-active: #094771;
+	--frames-vscode-tabstrip: #2d2d2d;
+	--frames-vscode-tab-active-bg: #1e1e1e;
+	--frames-vscode-tab-active-top: #007acc;
+	--frames-vscode-tab-inactive: #2d2d2d;
+	--frames-vscode-tab-border: #252526;
+	--frames-vscode-editor-bg: #1e1e1e;
+	--frames-vscode-line-num: #858585;
+	--frames-vscode-line-num-active: #c6c6c6;
+	--frames-vscode-cursor: #aeafad;
+	--frames-vscode-selection: rgba(38, 79, 120, 0.6);
+	--frames-vscode-statusbar: #007acc;
+	--frames-vscode-statusbar-text: rgba(255, 255, 255, 0.85);
+	--frames-vscode-text: #d4d4d4;
+	--frames-vscode-text-dim: #858585;
+	--frames-vscode-icon-active: #ffffff;
+	--frames-vscode-icon-inactive: #858585;
+
+	// Supplementary tokens — not yet in design-system.html
+	--frames-vscode-border: #474747; /* (*) */
+	--frames-vscode-text-subtle: #6e6e6e; /* (*) */
+	--frames-vscode-icon-ts: #3178c6; /* (*) */
+	--frames-vscode-icon-js: #e8c84d; /* (*) */
+	--frames-vscode-icon-folder: #dcb67a; /* (*) */
+	--frames-vscode-shadow: 0 0 0 1.5px rgba(58, 58, 60, 1), 0 32px 80px rgba(0, 0, 0, 0.75), 0 8px 24px rgba(0, 0, 0, 0.5); /* (*) */
+	--frames-vscode-win-close-hover-bg: #e81123; /* (*) */
+	--frames-vscode-btn-hover-bg: rgba(255, 255, 255, 0.1); /* (*) */
+	--frames-vscode-win-btn-hover-bg: rgba(255, 255, 255, 0.12); /* (*) */
+	--frames-vscode-terminal-path: #13a10e; /* (*) */
+	--frames-vscode-terminal-host: #3a96dd; /* (*) */
+}
+
+// ── Block root ─────────────────────────────────────────────────────────────
+.wp-block-frames-vscode {
+	width: 100%;
+	aspect-ratio: 16 / 10;
+	container-type: size;
+	border-radius: var(--frames-radius-md); // 8px — matches vscode spec
+	box-shadow: var(--frames-vscode-shadow);
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	background: var(--frames-vscode-bg);
+	color: var(--frames-vscode-text);
+	font-family: "Segoe UI", system-ui, sans-serif;
+	font-size: clamp(10px, 1.02cqw, 13px);
+	box-sizing: border-box;
+}
+
+// ── Titlebar ───────────────────────────────────────────────────────────────
+.wp-block-frames-vscode__titlebar {
+	flex-shrink: 0;
+	height: clamp(22px, 2.34cqw, 30px);
+	background: var(--frames-vscode-titlebar);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 0 0 clamp(6px, 0.94cqw, 12px);
+	user-select: none;
+	gap: clamp(4px, 0.63cqw, 8px);
+}
+
+.wp-block-frames-vscode__titlebar-left {
+	display: flex;
+	align-items: center;
+	gap: clamp(5px, 0.78cqw, 10px);
+	flex-shrink: 0;
+}
+
+.wp-block-frames-vscode__logo {
+	color: var(--frames-vscode-statusbar);
+	font-size: clamp(10px, 1.25cqw, 16px);
+}
+
+.wp-block-frames-vscode__menubar {
+	display: flex;
+	align-items: center;
+}
+
+.wp-block-frames-vscode__menu-item {
+	padding: 0 clamp(4px, 0.63cqw, 8px);
+	font-size: clamp(9px, 0.94cqw, 12px);
+	color: var(--frames-vscode-text);
+	cursor: pointer;
+	border-radius: var(--frames-radius-xs);
+	white-space: nowrap;
+	line-height: clamp(18px, 2.03cqw, 26px);
+
+	&:hover {
+		background: var(--frames-vscode-btn-hover-bg);
+	}
+
+	&--muted {
+		color: var(--frames-vscode-text-dim);
+	}
+}
+
+.wp-block-frames-vscode__search {
+	flex: 1;
+	max-width: clamp(160px, 32.81cqw, 420px);
+	height: clamp(16px, 1.72cqw, 22px);
+	background: var(--frames-vscode-bg);
+	border: 1px solid var(--frames-vscode-border);
+	border-radius: var(--frames-radius-xs);
+	display: flex;
+	align-items: center;
+	gap: clamp(3px, 0.47cqw, 6px);
+	padding: 0 clamp(5px, 0.78cqw, 10px);
+	cursor: text;
+	min-width: 0;
+
+	i {
+		color: var(--frames-vscode-text-dim);
+		font-size: clamp(8px, 0.86cqw, 11px);
+		flex-shrink: 0;
+	}
+
+	span {
+		font-size: clamp(9px, 0.94cqw, 12px);
+		color: var(--frames-vscode-text-dim);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+}
+
+.wp-block-frames-vscode__win-controls {
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+.wp-block-frames-vscode__win-btn {
+	width: clamp(30px, 3.59cqw, 46px);
+	height: clamp(22px, 2.34cqw, 30px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--frames-vscode-text);
+	font-size: clamp(9px, 0.94cqw, 12px);
+	cursor: pointer;
+
+	&:hover {
+		background: var(--frames-vscode-win-btn-hover-bg);
+	}
+
+	&--close:hover {
+		background: var(--frames-vscode-win-close-hover-bg);
+		color: var(--frames-vscode-icon-active);
+	}
+}
+
+// ── Body row ───────────────────────────────────────────────────────────────
+.wp-block-frames-vscode__body {
+	flex: 1;
+	display: flex;
+	overflow: hidden;
+	min-height: 0;
+}
+
+// ── Activity bar — far left, decorative ────────────────────────────────────
+.wp-block-frames-vscode__activity {
+	flex-shrink: 0;
+	width: clamp(32px, 3.75cqw, 48px);
+	background: var(--frames-vscode-activity);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: clamp(4px, 0.47cqw, 6px) 0;
+	border-right: 1px solid var(--frames-vscode-activity-border);
+	overflow: hidden;
+	transition: width 0.2s ease, opacity 0.2s ease;
+}
+
+.wp-block-frames-vscode__activity-top {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex: 1;
+}
+
+.wp-block-frames-vscode__activity-bottom {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.wp-block-frames-vscode__activity-btn {
+	width: clamp(32px, 3.75cqw, 48px);
+	height: clamp(32px, 3.75cqw, 48px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--frames-vscode-icon-inactive);
+	font-size: clamp(14px, 1.72cqw, 22px);
+	cursor: pointer;
+	border-left: 2px solid transparent;
+	flex-shrink: 0;
+
+	&:hover {
+		color: var(--frames-vscode-icon-active);
+	}
+
+	&--active {
+		color: var(--frames-vscode-icon-active);
+		border-left-color: var(--frames-vscode-icon-active);
+	}
+}
+
+// ── Inner zones — 2-column × 5-row CSS grid ────────────────────────────────
+// Col 1: file-explorer sidebar (LEFT, fixed width)
+// Col 2: editor column (tabs | crumb | code | panel-head | terminal)
+.wp-block-frames-vscode__inner-zones {
+	display: grid;
+	grid-template-columns: clamp(140px, 17.19cqw, 220px) 1fr;
+	grid-template-rows: auto auto 1fr auto auto;
+	grid-template-areas:
+		"sidebar  tabs"
+		"sidebar  crumb"
+		"sidebar  code"
+		"sidebar  panel-head"
+		"sidebar  terminal";
+	flex: 1;
+	overflow: hidden;
+	min-height: 0;
+}
+
+// ── Tabs — grid-area: tabs ─────────────────────────────────────────────────
+.wp-block-frames-vscode__tabs {
+	grid-area: tabs;
+	flex-shrink: 0;
+	height: clamp(24px, 2.73cqw, 35px);
+	background: var(--frames-vscode-tabstrip);
+	display: flex;
+	align-items: flex-end;
+	border-bottom: 1px solid var(--frames-vscode-border);
+	overflow: hidden;
+}
+
+.wp-block-frames-vscode__tab {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	gap: clamp(3px, 0.47cqw, 6px);
+	padding: 0 clamp(6px, 0.78cqw, 10px) 0 clamp(8px, 0.94cqw, 12px);
+	font-size: clamp(9px, 0.98cqw, 12.5px);
+	color: var(--frames-vscode-text-dim);
+	background: var(--frames-vscode-tabstrip);
+	border-right: 1px solid var(--frames-vscode-border);
+	cursor: pointer;
+	white-space: nowrap;
+	flex-shrink: 0;
+
+	&--active {
+		background: var(--frames-vscode-tab-active-bg);
+		color: var(--frames-vscode-text);
+		border-top: 1px solid var(--frames-vscode-tab-active-top);
+	}
+}
+
+.wp-block-frames-vscode__tab-icon {
+	font-size: clamp(9px, 0.94cqw, 12px);
+
+	&--ts  { color: var(--frames-vscode-icon-ts); }
+	&--js  { color: var(--frames-vscode-icon-js); }
+	&--dim { color: var(--frames-vscode-text-dim); }
+}
+
+.wp-block-frames-vscode__tab-close {
+	font-size: clamp(8px, 0.86cqw, 11px);
+	padding: 2px;
+	border-radius: var(--frames-radius-xs);
+	color: var(--frames-vscode-text-dim);
+
+	&:hover {
+		background: var(--frames-vscode-win-btn-hover-bg);
+	}
+}
+
+// ── Breadcrumb — grid-area: crumb ──────────────────────────────────────────
+.wp-block-frames-vscode__breadcrumb {
+	grid-area: crumb;
+	flex-shrink: 0;
+	height: clamp(17px, 1.88cqw, 24px);
+	background: var(--frames-vscode-bg);
+	display: flex;
+	align-items: center;
+	padding: 0 clamp(8px, 1.09cqw, 14px);
+	gap: clamp(2px, 0.31cqw, 4px);
+	font-size: clamp(9px, 0.94cqw, 12px);
+	color: var(--frames-vscode-text-dim);
+	border-bottom: 1px solid var(--frames-vscode-sidebar-border);
+	overflow: hidden;
+}
+
+.wp-block-frames-vscode__crumb {
+	cursor: pointer;
+	white-space: nowrap;
+
+	&--active {
+		color: var(--frames-vscode-text);
+	}
+}
+
+.wp-block-frames-vscode__crumb-sep {
+	color: var(--frames-vscode-text-subtle);
+	font-size: clamp(7px, 0.78cqw, 10px);
+	display: inline-flex;
+	align-items: center;
+}
+
+// ── Sidebar — core/list, grid-area: sidebar (LEFT column, all 5 rows) ──────
+.wp-block-frames-vscode__inner-zones > .wp-block-list {
+	grid-area: sidebar;
+	background: var(--frames-vscode-sidebar);
+	border-right: 1px solid var(--frames-vscode-border);
+	overflow-y: auto;
+	overflow-x: hidden;
+	scrollbar-width: thin;
+	scrollbar-color: var(--frames-vscode-border) transparent;
+
+	// "EXPLORER" section header via pseudo-element
+	&::before {
+		content: "EXPLORER";
 		display: flex;
 		align-items: center;
-		gap: 8px;
-		padding: 10px 16px;
-	}
-
-	&__dots {
-		display: flex;
-		gap: 6px;
-
-		span {
-			display: block;
-			width: 12px;
-			height: 12px;
-			border-radius: 50%;
-
-			&:nth-child(1) { background: #ff5f57; }
-			&:nth-child(2) { background: #febc2e; }
-			&:nth-child(3) { background: #28c840; }
-		}
-	}
-
-	&__filename {
-		flex: 1;
-		font-size: 13px;
-	}
-
-	&__language {
-		font-size: 11px;
+		padding: clamp(6px, 0.78cqw, 10px) clamp(8px, 0.94cqw, 12px) clamp(4px, 0.47cqw, 6px);
+		font-size: clamp(8px, 0.86cqw, 11px);
+		font-weight: 700;
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		opacity: 0.6;
+		letter-spacing: 0.08em;
+		color: var(--frames-vscode-text);
+		font-family: "Segoe UI", system-ui, sans-serif;
+	}
+}
+
+// Strip default list chrome
+.wp-block-frames-vscode__inner-zones > .wp-block-list,
+.wp-block-frames-vscode__inner-zones > .wp-block-list ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+// Each <li> is a file-tree row
+.wp-block-frames-vscode__inner-zones > .wp-block-list li {
+	display: flex;
+	align-items: center;
+	height: clamp(16px, 1.72cqw, 22px);
+	font-size: clamp(9px, 0.98cqw, 12.5px);
+	color: var(--frames-vscode-text);
+	cursor: pointer;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding-left: clamp(12px, 1.56cqw, 20px); // default depth-1
+
+	&:hover {
+		background: var(--frames-vscode-explorer-hover);
+	}
+}
+
+.wp-block-frames-vscode__inner-zones > .wp-block-list li > * {
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+// Depth modifier classes — apply via Advanced panel on list items
+.wp-block-frames-vscode__tree-item--depth-0 { padding-left: clamp(4px,  0.63cqw,  8px) !important; }
+.wp-block-frames-vscode__tree-item--depth-1 { padding-left: clamp(12px, 1.56cqw, 20px) !important; }
+.wp-block-frames-vscode__tree-item--depth-2 { padding-left: clamp(20px, 2.66cqw, 34px) !important; }
+.wp-block-frames-vscode__tree-item--depth-3 { padding-left: clamp(28px, 3.75cqw, 48px) !important; }
+.wp-block-frames-vscode__tree-item--depth-4 { padding-left: clamp(36px, 4.84cqw, 62px) !important; }
+
+// Active tree item
+.wp-block-frames-vscode__tree-item--active {
+	background: var(--frames-vscode-explorer-active) !important;
+	color: var(--frames-vscode-icon-active) !important;
+}
+
+// ── Code editor zone — grid-area: code ────────────────────────────────────
+.wp-block-frames-vscode__inner-zones > .wp-block-frames-vscode__code-zone {
+	grid-area: code;
+	overflow: hidden; // block clips to grid area; inner __body does the scrolling
+	min-height: 0;
+}
+
+// ── Panel header — grid-area: panel-head ───────────────────────────────────
+.wp-block-frames-vscode__panel-head {
+	grid-area: panel-head;
+	flex-shrink: 0;
+	height: clamp(22px, 2.34cqw, 30px);
+	background: var(--frames-vscode-sidebar);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 clamp(4px, 0.63cqw, 8px);
+	border-top: 1px solid var(--frames-vscode-border);
+	overflow: hidden;
+}
+
+.wp-block-frames-vscode__panel-tabs-left {
+	display: flex;
+	gap: 0;
+	height: 100%;
+	align-items: flex-end;
+}
+
+.wp-block-frames-vscode__panel-tab {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	padding: 0 clamp(6px, 0.94cqw, 12px);
+	font-size: clamp(9px, 0.94cqw, 12px);
+	color: var(--frames-vscode-text-dim);
+	cursor: pointer;
+	border-bottom: 2px solid transparent;
+	white-space: nowrap;
+
+	&--active {
+		color: var(--frames-vscode-text);
+		border-bottom-color: var(--frames-vscode-statusbar);
 	}
 
-	&__body {
-		padding: 16px;
+	&:hover {
+		color: var(--frames-vscode-text);
+	}
+}
 
-		pre {
-			margin: 0;
-			overflow-x: auto;
-		}
+.wp-block-frames-vscode__panel-actions {
+	display: flex;
+	align-items: center;
+	gap: clamp(3px, 0.47cqw, 6px);
+	color: var(--frames-vscode-text-dim);
+	font-size: clamp(10px, 1.09cqw, 14px);
 
-		code {
-			font-family: inherit;
-			font-size: 14px;
-			line-height: 1.6;
+	i {
+		cursor: pointer;
+		padding: 2px;
+		border-radius: var(--frames-radius-xs);
+
+		&:hover {
+			background: var(--frames-vscode-btn-hover-bg);
+			color: var(--frames-vscode-icon-active);
 		}
 	}
+}
 
-	// Dark theme (default)
-	&--dark {
-		background: #1e1e1e;
-		color: #d4d4d4;
+// ── Terminal zone — grid-area: terminal ────────────────────────────────────
+.wp-block-frames-vscode__inner-zones > .wp-block-frames-vscode__terminal-zone {
+	grid-area: terminal;
+	overflow: hidden;
+	min-height: clamp(80px, 11.11cqw, 140px);
+}
 
-		.wpf-code-editor-frame__titlebar {
-			background: #2d2d2d;
-			color: #ccc;
-		}
+// ── Status bar ─────────────────────────────────────────────────────────────
+.wp-block-frames-vscode__statusbar {
+	flex-shrink: 0;
+	height: clamp(16px, 1.72cqw, 22px);
+	background: var(--frames-vscode-statusbar);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 clamp(4px, 0.63cqw, 8px);
+	overflow: hidden;
+}
+
+.wp-block-frames-vscode__status-left,
+.wp-block-frames-vscode__status-right {
+	display: flex;
+	align-items: center;
+	gap: clamp(4px, 0.94cqw, 12px);
+	height: 100%;
+}
+
+.wp-block-frames-vscode__status-item {
+	display: inline-flex;
+	align-items: center;
+	gap: clamp(2px, 0.31cqw, 4px);
+	padding: 0 clamp(3px, 0.47cqw, 6px);
+	font-size: clamp(8px, 0.90cqw, 11.5px);
+	color: var(--frames-vscode-statusbar-text);
+	white-space: nowrap;
+	cursor: pointer;
+	height: 100%;
+	border-radius: var(--frames-radius-xs);
+
+	&:hover {
+		background: var(--frames-vscode-btn-hover-bg);
 	}
 
-	// Light theme
-	&--light {
-		background: #fafafa;
-		color: #333;
+	i {
+		font-size: clamp(7px, 0.78cqw, 10px);
+	}
+}
 
-		.wpf-code-editor-frame__titlebar {
-			background: #e8e8e8;
-			color: #555;
+// ── Inner block overrides — code-syntax-highlighter inside VS Code frame ───
+// Strip standalone presentation styles that don't fit the embedded zones.
+
+.wp-block-frames-vscode__code-zone.wp-block-frames-code,
+.wp-block-frames-vscode__terminal-zone.wp-block-frames-code {
+	border-radius: 0;
+	box-shadow: none;
+}
+
+// Code zone: make the block fill its grid area as a flex column so the inner
+// __body scroll area can expand and scroll independently.
+.wp-block-frames-vscode__code-zone.wp-block-frames-code {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	.wp-block-frames-code__body {
+		flex: 1;
+		overflow: auto;
+		min-height: 0;
+
+		// Slim VS Code-style scrollbar
+		scrollbar-width: thin;
+		scrollbar-color: var(--frames-vscode-border) transparent;
+
+		&::-webkit-scrollbar {
+			width: 6px;
+			height: 6px;
 		}
+
+		&::-webkit-scrollbar-thumb {
+			background: var(--frames-vscode-border);
+			border-radius: var(--frames-radius-xs);
+		}
+
+		&::-webkit-scrollbar-track {
+			background: transparent;
+		}
+	}
+}
+
+// Terminal zone: fill grid area as a flex column so __body scrolls independently.
+.wp-block-frames-vscode__terminal-zone.wp-block-frames-code {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	.wp-block-frames-code__body {
+		flex: 1;
+		overflow: auto;
+		min-height: 0;
+
+		// Slim VS Code-style scrollbar (matches code zone)
+		scrollbar-width: thin;
+		scrollbar-color: var(--frames-vscode-border) transparent;
+		padding: var(--frames-space-3) 0;
+
+		&::-webkit-scrollbar {
+			width: 6px;
+			height: 6px;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: var(--frames-vscode-border);
+			border-radius: var(--frames-radius-xs);
+		}
+
+		&::-webkit-scrollbar-track {
+			background: transparent;
+		}
+	}
+}
+
+// Terminal zone: align content to the top instead of vertically centered.
+.wp-block-frames-vscode__terminal-zone.wp-block-frames-code.is-terminal-code {
+	justify-content: flex-start;
+}
+
+// ── Collapse: narrow container query ───────────────────────────────────────
+// When block width < 480px: collapse activity bar + sidebar (left column → 0)
+@container (max-width: 480px) {
+	.wp-block-frames-vscode__activity {
+		width: 0;
+		opacity: 0;
+		border-right: none;
+		overflow: hidden;
+	}
+
+	.wp-block-frames-vscode__inner-zones {
+		grid-template-columns: 0 1fr;
+		grid-template-areas:
+			". tabs"
+			". crumb"
+			". code"
+			". panel-head"
+			". terminal";
+	}
+
+	.wp-block-frames-vscode__inner-zones > .wp-block-list {
+		display: none;
 	}
 }

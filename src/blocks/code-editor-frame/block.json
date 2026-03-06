@@ -6,29 +6,33 @@
 	"title": "Code Editor Frame",
 	"category": "text",
 	"icon": "editor-code",
-	"description": "Display code inside a styled code editor frame.",
-	"keywords": ["code", "editor", "frame", "syntax", "highlight"],
+	"description": "A pixel-perfect VS Code editor shell (Dark+ theme) with a fluid-scaling CSS-grid layout. Wraps a file-tree list (right sidebar), a code syntax-highlighter (main editor), and a terminal strip. Tree icons rely on text/emoji in list items; no split-pane resize; terminal height is content-driven.",
+	"keywords": [ "code", "editor", "vscode", "vs code", "frame", "syntax", "highlight" ],
 	"example": {},
 	"supports": {
 		"html": false,
-		"align": ["wide", "full"]
+		"align": [ "wide", "full" ]
 	},
 	"attributes": {
-		"code": {
+		"projectName": {
 			"type": "string",
-			"default": ""
-		},
-		"language": {
-			"type": "string",
-			"default": "javascript"
-		},
-		"editorTheme": {
-			"type": "string",
-			"default": "dark"
+			"default": "my-project"
 		},
 		"fileName": {
 			"type": "string",
-			"default": ""
+			"default": "index.ts"
+		},
+		"filePath": {
+			"type": "string",
+			"default": "src/components"
+		},
+		"language": {
+			"type": "string",
+			"default": "TypeScript JSX"
+		},
+		"branch": {
+			"type": "string",
+			"default": "main"
 		}
 	},
 	"textdomain": "wpframeblocks",
