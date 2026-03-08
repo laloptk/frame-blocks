@@ -1,6 +1,7 @@
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { buildInlineStyle } from '@wpfb/helpers';
 
-function SafariChrome( { url, tabTitle } ) {
+function SafariUI( { url, tabTitle } ) {
 	return (
 		<div className="wp-block-frames-safari__chrome">
 			<div className="wp-block-frames-safari__toolbar">
@@ -49,7 +50,7 @@ function SafariChrome( { url, tabTitle } ) {
 	);
 }
 
-function ChromeChrome( { url, tabTitle } ) {
+function ChromeUI( { url, tabTitle } ) {
 	return (
 		<div className="wp-block-frames-chrome__chrome">
 			<div className="wp-block-frames-chrome__tabstrip">
@@ -124,14 +125,15 @@ export default function save( { attributes } ) {
 
 	const blockProps = useBlockProps.save( {
 		className: `wp-block-frames-${ browserVariant }`,
+		style: buildInlineStyle( attributes ),
 	} );
 
 	return (
 		<div { ...blockProps }>
 			{ browserVariant === 'safari' ? (
-				<SafariChrome url={ url } tabTitle={ tabTitle } />
+				<SafariUI url={ url } tabTitle={ tabTitle } />
 			) : (
-				<ChromeChrome url={ url } tabTitle={ tabTitle } />
+				<ChromeUI url={ url } tabTitle={ tabTitle } />
 			) }
 
 			<div className={ `wp-block-frames-${ browserVariant }__viewport` }>

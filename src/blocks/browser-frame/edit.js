@@ -5,10 +5,12 @@ import {
 	InnerBlocks,
 } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
+import { StyleControls } from '@wpfb/components';
+import { buildInlineStyle } from '@wpfb/helpers';
 
 import './editor.scss';
 
-function SafariChrome( { url, tabTitle } ) {
+function SafariUI( { url, tabTitle } ) {
 	return (
 		<div className="wp-block-frames-safari__chrome">
 			<div className="wp-block-frames-safari__toolbar">
@@ -57,7 +59,7 @@ function SafariChrome( { url, tabTitle } ) {
 	);
 }
 
-function ChromeChrome( { url, tabTitle } ) {
+function ChromeUI( { url, tabTitle } ) {
 	return (
 		<div className="wp-block-frames-chrome__chrome">
 			<div className="wp-block-frames-chrome__tabstrip">
@@ -132,10 +134,19 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	const blockProps = useBlockProps( {
 		className: `wp-block-frames-${ browserVariant }`,
+		style: buildInlineStyle( attributes ),
 	} );
 
 	return (
 		<>
+			<StyleControls
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+				enable={ {
+					spacing: true,
+					border: true,
+				} }
+			/>
 			<InspectorControls>
 				<PanelBody title={ __( 'Browser Settings', 'wpframeblocks' ) }>
 					<SelectControl
@@ -168,15 +179,17 @@ export default function Edit( { attributes, setAttributes } ) {
 
 			<div { ...blockProps }>
 				{ browserVariant === 'safari' ? (
-					<SafariChrome url={ url } tabTitle={ tabTitle } />
+					<SafariUI url={ url } tabTitle={ tabTitle } />
 				) : (
-					<ChromeChrome url={ url } tabTitle={ tabTitle } />
+					<ChromeUI url={ url } tabTitle={ tabTitle } />
 				) }
 
 				<div
 					className={ `wp-block-frames-${ browserVariant }__viewport` }
 				>
-					<InnerBlocks />
+					<InnerBlocks 
+						renderAppender={() => <InnerBlocks.ButtonBlockAppender />}
+					/>
 				</div>
 			</div>
 		</>
