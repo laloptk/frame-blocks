@@ -1,0 +1,63 @@
+// Instagram Post — editor-only styles
+
+// ── Image upload UI ─────────────────────────────────────────────────────────
+.wp-block-frames-ig__image-placeholder {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	width: 100%;
+	height: 100%;
+	background: none;
+	border: none;
+	color: inherit;
+	cursor: pointer;
+	font-size: inherit;
+	padding: 0;
+
+	span {
+		font-size: 13px;
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+			Helvetica, Arial, sans-serif;
+	}
+
+	&:hover {
+		opacity: 0.8;
+	}
+}
+
+.wp-block-frames-ig__image-edit {
+	position: absolute;
+	bottom: 10px;
+	left: 50%;
+	transform: translateX(-50%);
+	background: rgba(0, 0, 0, 0.72);
+	color: #ffffff;
+	border: none;
+	border-radius: 4px;
+	padding: 4px 12px;
+	font-size: 12px;
+	cursor: pointer;
+	white-space: nowrap;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		Helvetica, Arial, sans-serif;
+
+	&:hover {
+		background: rgba(0, 0, 0, 0.9);
+	}
+}
+
+// ── Avatar inspector controls ───────────────────────────────────────────────
+.wp-block-frames-ig__avatar-controls {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 4px;
+}
+
+// ── Caption placeholder (editor only) ──────────────────────────────────────
+.wp-block-frames-ig__cap-placeholder {
+	opacity: 0.4;
+	font-style: italic;
+}

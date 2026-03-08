@@ -1,0 +1,94 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpframeblocks/instagram-post",
+	"version": "0.1.0",
+	"title": "Instagram Post",
+	"category": "media",
+	"icon": "instagram",
+	"description": "Display a styled Instagram post mockup. Choose between light and dark variants.",
+	"keywords": [ "instagram", "social", "post", "feed", "mockup", "ig" ],
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ]
+	},
+	"attributes": {
+		"variant": {
+			"type": "string",
+			"default": "dark"
+		},
+		"username": {
+			"type": "string",
+			"default": "username"
+		},
+		"likesCount": {
+			"type": "string",
+			"default": "1,234 likes"
+		},
+		"caption": {
+			"type": "string",
+			"default": ""
+		},
+		"isVerified": {
+			"type": "boolean",
+			"default": false
+		},
+		"isLiked": {
+			"type": "boolean",
+			"default": false
+		},
+		"timestamp": {
+			"type": "string",
+			"default": "2 days ago"
+		},
+		"imageUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"imageAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"imageId": {
+			"type": "integer",
+			"default": 0
+		},
+		"avatarUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"avatarId": {
+			"type": "integer",
+			"default": 0
+		},
+		"maxWidth": {
+			"type": "integer",
+			"default": 390
+		},
+		"padding": {
+			"type": "string",
+			"default": ""
+		},
+		"margin": {
+			"type": "string",
+			"default": ""
+		},
+		"borderRadius": {
+			"type": "integer",
+			"default": 0
+		},
+		"borderWidth": {
+			"type": "integer",
+			"default": 0
+		},
+		"borderColor": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"textdomain": "wpframeblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}
