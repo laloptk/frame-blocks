@@ -1,10 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
-import { useDispatch } from '@wordpress/data';
-import { createBlock } from '@wordpress/blocks';
-import { Button } from '@wordpress/components';
 
-import { StyleControls } from '@wpfb/components';
+import { StyleControls, AppendBlockButton } from '@wpfb/components';
 import { buildInlineStyle } from '@wpfb/helpers';
 
 import './editor.scss';
@@ -32,19 +29,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		},
 	});
 
-	const { insertBlock } = useDispatch('core/block-editor');
-
-	function addItem() {
-
-		const newBlock = createBlock('wpframeblocks/file-tree-item', {
-			label: 'new-item',
-			itemType: 'file',
-			depth: 1,
-		});
-		
-		insertBlock(newBlock, undefined, clientId);
-	}
-
 	return (
 		<>
 			<StyleControls
@@ -64,15 +48,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					template={DEFAULT_TEMPLATE}
 					renderAppender={false}
 				/>
-				<Button
-					className="wp-block-frames-file-tree__add-item"
-					icon="plus-alt2"
-					onClick={addItem}
-					label={__('Add tree item', 'wpframeblocks')}
-					showTooltip
-				>
-					{__('Add item', 'wpframeblocks')}
-				</Button>
+
+				<AppendBlockButton 
+					blockName='wpframeblocks/file-tree-item'
+					label='new-tree-item'
+					type='file'
+					depth={1}
+					clientId={clientId}
+				/>
 			</div>
 		</>
 	);
