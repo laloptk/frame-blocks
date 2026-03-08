@@ -1,19 +1,23 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "wpframeblocks/instagram-post",
+	"name": "wpframeblocks/social-post",
 	"version": "0.1.0",
-	"title": "Instagram Post",
+	"title": "Social Post",
 	"category": "media",
-	"icon": "instagram",
-	"description": "Display a styled Instagram post mockup. Choose between light and dark variants.",
-	"keywords": [ "instagram", "social", "post", "feed", "mockup", "ig" ],
+	"icon": "share",
+	"description": "Display a styled social post mockup for Instagram or Facebook.",
+	"keywords": [ "social", "post", "instagram", "facebook", "mockup" ],
 	"example": {},
 	"supports": {
 		"html": false,
 		"align": [ "wide", "full" ]
 	},
 	"attributes": {
+		"platform": {
+			"type": "string",
+			"default": "instagram"
+		},
 		"variant": {
 			"type": "string",
 			"default": "dark"
@@ -30,6 +34,30 @@
 			"type": "string",
 			"default": ""
 		},
+		"timestamp": {
+			"type": "string",
+			"default": "2 days ago"
+		},
+		"pageName": {
+			"type": "string",
+			"default": "Page Name"
+		},
+		"pageSubtitle": {
+			"type": "string",
+			"default": "2 hrs - Public"
+		},
+		"postText": {
+			"type": "string",
+			"default": ""
+		},
+		"reactionsCount": {
+			"type": "string",
+			"default": "1,234"
+		},
+		"commentsCount": {
+			"type": "string",
+			"default": "56 comments"
+		},
 		"isVerified": {
 			"type": "boolean",
 			"default": false
@@ -37,10 +65,6 @@
 		"isLiked": {
 			"type": "boolean",
 			"default": false
-		},
-		"timestamp": {
-			"type": "string",
-			"default": "2 days ago"
 		},
 		"imageUrl": {
 			"type": "string",
@@ -64,7 +88,7 @@
 		},
 		"maxWidth": {
 			"type": "integer",
-			"default": 390
+			"default": 500
 		},
 		"padding": {
 			"type": "string",

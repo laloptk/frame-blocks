@@ -1,7 +1,4 @@
-// Instagram Post — editor-only styles
-
-// ── Image upload UI ─────────────────────────────────────────────────────────
-.wp-block-frames-ig__image-placeholder {
+.wp-block-frames-social__image-placeholder {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -27,7 +24,7 @@
 	}
 }
 
-.wp-block-frames-ig__image-edit {
+.wp-block-frames-social__image-edit {
 	position: absolute;
 	bottom: 10px;
 	left: 50%;
@@ -48,16 +45,15 @@
 	}
 }
 
-// ── Avatar inspector controls ───────────────────────────────────────────────
-.wp-block-frames-ig__avatar-controls {
+.wp-block-frames-social__avatar-controls {
 	display: flex;
 	align-items: center;
 	gap: 8px;
 	margin-top: 4px;
 }
 
-// ── Caption placeholder (editor only) ──────────────────────────────────────
-.wp-block-frames-ig__cap-placeholder {
-	opacity: 0.4;
+.wp-block-frames-social__cap-placeholder,
+.wp-block-frames-social__body-placeholder {
+	opacity: 0.45;
 	font-style: italic;
 }
