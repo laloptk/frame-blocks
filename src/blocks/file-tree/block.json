@@ -7,10 +7,50 @@
 	"category": "text",
 	"icon": "category",
 	"description": "A VS Code-style file explorer tree. Add File Tree Item child blocks to build a folder/file structure up to four levels deep.",
-	"keywords": [ "file", "tree", "explorer", "folder", "vscode", "sidebar" ],
+	"keywords": [
+		"file",
+		"tree",
+		"explorer",
+		"folder",
+		"vscode",
+		"sidebar"
+	],
 	"example": {},
 	"supports": {
 		"html": false
+	},
+	"attributes": {
+		"fontSize":   { "type": "string",  "default": "12.5px" },
+		"fontWeight": { "type": "string",  "default": "400" },
+		"lineHeight": { "type": "number",  "default": 1.2 },
+		"textColor": {
+			"type": "string",
+			"default": ""
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": ""
+		},
+		"padding": {
+			"type": "string",
+			"default": ""
+		},
+		"margin": {
+			"type": "string",
+			"default": ""
+		},
+		"borderRadius": {
+			"type": "integer",
+			"default": 0
+		},
+		"borderWidth": {
+			"type": "integer",
+			"default": 0
+		},
+		"borderColor": {
+			"type": "string",
+			"default": ""
+		}
 	},
 	"textdomain": "wpframeblocks",
 	"editorScript": "file:./index.js",

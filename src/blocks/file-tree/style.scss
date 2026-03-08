@@ -19,6 +19,7 @@
 	--frames-file-tree-icon-ts: var(--frames-vscode-icon-ts, #3178c6); /* (*) */
 	--frames-file-tree-icon-js: var(--frames-vscode-icon-js, #e8c84d); /* (*) */
 	--frames-file-tree-scrollbar: var(--frames-vscode-border, #474747); /* (*) */
+	--frames-file-tree-font-size: 13px; /* (*) */
 }
 
 // ── Block root ──────────────────────────────────────────────────────────────
@@ -46,7 +47,7 @@
 .wp-block-frames-file-tree__item {
 	display: flex;
 	align-items: center;
-	height: 22px;
+	min-height: 22px;
 	padding-right: 8px;
 	cursor: pointer;
 	white-space: nowrap;
@@ -63,6 +64,11 @@
 	&--depth-2 { padding-left: 28px; }
 	&--depth-3 { padding-left: 40px; }
 	&--depth-4 { padding-left: 52px; }
+	&--depth-5 { padding-left: 64px; }
+	&--depth-6 { padding-left: 76px; }
+	&--depth-7 { padding-left: 88px; }
+	&--depth-8 { padding-left: 100px; }
+	&--depth-9 { padding-left: 112px; }
 
 	&--active {
 		background: var(--frames-file-tree-active-bg);
@@ -85,9 +91,9 @@
 
 // ── Icon — file type / folder ───────────────────────────────────────────────
 .wp-block-frames-file-tree__icon {
-	font-size: 13px;
+	font-size: var(--frames-file-tree-font-size);
 	flex-shrink: 0;
-	width: 16px;
+	width: calc(var(--frames-file-tree-font-size) + 0.2em);
 	text-align: center;
 
 	&--folder,
@@ -102,7 +108,6 @@
 
 // ── Label ───────────────────────────────────────────────────────────────────
 .wp-block-frames-file-tree__label {
-	font-size: 12.5px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }

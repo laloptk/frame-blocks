@@ -1,17 +1,18 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
+import { useBlockProps, InspectorControls, ColorPalette } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	TextControl,
 	SelectControl,
 	RangeControl,
 	ToggleControl,
+	BaseControl,
 } from '@wordpress/components';
-
-import { getTreeItemIcon } from '@wpfb/helpers';
+import { StyleControls } from '@wpfb/components';
+import { buildInlineStyle, getTreeItemIcon } from '@wpfb/helpers';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { label, itemType, depth, isActive, isOpen, fileExt } = attributes;
+	const { label, itemType, depth, isActive, isOpen, fileExt, activeColor, activeTextColor } = attributes;
 
 	const { iconFA, iconMod } = getTreeItemIcon( itemType, fileExt, isOpen );
 
@@ -30,10 +31,25 @@ export default function Edit( { attributes, setAttributes } ) {
 		]
 			.filter( Boolean )
 			.join( ' ' ),
+		style: {
+			...buildInlineStyle( attributes ),
+			...( isActive && activeColor ? { '--frames-file-tree-active-bg': activeColor } : {} ),
+			...( isActive && activeTextColor ? { color: activeTextColor } : {} ),
+		},
 	} );
+
+	const fs = attributes.fontSize || undefined;
+	const lh = attributes.lineHeight || undefined;
 
 	return (
 		<>
+			<StyleControls
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+				enable={ {
+					typography: true,
+				} }
+			/>
 			<InspectorControls>
 				<PanelBody title={ __( 'Item Settings', 'wpframeblocks' ) }>
 					<TextControl
@@ -68,7 +84,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						label={ __( 'Depth', 'wpframeblocks' ) }
 						value={ depth }
 						min={ 0 }
-						max={ 4 }
+						max={ 9 }
 						onChange={ ( value ) => setAttributes( { depth: value } ) }
 					/>
 					<ToggleControl
@@ -76,6 +92,32 @@ export default function Edit( { attributes, setAttributes } ) {
 						checked={ isActive }
 						onChange={ ( value ) => setAttributes( { isActive: value } ) }
 					/>
+					{ isActive && (
+						<>
+							<BaseControl
+								label={ __( 'Highlight Color', 'wpframeblocks' ) }
+								id="wpfb-active-color"
+							>
+								<ColorPalette
+									value={ activeColor || '' }
+									onChange={ ( value ) =>
+										setAttributes( { activeColor: value ?? '' } )
+									}
+								/>
+							</BaseControl>
+							<BaseControl
+								label={ __( 'Highlight Text Color', 'wpframeblocks' ) }
+								id="wpfb-active-text-color"
+							>
+								<ColorPalette
+									value={ activeTextColor || '' }
+									onChange={ ( value ) =>
+										setAttributes( { activeTextColor: value ?? '' } )
+									}
+								/>
+							</BaseControl>
+						</>
+					) }
 					{ itemType === 'folder' && (
 						<ToggleControl
 							label={ __( 'Open (expanded arrow)', 'wpframeblocks' ) }
@@ -99,6 +141,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					]
 						.filter( Boolean )
 						.join( ' ' ) }
+					style={ { lineHeight: lh } }
 				></i>
 				<i
 					className={ [
@@ -108,9 +151,17 @@ export default function Edit( { attributes, setAttributes } ) {
 					]
 						.filter( Boolean )
 						.join( ' ' ) }
+					style={ {
+						fontSize: fs,
+						width: fs ? `calc(${ fs } + 0.2em)` : undefined,
+						lineHeight: lh,
+					} }
 				></i>
-				<span className="wp-block-frames-file-tree__label">
-					{ `${label}${itemType === 'file' && fileExt ? '.' + fileExt : ''}` }
+				<span
+					className="wp-block-frames-file-tree__label"
+					style={ { fontSize: fs, lineHeight: lh } }
+				>
+					{ `${ label }${ itemType === 'file' && fileExt ? '.' + fileExt : '' }` }
 				</span>
 			</div>
 		</>

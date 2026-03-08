@@ -1,9 +1,9 @@
 import { useBlockProps } from '@wordpress/block-editor';
 
-import { getTreeItemIcon } from '@wpfb/helpers';
+import { getTreeItemIcon, buildInlineStyle } from '@wpfb/helpers';
 
 export default function save( { attributes } ) {
-	const { label, itemType, depth, isActive, isOpen, fileExt } = attributes;
+	const { label, itemType, depth, isActive, isOpen, fileExt, activeColor, activeTextColor } = attributes;
 
 	const { iconFA, iconMod } = getTreeItemIcon( itemType, fileExt, isOpen );
 
@@ -22,7 +22,17 @@ export default function save( { attributes } ) {
 		]
 			.filter( Boolean )
 			.join( ' ' ),
+		style: {
+			...buildInlineStyle( attributes ),
+			...( isActive && activeColor ? { '--frames-file-tree-active-bg': activeColor } : {} ),
+			...( isActive && activeTextColor ? { color: activeTextColor } : {} ),
+		},
 	} );
+
+	const childTypography = {
+		fontSize: attributes.fontSize || undefined,
+		lineHeight: attributes.lineHeight || undefined,
+	};
 
 	return (
 		<div { ...blockProps }>
@@ -36,6 +46,7 @@ export default function save( { attributes } ) {
 				]
 					.filter( Boolean )
 					.join( ' ' ) }
+				style={ { lineHeight: childTypography.lineHeight } }
 			></i>
 			<i
 				className={ [
@@ -45,8 +56,21 @@ export default function save( { attributes } ) {
 				]
 					.filter( Boolean )
 					.join( ' ' ) }
+				style={ {
+					fontSize: childTypography.fontSize,
+					lineHeight: childTypography.lineHeight,
+					width: childTypography.fontSize ? `calc(${ childTypography.fontSize } + 0.2em)` : undefined,
+				} }
 			></i>
-			<span className="wp-block-frames-file-tree__label">{ label }</span>
+			<span
+				className="wp-block-frames-file-tree__label"
+				style={ {
+					fontSize: childTypography.fontSize,
+					lineHeight: childTypography.lineHeight,
+				} }
+			>
+				{ `${ label }${ itemType === 'file' && fileExt ? '.' + fileExt : '' }` }
+			</span>
 		</div>
 	);
 }
