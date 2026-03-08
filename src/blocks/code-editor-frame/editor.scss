@@ -32,8 +32,9 @@
 		display: contents;
 	}
 
-	// core/list inner block → sidebar (LEFT column, all 5 rows)
-	> .block-editor-inner-blocks > .block-editor-block-list__layout > .wp-block:nth-child(1) {
+	// file-tree block → sidebar (LEFT column, all 5 rows)
+	// Use class selector (not nth-child) so grid placement is robust even if blocks are reordered.
+	> .block-editor-inner-blocks > .block-editor-block-list__layout > .wp-block-wpframeblocks-file-tree {
 		grid-area: sidebar;
 		background: var(--frames-vscode-sidebar);
 		border-right: 1px solid var(--frames-vscode-border);

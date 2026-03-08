@@ -359,7 +359,7 @@
 
 // Fluid item sizing within the vscode frame
 .wp-block-frames-vscode .wp-block-frames-file-tree__item {
-	height: clamp(16px, 1.72cqw, 22px);
+	min-height: clamp(16px, 1.72cqw, 22px);
 }
 
 // Fluid depth indentation within the vscode frame (overrides standalone px values)
@@ -368,6 +368,10 @@
 .wp-block-frames-vscode .wp-block-frames-file-tree__item--depth-2 { padding-left: clamp(20px, 2.66cqw, 34px); }
 .wp-block-frames-vscode .wp-block-frames-file-tree__item--depth-3 { padding-left: clamp(28px, 3.75cqw, 48px); }
 .wp-block-frames-vscode .wp-block-frames-file-tree__item--depth-4 { padding-left: clamp(36px, 4.84cqw, 62px); }
+.wp-block-frames-vscode .wp-block-frames-file-tree__item--depth-5 { padding-left: clamp(44px, 5.93cqw, 76px); }
+.wp-block-frames-vscode .wp-block-frames-file-tree__item--depth-6 { padding-left: clamp(52px, 7.02cqw, 90px); }
+.wp-block-frames-vscode .wp-block-frames-file-tree__item--depth-7 { padding-left: clamp(60px, 8.11cqw, 104px); }
+.wp-block-frames-vscode .wp-block-frames-file-tree__item--depth-8 { padding-left: clamp(68px, 9.20cqw, 118px); }
 
 // Fluid icon + label sizing within the vscode frame
 .wp-block-frames-vscode .wp-block-frames-file-tree__arrow { font-size: clamp(7px, 0.70cqw, 9px); }
@@ -566,6 +570,7 @@
 // Terminal zone: align content to the top instead of vertically centered.
 .wp-block-frames-vscode__terminal-zone.wp-block-frames-code.is-terminal-code {
 	justify-content: flex-start;
+	padding: var(--frames-space-3) 0 var(--frames-space-3) var(--frames-space-3);
 }
 
 // ── Collapse: narrow container query ───────────────────────────────────────

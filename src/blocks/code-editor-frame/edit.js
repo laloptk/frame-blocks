@@ -5,24 +5,35 @@ import {
 	InnerBlocks,
 } from '@wordpress/block-editor';
 import { PanelBody, TextControl } from '@wordpress/components';
-
-import { getFileIcon, parseBreadcrumb } from '@wpfb/helpers';
+import { StyleControls } from '@wpfb/components';
+import { getFileIcon, parseBreadcrumb, buildInlineStyle } from '@wpfb/helpers';
 
 import './editor.scss';
 
+// Each zone is individually locked (move + remove) so the 3-panel layout
+// stays intact, without using templateLock which would cascade to nested InnerBlocks
+// and prevent the file-tree from accepting new items via insertBlock dispatch.
 const TEMPLATE = [
-	[ 'wpframeblocks/file-tree', {} ],
+	[ 'wpframeblocks/file-tree', { lock: { move: true, remove: true } } ],
 	[
 		'wpframeblocks/code-syntax-highlighter',
-		{ className: 'wp-block-frames-vscode__code-zone' },
+		{
+			className: 'wp-block-frames-vscode__code-zone',
+			lock: { move: true, remove: true },
+		},
 	],
 	[
 		'wpframeblocks/code-syntax-highlighter',
-		{ className: 'wp-block-frames-vscode__terminal-zone' },
+		{
+			className: 'wp-block-frames-vscode__terminal-zone',
+			lock: { move: true, remove: true },
+			isTerminal: true,
+			padding: '0 0 0 15px',
+		},
 	],
 ];
 
-const TEMPLATE_LOCK = 'all';
+const TEMPLATE_LOCK = false;
 
 const MENU_ITEMS = [ 'File', 'Edit', 'Selection', 'View', 'Go', 'Run' ];
 
@@ -31,6 +42,7 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	const blockProps = useBlockProps( {
 		className: 'wp-block-frames-vscode',
+		style: buildInlineStyle( attributes ),
 		role: 'img',
 		'aria-label': `VS Code editor — ${ projectName }`,
 	} );
@@ -40,6 +52,14 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	return (
 		<>
+			<StyleControls
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+				enable={ {
+					spacing: true,
+					border: true,
+				} }
+			/>
 			<InspectorControls>
 				<PanelBody title={ __( 'Editor Settings', 'wpframeblocks' ) }>
 					<TextControl
@@ -175,13 +195,6 @@ export default function Edit( { attributes, setAttributes } ) {
 						</div>
 					</div>
 
-					{ /*
-					 * Inner zones — 2-column × 5-row CSS grid.
-					 * Column 1: sidebar (core/list file explorer, LEFT).
-					 * Column 2: tabs | breadcrumb | code | panel-head | terminal.
-					 * The three InnerBlocks (core/list, code-zone, terminal-zone)
-					 * are positioned into their grid areas via CSS class selectors.
-					 */ }
 					<div className="wp-block-frames-vscode__inner-zones">
 
 						{ /* Tabs — grid-area: tabs */ }
@@ -243,14 +256,8 @@ export default function Edit( { attributes, setAttributes } ) {
 							</div>
 						</div>
 
-						{ /* InnerBlocks:
-						   - core/list           → .wp-block-list            → grid-area: sidebar (LEFT)
-						   - code-syntax-highlighter #1 → .__code-zone       → grid-area: code
-						   - code-syntax-highlighter #2 → .__terminal-zone   → grid-area: terminal
-						*/ }
 						<InnerBlocks
 							template={ TEMPLATE }
-							templateLock={ TEMPLATE_LOCK }
 						/>
 					</div>
 				</div>

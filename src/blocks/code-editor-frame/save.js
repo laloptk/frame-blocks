@@ -1,6 +1,6 @@
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
-import { getFileIcon, parseBreadcrumb } from '@wpfb/helpers';
+import { getFileIcon, parseBreadcrumb, buildInlineStyle } from '@wpfb/helpers';
 
 const MENU_ITEMS = [ 'File', 'Edit', 'Selection', 'View', 'Go', 'Run' ];
 
@@ -9,6 +9,7 @@ export default function save( { attributes } ) {
 
 	const blockProps = useBlockProps.save( {
 		className: 'wp-block-frames-vscode',
+		style: buildInlineStyle( attributes ),
 		role: 'img',
 		'aria-label': `VS Code editor — ${ projectName }`,
 	} );
