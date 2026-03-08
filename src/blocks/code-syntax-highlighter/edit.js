@@ -7,6 +7,8 @@ import CodeHighlighter from '@wpfb/components/CodeHighlighter';
 import useTokens from '@wpfb/components/hooks/useTokens';
 
 import './editor.scss';
+import { StyleControls } from '@wpfb/components';
+import { buildInlineStyle } from '@wpfb/helpers';
 
 const DEFAULT_BG = '#0F172A';
 
@@ -37,6 +39,7 @@ const TERMINAL_LANGUAGES = [
 ];
 
 const THEMES = [
+	{ label: 'None', value: 'none'},
 	{ label: 'GitHub Dark', value: 'github-dark' },
 	{ label: 'GitHub Light', value: 'github-light' },
 	{ label: 'Dracula', value: 'dracula' },
@@ -44,67 +47,92 @@ const THEMES = [
 	{ label: 'Nord', value: 'nord' },
 	{ label: 'Catppuccin Mocha', value: 'catppuccin-mocha' },
 	{ label: 'Solarized Dark', value: 'solarized-dark' },
+	{ label: 'Solarized Light', value: 'solarized-light' },
 	{ label: 'VS Code Dark+', value: 'dark-plus' },
 	{ label: 'Min Light', value: 'min-light' },
+	{ label: 'Night Owl', value: 'night-owl' },
+	{ label: 'Red', value: 'red'}
 ];
 
-export default function Edit( { attributes, setAttributes } ) {
-	const { terminalLang, theme, tokens, bg, code, codeLang, isTerminal, terminalPrompt, terminalCommand } = attributes;
+export default function Edit({ attributes, setAttributes }) {
+	const {
+		terminalLang,
+		theme,
+		tokens,
+		bg,
+		code,
+		codeLang,
+		isTerminal, 
+		terminalPrompt, 
+		terminalCommand,
+	} = attributes;
+
 	const toTokenize = isTerminal ? `${terminalPrompt} ${terminalCommand}` : code;
 	const activeLanguage = isTerminal ? terminalLang : codeLang;
-	const [ tokensData, loading, error ] = useTokens( toTokenize, activeLanguage, theme );
+	const [tokensData, loading, error] = useTokens(toTokenize, activeLanguage, theme);
 
-	useEffect( () => {
-		if ( ! tokensData ) return;
-		setAttributes( {
+	useEffect(() => {
+		if (!tokensData) return;
+		setAttributes({
 			tokens: tokensData.tokens,
 			bg: tokensData.bg ?? DEFAULT_BG,
-		} );
-	}, [ tokensData, setAttributes ] );
+		});
+	}, [tokensData, setAttributes]);
 
 	const hasStoredTokens = tokens && tokens.length > 0;
 	const hasLiveTokens =
 		tokensData && tokensData.tokens && tokensData.tokens.length > 0;
 
-	const showWarning = !! error && hasStoredTokens;
-	const showError = !! error && ! hasStoredTokens;
-	const showLoading = loading && ! hasLiveTokens && ! hasStoredTokens;
+	const showWarning = !!error && hasStoredTokens;
+	const showError = !!error && !hasStoredTokens;
+	const showLoading = loading && !hasLiveTokens && !hasStoredTokens;
 	const showEmpty =
-		! loading && ! error && ! hasLiveTokens && ! hasStoredTokens;
+		!loading && !error && !hasLiveTokens && !hasStoredTokens;
 
-	const renderTokensData = useMemo( () => {
-		if ( hasLiveTokens ) return tokensData;
-		if ( hasStoredTokens ) return { tokens };
+	const renderTokensData = useMemo(() => {
+		if (hasLiveTokens) return tokensData;
+		if (hasStoredTokens) return { tokens };
 		return null;
-	}, [ hasLiveTokens, hasStoredTokens, tokensData, tokens ] );
-	const blockProps = useBlockProps( {
+	}, [hasLiveTokens, hasStoredTokens, tokensData, tokens]);
+	const blockProps = useBlockProps({
 		className: `wp-block-frames-code ${isTerminal ? 'is-terminal-code' : ''}`,
-		style: { '--frames-code-bg': bg },
-	} );
+		style: {
+			'--frames-code-bg': bg,
+			...buildInlineStyle(attributes)
+		},
+	});
 
 	return (
 		<>
+			<StyleControls
+				attributes={attributes}
+				setAttributes={setAttributes}
+				enable={{
+					spacing: true,
+					border: true,
+				}}
+			/>
 			<InspectorControls>
 				<PanelBody
-					title={ __( 'Syntax Highlighter', 'wpframeblocks' ) }
+					title={__('Syntax Highlighter', 'wpframeblocks')}
 				>
 					<SelectControl
-						label={ __( 'Language', 'wpframeblocks' ) }
-						value={ activeLanguage }
-						options={ isTerminal ? TERMINAL_LANGUAGES : LANGUAGES }
-						onChange={ ( value ) => {
-								isTerminal 
-									? setAttributes({ terminalLang: value })
-									: setAttributes({ codeLang: value })
-							}
+						label={__('Language', 'wpframeblocks')}
+						value={activeLanguage}
+						options={isTerminal ? TERMINAL_LANGUAGES : LANGUAGES}
+						onChange={(value) => {
+							isTerminal
+								? setAttributes({ terminalLang: value })
+								: setAttributes({ codeLang: value })
+						}
 						}
 					/>
 					<SelectControl
-						label={ __( 'Theme', 'wpframeblocks' ) }
-						value={ theme }
-						options={ THEMES }
-						onChange={ ( value ) =>
-							setAttributes( { theme: value } )
+						label={__('Theme', 'wpframeblocks')}
+						value={theme}
+						options={THEMES}
+						onChange={(value) =>
+							setAttributes({ theme: value })
 						}
 					/>
 					<ToggleControl
@@ -115,65 +143,65 @@ export default function Edit( { attributes, setAttributes } ) {
 					/>
 					{
 						isTerminal &&
-							<TextControl 
-								label={ __('Terminal Prompt', 'wpframeblocks')}
-								value={ terminalPrompt }
-								onChange={ ( value ) =>
-									setAttributes( { terminalPrompt: value } )
-								}
-							/>
+						<TextControl
+							label={__('Terminal Prompt', 'wpframeblocks')}
+							value={terminalPrompt}
+							onChange={(value) =>
+								setAttributes({ terminalPrompt: value })
+							}
+						/>
 					}
 					<TextareaControl
-						label={ isTerminal ? __( 'Command', 'wpframeblocks' ) : __( 'Code', 'wpframeblocks' ) }
-						value={ isTerminal ? terminalCommand : code }
-						rows={ 12 }
-						onChange={ ( value ) =>
-							isTerminal 
-								? setAttributes( { terminalCommand: value } ) 
-								: setAttributes( { code: value } )
+						label={isTerminal ? __('Command', 'wpframeblocks') : __('Code', 'wpframeblocks')}
+						value={isTerminal ? terminalCommand : code}
+						rows={12}
+						onChange={(value) =>
+							isTerminal
+								? setAttributes({ terminalCommand: value })
+								: setAttributes({ code: value })
 						}
 					/>
 				</PanelBody>
 			</InspectorControls>
 
-			<div { ...blockProps }>
+			<div {...blockProps}>
 				<div className="wp-block-frames-code__body">
-					{ showWarning && (
+					{showWarning && (
 						<p className="wp-block-frames-code__warning">
-							{ __(
+							{__(
 								'Could not refresh highlighting. Showing last valid preview.',
 								'wpframeblocks'
-							) }
+							)}
 						</p>
-					) }
+					)}
 
-					{ showLoading && (
+					{showLoading && (
 						<p className="wp-block-frames-code__status">
-							{ __( 'Highlighting code\u2026', 'wpframeblocks' ) }
+							{__('Highlighting code\u2026', 'wpframeblocks')}
 						</p>
-					) }
+					)}
 
-					{ showError && (
+					{showError && (
 						<p className="wp-block-frames-code__status wp-block-frames-code__status--error">
-							{ __(
+							{__(
 								'Could not highlight code. Check language/theme options.',
 								'wpframeblocks'
-							) }
+							)}
 						</p>
-					) }
+					)}
 
-					{ showEmpty && (
+					{showEmpty && (
 						<p className="wp-block-frames-code__status">
-							{ __(
+							{__(
 								'Add code to preview highlighted output.',
 								'wpframeblocks'
-							) }
+							)}
 						</p>
-					) }
+					)}
 
-					{ renderTokensData && 
-						<CodeHighlighter tokensData={ renderTokensData } />
-				    }
+					{renderTokensData &&
+						<CodeHighlighter tokensData={renderTokensData} />
+					}
 				</div>
 			</div>
 		</>

@@ -36,7 +36,7 @@
 		},
 		"terminalPrompt": {
 			"type": "string",
-			"default": "user@LAPTOP-SO57FW60 MINGW64 ~"
+			"default": "user@LAPTOP-SO57FW60 MINGW64 ~ # Edit this content in the sidebar panel."
 		},
 		"terminalCommand": {
 			"type": "string",
@@ -44,11 +44,31 @@
 		},
 		"code": {
 			"type": "string",
-			"default": "<?php\n\nfunction greet( string $name ): string {\n    return \"Hello, {$name}!\";\n}\n\necho greet( 'World' );\n"
+			"default": "/**\n * ✨ Editable Code Area\n * --------------------------------------------------\n * You can edit this code from the Gutenberg editor sidebar panel.\n * Changes made there will appear here automatically.\n */\n\nfunction generateGreeting(name) {\n  const greetings = [\n    \"Hello\",\n    \"Welcome\",\n    \"Good to see you\",\n    \"Hi there\",\n    \"Greetings\"\n  ];\n\n  const randomGreeting =\n    greetings[Math.floor(Math.random() * greetings.length)];\n\n  return `${randomGreeting}, ${name}!`;\n}\n\nfunction simulateWork() {\n  const tasks = [\n    \"Loading modules\",\n    \"Initializing environment\",\n    \"Fetching data\",\n    \"Rendering components\",\n    \"Finalizing setup\"\n  ];\n\n  tasks.forEach((task, index) => {\n    setTimeout(() => {\n      console.log(`⚙️ ${task}...`);\n    }, index * 400);\n  });\n}\n\nconst user = \"Developer\";\n\nconsole.log(generateGreeting(user));\nsimulateWork();"
 		},
 		"codeLang": {
 			"type": "string",
 			"default": "javascript"
+		},
+		"padding": {
+			"type": "string",
+			"default": "0"
+		},
+		"margin": {
+			"type": "string",
+			"default": ""
+		},
+		"borderRadius": {
+			"type": "integer",
+			"default": 0
+		},
+		"borderWidth": {
+			"type": "integer",
+			"default": 0
+		},
+		"borderColor": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"textdomain": "wpframeblocks",
