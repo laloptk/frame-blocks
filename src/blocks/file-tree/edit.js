@@ -50,11 +50,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				/>
 
 				<AppendBlockButton 
-					blockName='wpframeblocks/file-tree-item'
-					label='new-tree-item'
-					type='file'
-					depth={1}
-					clientId={clientId}
+					blockName="wpframeblocks/file-tree-item"
+					blockAttributes={ {
+						label: 'new-tree-item',
+						itemType: 'file',
+						depth: 1,
+					} }
+					clientId={ clientId }
+					className="wp-block-frames-file-tree__add-item wp-block-frames-file-tree__add-item--new-tree-item"
+					tooltipLabel={ __( 'Add tree item', 'wpframeblocks' ) }
+					buttonText={ __( 'Add item', 'wpframeblocks' ) }
 				/>
 			</div>
 		</>
