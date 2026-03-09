@@ -8,7 +8,7 @@ import {
 	ToggleControl,
 	BaseControl,
 } from '@wordpress/components';
-import { StyleControls } from '@wpfb/components';
+import { StyleControls, FrameIcon } from '@wpfb/components';
 import { buildInlineStyle, getTreeItemIcon } from '@wpfb/helpers';
 
 export default function Edit( { attributes, setAttributes } ) {
@@ -131,7 +131,8 @@ export default function Edit( { attributes, setAttributes } ) {
 			</InspectorControls>
 
 			<div { ...blockProps }>
-				<i
+				<FrameIcon
+					as="i"
 					className={ [
 						'wp-block-frames-file-tree__arrow',
 						itemType === 'file'
@@ -142,8 +143,9 @@ export default function Edit( { attributes, setAttributes } ) {
 						.filter( Boolean )
 						.join( ' ' ) }
 					style={ { lineHeight: lh } }
-				></i>
-				<i
+				/>
+				<FrameIcon
+					as="i"
 					className={ [
 						'wp-block-frames-file-tree__icon',
 						iconMod,
@@ -156,7 +158,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						width: fs ? `calc(${ fs } + 0.2em)` : undefined,
 						lineHeight: lh,
 					} }
-				></i>
+				/>
 				<span
 					className="wp-block-frames-file-tree__label"
 					style={ { fontSize: fs, lineHeight: lh } }

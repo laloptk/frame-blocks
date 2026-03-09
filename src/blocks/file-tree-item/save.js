@@ -1,4 +1,5 @@
 import { useBlockProps } from '@wordpress/block-editor';
+import { FrameIcon } from '@wpfb/components';
 
 import { getTreeItemIcon, buildInlineStyle } from '@wpfb/helpers';
 
@@ -36,7 +37,8 @@ export default function save( { attributes } ) {
 
 	return (
 		<div { ...blockProps }>
-			<i
+			<FrameIcon
+				as="i"
 				className={ [
 					'wp-block-frames-file-tree__arrow',
 					itemType === 'file'
@@ -47,8 +49,9 @@ export default function save( { attributes } ) {
 					.filter( Boolean )
 					.join( ' ' ) }
 				style={ { lineHeight: childTypography.lineHeight } }
-			></i>
-			<i
+			/>
+			<FrameIcon
+				as="i"
 				className={ [
 					'wp-block-frames-file-tree__icon',
 					iconMod,
@@ -61,7 +64,7 @@ export default function save( { attributes } ) {
 					lineHeight: childTypography.lineHeight,
 					width: childTypography.fontSize ? `calc(${ childTypography.fontSize } + 0.2em)` : undefined,
 				} }
-			></i>
+			/>
 			<span
 				className="wp-block-frames-file-tree__label"
 				style={ {

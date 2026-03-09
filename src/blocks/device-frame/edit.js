@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls, InnerBlocks } from '@wordpress/block-editor';
 import { PanelBody, SelectControl } from '@wordpress/components';
+import { DeviceFrameTemplate } from '@wpfb/components';
 
 import './editor.scss';
 
@@ -29,11 +30,7 @@ export default function Edit( { attributes, setAttributes } ) {
 			</InspectorControls>
 
 			<div { ...blockProps }>
-				<div className="wpf-device-frame__shell">
-					<div className="wpf-device-frame__screen">
-						<InnerBlocks />
-					</div>
-				</div>
+				<DeviceFrameTemplate renderScreen={ () => <InnerBlocks /> } />
 			</div>
 		</>
 	);

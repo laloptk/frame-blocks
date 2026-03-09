@@ -16,61 +16,16 @@ import {
 	TextControl,
 	ToggleControl,
 } from '@wordpress/components';
-import { StyleControls, AppendBlockButton } from '@wpfb/components';
-import { buildInlineStyle, parseCaptionSegments } from '@wpfb/helpers';
+import {
+	StyleControls,
+	AppendBlockButton,
+	SocialPostTemplate,
+	FrameIcon,
+} from '@wpfb/components';
+import { buildInlineStyle } from '@wpfb/helpers';
 import './editor.scss';
 
 const ALLOWED_COMMENT_BLOCKS = [ 'wpframeblocks/social-comment' ];
-
-function SegmentedText( { text, classPrefix } ) {
-	const segments = parseCaptionSegments( text );
-	if ( ! segments.length ) return null;
-	const lines = [ [] ];
-
-	segments.forEach( ( seg ) => {
-		if ( seg.type === 'linebreak' ) {
-			lines.push( [] );
-			return;
-		}
-		lines[ lines.length - 1 ].push( seg );
-	} );
-
-	return (
-		<>
-			{ lines.map( ( line, lineIndex ) => {
-				return (
-					<p key={ lineIndex } className={ `${ classPrefix }line` }>
-						{ line.map( ( seg, segIndex ) => {
-							const key = `${ lineIndex }-${ segIndex }`;
-							if ( seg.type === 'plain' ) return seg.text;
-							if ( seg.type === 'url' ) {
-								const href = seg.text.startsWith( 'www.' )
-									? `https://${ seg.text }`
-									: seg.text;
-								return (
-									<a
-										key={ key }
-										className={ `${ classPrefix }url` }
-										href={ href }
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										{ seg.text }
-									</a>
-								);
-							}
-							return (
-								<span key={ key } className={ `${ classPrefix }${ seg.type }` }>
-									{ seg.text }
-								</span>
-							);
-						} ) }
-					</p>
-				);
-			} ) }
-		</>
-	);
-}
 
 function SocialImageUpload( {
 	imageUrl,
@@ -102,7 +57,7 @@ function SocialImageUpload( {
 								className="wp-block-frames-social__image-placeholder"
 								onClick={ open }
 							>
-								<i className="fa-regular fa-image"></i>
+								<FrameIcon iconClass="fa-regular fa-image" />
 								<span>{ __( 'Upload Image', 'wpframeblocks' ) }</span>
 							</button>
 						) }
@@ -113,46 +68,6 @@ function SocialImageUpload( {
 	);
 }
 
-function SocialTextSection( {
-	isInstagram,
-	username,
-	isVerified,
-	caption,
-	postText,
-} ) {
-	if ( isInstagram ) {
-		return (
-			<div className="wp-block-frames-social__text-area wp-block-frames-ig__caption">
-				<span className="wp-block-frames-ig__cap-user">{ username }</span>
-				{ isVerified && (
-					<i
-						className="fa-solid fa-circle-check wp-block-frames-ig__verified wp-block-frames-ig__verified--inline"
-						aria-hidden="true"
-					></i>
-				) }{ ' ' }
-				{ caption ? (
-					<div className="wp-block-frames-ig__cap-text">
-						<SegmentedText text={ caption } classPrefix="wp-block-frames-ig__cap-" />
-					</div>
-				) : (
-					<span className="wp-block-frames-social__cap-placeholder">
-						{ __( 'Write a caption...', 'wpframeblocks' ) }
-					</span>
-				) }
-			</div>
-		);
-	}
-
-	return postText ? (
-		<div className="wp-block-frames-social__text-area wp-block-frames-fb__body">
-			<SegmentedText text={ postText } classPrefix="wp-block-frames-fb__text-" />
-		</div>
-	) : (
-		<div className="wp-block-frames-social__text-area wp-block-frames-fb__body wp-block-frames-social__body-placeholder">
-			{ __( 'Write post text...', 'wpframeblocks' ) }
-		</div>
-	);
-}
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
 	const {
@@ -190,7 +105,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		},
 	} );
 
-	const avatarLetter = pageName ? pageName.charAt( 0 ).toUpperCase() : '?';
 	const widthMax = isInstagram ? 614 : 680;
 	const handlePlatformChange = ( nextPlatform ) => {
 		const nextAttributes = { platform: nextPlatform };
@@ -380,195 +294,64 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			</InspectorControls>
 
 			<div { ...blockProps }>
-				<div className="wp-block-frames-social__section wp-block-frames-social__section--header">
-					{ isInstagram ? (
-						<div className="wp-block-frames-ig__header">
-							<div className="wp-block-frames-ig__user-row">
-								<div className="wp-block-frames-ig__avatar-ring">
-									<div className="wp-block-frames-ig__avatar-inner">
-										<div
-											className="wp-block-frames-ig__avatar-img"
-											style={
-												avatarUrl
-													? { backgroundImage: `url(${ avatarUrl })` }
-													: undefined
-											}
-										>
-											{ ! avatarUrl && <i className="fa-solid fa-user"></i> }
-										</div>
-									</div>
-								</div>
-								<div className="wp-block-frames-ig__user-info">
-									<div className="wp-block-frames-ig__username-row">
-										<span className="wp-block-frames-ig__username">{ username }</span>
-										{ isVerified && (
-											<i
-												className="fa-solid fa-circle-check wp-block-frames-ig__verified"
-												aria-label={ __( 'Verified', 'wpframeblocks' ) }
-											></i>
-										) }
-									</div>
-								</div>
-							</div>
-							<div className="wp-block-frames-ig__more-btn" aria-hidden="true">
-								<i className="fa-solid fa-ellipsis"></i>
-							</div>
-						</div>
-					) : (
-						<div className="wp-block-frames-fb__header">
-							<div className="wp-block-frames-fb__user-row">
-								<div
-									className="wp-block-frames-fb__avatar"
-									style={
-										avatarUrl
-											? { backgroundImage: `url(${ avatarUrl })` }
-											: undefined
-									}
-								>
-									{ ! avatarUrl && avatarLetter }
-								</div>
-								<div className="wp-block-frames-fb__meta">
-									<div className="wp-block-frames-fb__name-row">
-										<span className="wp-block-frames-fb__name">{ pageName }</span>
-										{ isVerified && (
-											<i
-												className="fa-solid fa-circle-check wp-block-frames-fb__verified"
-												aria-label={ __( 'Verified', 'wpframeblocks' ) }
-											></i>
-										) }
-									</div>
-									<span className="wp-block-frames-fb__subtitle">{ pageSubtitle }</span>
-								</div>
-							</div>
-							<div className="wp-block-frames-fb__more-btn" aria-hidden="true">
-								<i className="fa-solid fa-ellipsis"></i>
-							</div>
-						</div>
-					) }
-				</div>
-
-				<div className="wp-block-frames-social__section wp-block-frames-social__section--text">
-					<SocialTextSection
-						isInstagram={ isInstagram }
-						username={ username }
-						isVerified={ isVerified }
-						caption={ caption }
-						postText={ postText }
-					/>
-				</div>
-
-				<div className="wp-block-frames-social__section wp-block-frames-social__section--media">
-					<SocialImageUpload
-						imageUrl={ imageUrl }
-						imageAlt={ imageAlt }
-						imageId={ imageId }
-						onSelect={ ( media ) =>
-							setAttributes( {
-								imageUrl: media.url,
-								imageAlt: media.alt || '',
-								imageId: media.id,
-							} )
-						}
-						containerClassName={
-							isInstagram ? 'wp-block-frames-ig__image' : 'wp-block-frames-fb__image'
-						}
-					/>
-				</div>
-
-				<div className="wp-block-frames-social__section wp-block-frames-social__section--engagement">
-					{ isInstagram ? (
-						<div className="wp-block-frames-ig__likes">{ likesCount }</div>
-					) : (
-						<div className="wp-block-frames-fb__reactions-row" aria-hidden="true">
-							<div className="wp-block-frames-fb__reactions-left">
-								<div className="wp-block-frames-fb__reaction-icons">
-									<div className="wp-block-frames-fb__react-emoji wp-block-frames-fb__react-emoji--like">
-										<i className="fa-solid fa-thumbs-up"></i>
-									</div>
-									<div className="wp-block-frames-fb__react-emoji wp-block-frames-fb__react-emoji--love">
-										<i className="fa-solid fa-heart"></i>
-									</div>
-									<div className="wp-block-frames-fb__react-emoji wp-block-frames-fb__react-emoji--care">
-										<span aria-hidden="true">&#129303;</span>
-									</div>
-								</div>
-								<span className="wp-block-frames-fb__reactions-text">{ reactionsCount }</span>
-							</div>
-							<span className="wp-block-frames-fb__comments-count">{ commentsCount }</span>
-						</div>
-					) }
-				</div>
-
-				<div className="wp-block-frames-social__section wp-block-frames-social__section--primary-actions">
-					{ isInstagram ? (
-						<div className="wp-block-frames-ig__actions" aria-hidden="true">
-							<div className="wp-block-frames-ig__actions-left">
-								<span className="wp-block-frames-ig__action-btn">
-									<i
-										className={
-											isLiked
-												? 'fa-solid fa-heart wp-block-frames-ig__heart--liked'
-												: 'fa-regular fa-heart'
-										}
-									></i>
-								</span>
-								<span className="wp-block-frames-ig__action-btn">
-									<i className="fa-regular fa-comment"></i>
-								</span>
-								<span className="wp-block-frames-ig__action-btn">
-									<i className="fa-regular fa-paper-plane"></i>
-								</span>
-							</div>
-							<span className="wp-block-frames-ig__bookmark">
-								<i className="fa-regular fa-bookmark"></i>
-							</span>
-						</div>
-					) : (
-						<div className="wp-block-frames-fb__actions" aria-hidden="true">
-							<span className="wp-block-frames-fb__action-btn">
-								<i
-									className={
-										isLiked
-											? 'fa-solid fa-thumbs-up wp-block-frames-fb__thumb--liked'
-											: 'fa-regular fa-thumbs-up'
-									}
-								></i>
-								<span>{ __( 'Like', 'wpframeblocks' ) }</span>
-							</span>
-							<span className="wp-block-frames-fb__action-btn">
-								<i className="fa-regular fa-comment"></i>
-								<span>{ __( 'Comment', 'wpframeblocks' ) }</span>
-							</span>
-							<span className="wp-block-frames-fb__action-btn">
-								<i className="fa-solid fa-share-nodes"></i>
-								<span>{ __( 'Share', 'wpframeblocks' ) }</span>
-							</span>
-						</div>
-					) }
-				</div>
-
-				{ isInstagram && (
-					<div className="wp-block-frames-social__section wp-block-frames-social__section--timestamp">
-						<div className="wp-block-frames-ig__timestamp">{ timestamp }</div>
-					</div>
-				) }
-
-				<div className="wp-block-frames-social__section wp-block-frames-social__section--comments">
-					<div className="wp-block-frames-social__comments">
-						<InnerBlocks
-							allowedBlocks={ ALLOWED_COMMENT_BLOCKS }
-							renderAppender={ false }
+				<SocialPostTemplate
+					isInstagram={ isInstagram }
+					username={ username }
+					pageName={ pageName }
+					pageSubtitle={ pageSubtitle }
+					avatarUrl={ avatarUrl }
+					isVerified={ isVerified }
+					caption={ caption }
+					postText={ postText }
+					likesCount={ likesCount }
+					reactionsCount={ reactionsCount }
+					commentsCount={ commentsCount }
+					isLiked={ isLiked }
+					timestamp={ timestamp }
+					verifiedLabel={ __( 'Verified', 'wpframeblocks' ) }
+					instagramCaptionPlaceholder={ __( 'Write a caption...', 'wpframeblocks' ) }
+					facebookPostPlaceholder={ __( 'Write post text...', 'wpframeblocks' ) }
+					actionLabels={ {
+						like: __( 'Like', 'wpframeblocks' ),
+						comment: __( 'Comment', 'wpframeblocks' ),
+						share: __( 'Share', 'wpframeblocks' ),
+					} }
+					renderMedia={ ( instagramMode ) => (
+						<SocialImageUpload
+							imageUrl={ imageUrl }
+							imageAlt={ imageAlt }
+							imageId={ imageId }
+							onSelect={ ( media ) =>
+								setAttributes( {
+									imageUrl: media.url,
+									imageAlt: media.alt || '',
+									imageId: media.id,
+								} )
+							}
+							containerClassName={
+								instagramMode
+									? 'wp-block-frames-ig__image'
+									: 'wp-block-frames-fb__image'
+							}
 						/>
-						<AppendBlockButton
-							blockName="wpframeblocks/social-comment"
-							blockAttributes={ {} }
-							clientId={ clientId }
-							className="wp-block-frames-social__add-comment"
-							tooltipLabel={ __( 'Add comment', 'wpframeblocks' ) }
-							buttonText={ __( 'Add comment', 'wpframeblocks' ) }
-						/>
-					</div>
-				</div>
+					) }
+					renderComments={ () => (
+						<>
+							<InnerBlocks
+								allowedBlocks={ ALLOWED_COMMENT_BLOCKS }
+								renderAppender={ false }
+							/>
+							<AppendBlockButton
+								blockName="wpframeblocks/social-comment"
+								blockAttributes={ {} }
+								clientId={ clientId }
+								className="wp-block-frames-social__add-comment"
+								tooltipLabel={ __( 'Add comment', 'wpframeblocks' ) }
+								buttonText={ __( 'Add comment', 'wpframeblocks' ) }
+							/>
+						</>
+					) }
+				/>
 			</div>
 		</>
 	);

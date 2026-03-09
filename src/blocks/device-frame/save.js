@@ -1,4 +1,5 @@
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { DeviceFrameTemplate } from '@wpfb/components';
 
 export default function save( { attributes } ) {
 	const { deviceType } = attributes;
@@ -9,11 +10,7 @@ export default function save( { attributes } ) {
 
 	return (
 		<div { ...blockProps }>
-			<div className="wpf-device-frame__shell">
-				<div className="wpf-device-frame__screen">
-					<InnerBlocks.Content />
-				</div>
-			</div>
+			<DeviceFrameTemplate renderScreen={ () => <InnerBlocks.Content /> } />
 		</div>
 	);
 }
