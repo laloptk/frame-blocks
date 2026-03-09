@@ -7,68 +7,68 @@
  * @param {string} text  Plain-text caption/comment string.
  * @returns {Array<{text: string, type: 'plain'|'hashtag'|'mention'|'url'|'linebreak'}>}
  */
-export function parseCaptionSegments( text ) {
-	if ( ! text ) return [];
+export function parseCaptionSegments(text) {
+	if (!text) return [];
 
 	const segments = [];
-	const normalizedText = text.replace( /\r\n/g, '\n' );
+	const normalizedText = text.replace(/\r\n/g, '\n');
 	const TOKEN =
 		/(https?:\/\/[^\s]+|www\.[^\s]+|#[\w\u00C0-\u024F\u0400-\u04FF]+|@[\w.]+|\n)/gu;
 	let lastIndex = 0;
 	let match;
 
-	while ( ( match = TOKEN.exec( normalizedText ) ) !== null ) {
-		if ( match.index > lastIndex ) {
-			segments.push( {
-				text: normalizedText.slice( lastIndex, match.index ),
+	while ((match = TOKEN.exec(normalizedText)) !== null) {
+		if (match.index > lastIndex) {
+			segments.push({
+				text: normalizedText.slice(lastIndex, match.index),
 				type: 'plain',
-			} );
+			});
 		}
 
-		const token = match[ 0 ];
-		const firstChar = token[ 0 ];
+		const token = match[0];
+		const firstChar = token[0];
 		const isHashtag = firstChar === '#';
 		const isMention = firstChar === '@';
 		const isLineBreak = token === '\n';
 		const isUrl =
-			token.startsWith( 'http://' ) ||
-			token.startsWith( 'https://' ) ||
-			token.startsWith( 'www.' );
+			token.startsWith('http://') ||
+			token.startsWith('https://') ||
+			token.startsWith('www.');
 
-		if ( isLineBreak ) {
-			segments.push( { text: token, type: 'linebreak' } );
+		if (isLineBreak) {
+			segments.push({ text: token, type: 'linebreak' });
 			lastIndex = TOKEN.lastIndex;
 			continue;
 		}
 
-		if ( isUrl ) {
-			const cleanedUrl = token.replace( /[),.!?;:]+$/u, '' );
-			const trailingText = token.slice( cleanedUrl.length );
-			segments.push( { text: cleanedUrl, type: 'url' } );
-			if ( trailingText ) {
-				segments.push( { text: trailingText, type: 'plain' } );
+		if (isUrl) {
+			const cleanedUrl = token.replace(/[),.!?;:]+$/u, '');
+			const trailingText = token.slice(cleanedUrl.length);
+			segments.push({ text: cleanedUrl, type: 'url' });
+			if (trailingText) {
+				segments.push({ text: trailingText, type: 'plain' });
 			}
 			lastIndex = TOKEN.lastIndex;
 			continue;
 		}
 
 		// Skip numeric-only hashtags - all platforms ignore these.
-		if ( isHashtag && /^#\d+$/.test( token ) ) {
-			segments.push( { text: token, type: 'plain' } );
-		} else if ( isMention ) {
-			segments.push( { text: token, type: 'mention' } );
+		if (isHashtag && /^#\d+$/.test(token)) {
+			segments.push({ text: token, type: 'plain' });
+		} else if (isMention) {
+			segments.push({ text: token, type: 'mention' });
 		} else {
-			segments.push( { text: token, type: 'hashtag' } );
+			segments.push({ text: token, type: 'hashtag' });
 		}
 
 		lastIndex = TOKEN.lastIndex;
 	}
 
-	if ( lastIndex < normalizedText.length ) {
-		segments.push( {
-			text: normalizedText.slice( lastIndex ),
+	if (lastIndex < normalizedText.length) {
+		segments.push({
+			text: normalizedText.slice(lastIndex),
 			type: 'plain',
-		} );
+		});
 	}
 
 	return segments;
@@ -82,7 +82,7 @@ export function parseCaptionSegments( text ) {
  * @param {Object} attributes  Block attributes (superset of style attributes is fine)
  * @return {Object} React style object
  */
-export function buildInlineStyle( {
+export function buildInlineStyle({
 	fontSize,
 	fontWeight,
 	lineHeight,
@@ -92,21 +92,21 @@ export function buildInlineStyle( {
 	borderRadius,
 	borderWidth,
 	borderColor,
-} = {} ) {
+} = {}) {
 	const style = {};
 
-	if ( fontSize ) style.fontSize = fontSize;
-	if ( fontWeight ) style.fontWeight = fontWeight;
-	if ( lineHeight ) style.lineHeight = lineHeight;
-	if ( backgroundColor ) style.backgroundColor = backgroundColor;
-	if ( borderRadius > 0 ) style.borderRadius = `${ borderRadius }px`;
-	if ( borderWidth > 0 ) {
-		style.borderWidth = `${ borderWidth }px`;
+	if (fontSize) style.fontSize = fontSize;
+	if (fontWeight) style.fontWeight = fontWeight;
+	if (lineHeight) style.lineHeight = lineHeight;
+	if (backgroundColor) style.backgroundColor = backgroundColor;
+	if (borderRadius > 0) style.borderRadius = `${borderRadius}px`;
+	if (borderWidth > 0) {
+		style.borderWidth = `${borderWidth}px`;
 		style.borderStyle = 'solid';
 	}
-	if ( borderColor ) style.borderColor = borderColor;
-	if ( padding ) style.padding = padding;
-	if ( margin ) style.margin = margin;
+	if (borderColor) style.borderColor = borderColor;
+	if (padding) style.padding = padding;
+	if (margin) style.margin = margin;
 
 	return style;
 }
@@ -117,9 +117,9 @@ export function buildInlineStyle( {
  * @param {string} fileName
  * @return {{ iconClass: string, colorClass: string }}
  */
-export function getFileIcon( fileName ) {
-	const ext = fileName ? fileName.split( '.' ).pop().toLowerCase() : '';
-	switch ( ext ) {
+export function getFileIcon(fileName) {
+	const ext = fileName ? fileName.split('.').pop().toLowerCase() : '';
+	switch (ext) {
 		case 'ts':
 		case 'tsx':
 			return {
@@ -156,21 +156,21 @@ export function getFileIcon( fileName ) {
  * @param {boolean} isOpen    Whether a folder is expanded
  * @return {{ iconFA: string, iconMod: string }}
  */
-export function getTreeItemIcon( itemType, fileExt, isOpen ) {
-	if ( itemType === 'folder' ) {
+export function getTreeItemIcon(itemType, fileExt, isOpen) {
+	if (itemType === 'folder') {
 		return isOpen
 			? {
-					iconFA: 'fa-solid fa-folder-open',
-					iconMod: 'wp-block-frames-file-tree__icon--folder-open',
-			  }
+				iconFA: 'fa-solid fa-folder-open',
+				iconMod: 'wp-block-frames-file-tree__icon--folder-open',
+			}
 			: {
-					iconFA: 'fa-solid fa-folder',
-					iconMod: 'wp-block-frames-file-tree__icon--folder',
-			  };
+				iconFA: 'fa-solid fa-folder',
+				iconMod: 'wp-block-frames-file-tree__icon--folder',
+			};
 	}
 
-	const ext = ( fileExt || '' ).toLowerCase().replace( /^\./, '' );
-	switch ( ext ) {
+	const ext = (fileExt || '').toLowerCase().replace(/^\./, '');
+	switch (ext) {
 		case 'ts':
 			return { iconFA: 'fa-brands fa-js', iconMod: 'wp-block-frames-file-tree__icon--ts' };
 		case 'tsx':
@@ -197,10 +197,10 @@ export function getTreeItemIcon( itemType, fileExt, isOpen ) {
  * @param {string} fileName  e.g. "index.ts"
  * @return {Array<{ label: string, active: boolean }>}
  */
-export function parseBreadcrumb( filePath, fileName ) {
-	const segments = filePath ? filePath.split( '/' ).filter( Boolean ) : [];
-	const crumbs = segments.map( ( label ) => ( { label, active: false } ) );
-	crumbs.push( { label: fileName || '', active: true } );
+export function parseBreadcrumb(filePath, fileName) {
+	const segments = filePath ? filePath.split('/').filter(Boolean) : [];
+	const crumbs = segments.map((label) => ({ label, active: false }));
+	crumbs.push({ label: fileName || '', active: true });
 	return crumbs;
 }
 
