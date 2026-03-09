@@ -19,9 +19,8 @@ import {
 import {
 	StyleControls,
 	AppendBlockButton,
-	SocialPostTemplate,
-	FrameIcon,
 } from '@wpfb/components';
+import { SocialPostTemplate, FrameIcon } from '@wpfb/frame-components';
 import { buildInlineStyle } from '@wpfb/helpers';
 import './editor.scss';
 
@@ -75,9 +74,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		variant,
 		username,
 		likesCount,
-		caption,
 		timestamp,
-		pageName,
 		pageSubtitle,
 		postText,
 		reactionsCount,
@@ -107,18 +104,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 	const widthMax = isInstagram ? 614 : 680;
 	const handlePlatformChange = ( nextPlatform ) => {
-		const nextAttributes = { platform: nextPlatform };
-
-		// Preserve authored text when switching between social networks.
-		if ( nextPlatform === 'facebook' && ! postText && caption ) {
-			nextAttributes.postText = caption;
-		}
-
-		if ( nextPlatform === 'instagram' && ! caption && postText ) {
-			nextAttributes.caption = postText;
-		}
-
-		setAttributes( nextAttributes );
+		setAttributes( { platform: nextPlatform } );
 	};
 
 	return (
@@ -216,14 +202,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							) }
 						</div>
 					</BaseControl>
+					<TextControl
+						label={
+							isInstagram
+								? __( 'Username', 'wpframeblocks' )
+								: __( 'Page / Name', 'wpframeblocks' )
+						}
+						value={ username }
+						onChange={ ( value ) => setAttributes( { username: value } ) }
+					/>
 
 					{ isInstagram ? (
 						<>
-							<TextControl
-								label={ __( 'Username', 'wpframeblocks' ) }
-								value={ username }
-								onChange={ ( value ) => setAttributes( { username: value } ) }
-							/>
 							<TextControl
 								label={ __( 'Likes', 'wpframeblocks' ) }
 								value={ likesCount }
@@ -237,22 +227,17 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								onChange={ ( value ) => setAttributes( { timestamp: value } ) }
 							/>
 							<TextareaControl
-								label={ __( 'Caption', 'wpframeblocks' ) }
+								label={ __( 'Post text', 'wpframeblocks' ) }
 								help={ __(
-									'Use #hashtags and @mentions. They are highlighted automatically.',
+									'#hashtags and @mentions are highlighted automatically.',
 									'wpframeblocks'
 								) }
-								value={ caption }
-								onChange={ ( value ) => setAttributes( { caption: value } ) }
+								value={ postText }
+								onChange={ ( value ) => setAttributes( { postText: value } ) }
 							/>
 						</>
 					) : (
 						<>
-							<TextControl
-								label={ __( 'Page / Name', 'wpframeblocks' ) }
-								value={ pageName }
-								onChange={ ( value ) => setAttributes( { pageName: value } ) }
-							/>
 							<TextControl
 								label={ __( 'Subtitle', 'wpframeblocks' ) }
 								value={ pageSubtitle }
@@ -297,11 +282,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				<SocialPostTemplate
 					isInstagram={ isInstagram }
 					username={ username }
-					pageName={ pageName }
 					pageSubtitle={ pageSubtitle }
 					avatarUrl={ avatarUrl }
 					isVerified={ isVerified }
-					caption={ caption }
 					postText={ postText }
 					likesCount={ likesCount }
 					reactionsCount={ reactionsCount }
@@ -309,8 +292,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					isLiked={ isLiked }
 					timestamp={ timestamp }
 					verifiedLabel={ __( 'Verified', 'wpframeblocks' ) }
-					instagramCaptionPlaceholder={ __( 'Write a caption...', 'wpframeblocks' ) }
-					facebookPostPlaceholder={ __( 'Write post text...', 'wpframeblocks' ) }
+					textPlaceholder={ __( 'Write text...', 'wpframeblocks' ) }
 					actionLabels={ {
 						like: __( 'Like', 'wpframeblocks' ),
 						comment: __( 'Comment', 'wpframeblocks' ),

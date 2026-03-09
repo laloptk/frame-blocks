@@ -61,6 +61,10 @@ module.exports = {
 		alias: {
 			...( defaultConfig.resolve?.alias ?? {} ),
 			'@wpfb/components': path.resolve( __dirname, 'src/components' ),
+			'@wpfb/frame-components': path.resolve(
+				__dirname,
+				'src/components/frame-parts'
+			),
 			'@wpfb/hooks': path.resolve( __dirname, 'src/hooks' ),
 			'@wpfb/helpers': path.resolve( __dirname, 'src/helpers' ),
 			'@wpfb/services': path.resolve( __dirname, 'src/services' ),

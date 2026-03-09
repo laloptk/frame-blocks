@@ -1,9 +1,9 @@
 export { default as SegmentedText } from './atoms/social/SegmentedText';
 
-export { default as PostHeader } from './molecules/social/PostHeader';
-export { default as PostTextSection } from './molecules/social/PostTextSection';
-export { default as PostEngagement } from './molecules/social/PostEngagement';
-export { default as PostActions } from './molecules/social/PostActions';
+export { default as PostHeader } from './organisms/social/PostHeader';
+export { default as PostTextSection } from './organisms/social/PostTextSection';
+export { default as PostEngagement } from './organisms/social/PostEngagement';
+export { default as PostActions } from './organisms/social/PostActions';
 export { default as FrameIcon } from './organisms/FrameIcon';
 export { default as IconSet } from './organisms/IconSet';
 export { default as SafariUI } from './organisms/browser/SafariUI';

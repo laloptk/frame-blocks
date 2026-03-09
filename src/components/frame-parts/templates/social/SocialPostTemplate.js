@@ -1,18 +1,15 @@
-import PostHeader from '../../molecules/social/PostHeader';
-import PostTextSection from '../../molecules/social/PostTextSection';
-import PostEngagement from '../../molecules/social/PostEngagement';
-import PostActions from '../../molecules/social/PostActions';
+import PostHeader from '../../organisms/social/PostHeader';
+import PostTextSection from '../../organisms/social/PostTextSection';
+import PostEngagement from '../../organisms/social/PostEngagement';
+import PostActions from '../../organisms/social/PostActions';
 
 export default function SocialPostTemplate( {
 	isInstagram,
 	username,
-	pageName,
 	pageSubtitle,
 	avatarUrl,
 	isVerified,
-	caption,
 	postText,
-	captionSegments,
 	postSegments,
 	likesCount,
 	reactionsCount,
@@ -20,8 +17,7 @@ export default function SocialPostTemplate( {
 	isLiked,
 	timestamp,
 	verifiedLabel,
-	instagramCaptionPlaceholder,
-	facebookPostPlaceholder,
+	textPlaceholder,
 	actionLabels,
 	renderMedia,
 	renderComments,
@@ -32,7 +28,6 @@ export default function SocialPostTemplate( {
 				<PostHeader
 					isInstagram={ isInstagram }
 					username={ username }
-					pageName={ pageName }
 					pageSubtitle={ pageSubtitle }
 					avatarUrl={ avatarUrl }
 					isVerified={ isVerified }
@@ -45,12 +40,9 @@ export default function SocialPostTemplate( {
 					isInstagram={ isInstagram }
 					username={ username }
 					isVerified={ isVerified }
-					caption={ caption }
 					postText={ postText }
-					captionSegments={ captionSegments }
 					postSegments={ postSegments }
-					instagramCaptionPlaceholder={ instagramCaptionPlaceholder }
-					facebookPostPlaceholder={ facebookPostPlaceholder }
+					textPlaceholder={ textPlaceholder }
 				/>
 			</div>
 

@@ -5,7 +5,8 @@ import {
 	InnerBlocks,
 } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
-import { StyleControls, BrowserFrameTemplate } from '@wpfb/components';
+import { StyleControls } from '@wpfb/components';
+import { BrowserFrameTemplate } from '@wpfb/frame-components';
 import { buildInlineStyle } from '@wpfb/helpers';
 
 import './editor.scss';

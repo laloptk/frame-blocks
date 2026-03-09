@@ -1,5 +1,5 @@
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
-import { DeviceFrameTemplate } from '@wpfb/components';
+import { DeviceFrameTemplate } from '@wpfb/frame-components';
 
 export default function save( { attributes } ) {
 	const { deviceType } = attributes;

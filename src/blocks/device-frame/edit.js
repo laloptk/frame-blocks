@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls, InnerBlocks } from '@wordpress/block-editor';
 import { PanelBody, SelectControl } from '@wordpress/components';
-import { DeviceFrameTemplate } from '@wpfb/components';
+import { DeviceFrameTemplate } from '@wpfb/frame-components';
 
 import './editor.scss';
 

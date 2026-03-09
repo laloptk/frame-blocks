@@ -1,5 +1,5 @@
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
-import { BrowserFrameTemplate } from '@wpfb/components';
+import { BrowserFrameTemplate } from '@wpfb/frame-components';
 import { buildInlineStyle } from '@wpfb/helpers';
 
 export default function save( { attributes } ) {

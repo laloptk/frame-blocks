@@ -4,6 +4,8 @@
 		"paths": {
 			"@wpfb/components": ["src/components/index.js"],
 			"@wpfb/components/*": ["src/components/*"],
+			"@wpfb/frame-components": ["src/components/frame-parts/index.js"],
+			"@wpfb/frame-components/*": ["src/components/frame-parts/*"],
 			"@wpfb/hooks": ["src/hooks/index.js"],
 			"@wpfb/hooks/*": ["src/hooks/*"],
 			"@wpfb/helpers": ["src/helpers/index.js"],

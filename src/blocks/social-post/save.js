@@ -1,5 +1,5 @@
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
-import { SocialPostTemplate, FrameIcon } from '@wpfb/components';
+import { SocialPostTemplate, FrameIcon } from '@wpfb/frame-components';
 import { buildInlineStyle } from '@wpfb/helpers';
 
 export default function save( { attributes } ) {
@@ -8,9 +8,7 @@ export default function save( { attributes } ) {
 		variant,
 		username,
 		likesCount,
-		caption,
 		timestamp,
-		pageName,
 		pageSubtitle,
 		postText,
 		reactionsCount,
@@ -41,17 +39,16 @@ export default function save( { attributes } ) {
 			<SocialPostTemplate
 				isInstagram={ isInstagram }
 				username={ username }
-				pageName={ pageName }
 				pageSubtitle={ pageSubtitle }
 				avatarUrl={ avatarUrl }
 				isVerified={ isVerified }
-				caption={ caption }
 				postText={ postText }
 				likesCount={ likesCount }
 				reactionsCount={ reactionsCount }
 				commentsCount={ commentsCount }
 				isLiked={ isLiked }
 				timestamp={ timestamp }
+				textPlaceholder="Write text..."
 				renderMedia={ ( instagramMode ) => (
 					<div className={ instagramMode ? 'wp-block-frames-ig__image' : 'wp-block-frames-fb__image' }>
 						{ imageUrl ? (

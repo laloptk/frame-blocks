@@ -15,7 +15,7 @@ import {
 	TextControl,
 	ToggleControl,
 } from '@wordpress/components';
-import { SocialCommentTemplate } from '@wpfb/components';
+import { SocialCommentTemplate } from '@wpfb/frame-components';
 import './editor.scss';
 
 export default function Edit( { attributes, setAttributes, context } ) {

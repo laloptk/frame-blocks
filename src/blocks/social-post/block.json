@@ -34,17 +34,9 @@
 			"type": "string",
 			"default": "1,234 likes"
 		},
-		"caption": {
-			"type": "string",
-			"default": ""
-		},
 		"timestamp": {
 			"type": "string",
 			"default": "2 days ago"
-		},
-		"pageName": {
-			"type": "string",
-			"default": "Page Name"
 		},
 		"pageSubtitle": {
 			"type": "string",

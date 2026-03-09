@@ -1,7 +1,8 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls, InnerBlocks } from '@wordpress/block-editor';
 import { PanelBody, TextControl } from '@wordpress/components';
-import { StyleControls, VSCodeFrameTemplate } from '@wpfb/components';
+import { StyleControls } from '@wpfb/components';
+import { VSCodeFrameTemplate } from '@wpfb/frame-components';
 import { buildInlineStyle } from '@wpfb/helpers';
 
 import './editor.scss';

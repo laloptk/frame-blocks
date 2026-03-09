@@ -1,5 +1,5 @@
 import { useBlockProps } from '@wordpress/block-editor';
-import { SocialCommentTemplate } from '@wpfb/components';
+import { SocialCommentTemplate } from '@wpfb/frame-components';
 
 export default function save( { attributes } ) {
 	const {

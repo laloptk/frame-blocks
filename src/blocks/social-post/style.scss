@@ -130,13 +130,13 @@
 	flex-direction: column;
 }
 
-.wp-block-frames-ig__username-row {
+.wp-block-frames-ig__user-name-row {
 	display: flex;
 	align-items: center;
 	gap: clamp(4px, 0.98cqw, 6px);
 }
 
-.wp-block-frames-ig__username {
+.wp-block-frames-ig__user-name {
 	font-size: var(--frames-ig-font-size-username);
 	font-weight: var(--frames-ig-font-weight-bold);
 	color: var(--_text-primary);
@@ -211,38 +211,38 @@
 }
 
 // ── Caption ────────────────────────────────────────────────────────────────
-.wp-block-frames-ig__caption {
+.wp-block-frames-ig__text {
 	padding: 2px clamp(8px, 1.95cqw, 12px) 6px;
 	font-size: var(--frames-ig-font-size-body);
 	color: var(--_text-primary);
 	line-height: 1.5;
 }
 
-.wp-block-frames-ig__cap-user {
+.wp-block-frames-ig__text-user {
 	font-weight: var(--frames-ig-font-weight-bold);
 	margin-right: 4px;
 	color: var(--_text-primary);
 }
 
-.wp-block-frames-ig__cap-text {
+.wp-block-frames-ig__text-content {
 	color: var(--_text-primary);
 	opacity: 0.88;
 }
 
-.wp-block-frames-ig__cap-line,
+.wp-block-frames-ig__text-line,
 .wp-block-frames-fb__text-line {
 	margin: 0;
 }
 
 // ── Verified badge ─────────────────────────────────────────────────────────
-// Inline after username in the header row and caption line.
+// Inline after username in the header row and text line.
 .wp-block-frames-ig__verified {
 	color: var(--frames-ig-blue);
 	font-size: 0.82em;
 	flex-shrink: 0;
 	line-height: 1;
 
-	// Caption variant sits inline between cap-user and cap-text
+	// Text variant sits inline between text-user and text-content
 	&--inline {
 		font-size: 0.78em;
 		vertical-align: middle;
@@ -252,9 +252,9 @@
 }
 
 // ── Hashtag & mention highlighting ────────────────────────────────────────
-.wp-block-frames-ig__cap-hashtag,
-.wp-block-frames-ig__cap-mention,
-.wp-block-frames-ig__cap-url {
+.wp-block-frames-ig__text-hashtag,
+.wp-block-frames-ig__text-mention,
+.wp-block-frames-ig__text-url {
 	color: var(--frames-ig-blue);
 	text-decoration: none;
 }
@@ -350,19 +350,19 @@
 }
 
 // ── Meta (name + subtitle) ─────────────────────────────────────────────────
-.wp-block-frames-fb__meta {
+.wp-block-frames-fb__user-info {
 	display: flex;
 	flex-direction: column;
 	gap: 1px;
 }
 
-.wp-block-frames-fb__name-row {
+.wp-block-frames-fb__user-name-row {
 	display: flex;
 	align-items: center;
 	gap: clamp(3px, 0.59cqw, 4px);
 }
 
-.wp-block-frames-fb__name {
+.wp-block-frames-fb__user-name {
 	font-size: var(--frames-fb-font-size-name);
 	font-weight: var(--frames-fb-font-weight-bold);
 	color: var(--frames-fb-text-primary);
@@ -394,7 +394,7 @@
 
 // ── Post body (text) ────────────────────────────────────────────────────────
 // native: padding 12px 12px 8px
-.wp-block-frames-fb__body {
+.wp-block-frames-fb__text {
 	padding: clamp(8px, 1.76cqw, 12px) clamp(8px, 1.76cqw, 12px)
 		clamp(5px, 1.18cqw, 8px);
 	font-size: var(--frames-fb-font-size-body);
@@ -402,11 +402,6 @@
 	line-height: 1.55;
 	white-space: pre-wrap;
 	word-break: break-word;
-
-	&--placeholder {
-		color: var(--frames-fb-text-secondary);
-		font-style: italic;
-	}
 }
 
 // ── Hashtag & mention highlighting ─────────────────────────────────────────
@@ -539,8 +534,8 @@
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
-.wp-block-frames-fb--dark .wp-block-frames-fb__name,
-.wp-block-frames-fb--dark .wp-block-frames-fb__body,
+.wp-block-frames-fb--dark .wp-block-frames-fb__user-name,
+.wp-block-frames-fb--dark .wp-block-frames-fb__text,
 .wp-block-frames-fb--dark .wp-block-frames-fb__action-btn {
 	color: #f2f3f5;
 }
@@ -552,7 +547,7 @@
 	color: #b0b3b8;
 }
 
-.wp-block-frames-fb--dark .wp-block-frames-fb__body--placeholder {
+.wp-block-frames-fb--dark .wp-block-frames-social__text-placeholder {
 	color: #8d9096;
 }
 

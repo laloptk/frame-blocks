@@ -8,7 +8,8 @@ import {
 	ToggleControl,
 	BaseControl,
 } from '@wordpress/components';
-import { StyleControls, FrameIcon } from '@wpfb/components';
+import { StyleControls } from '@wpfb/components';
+import { FrameIcon } from '@wpfb/frame-components';
 import { buildInlineStyle, getTreeItemIcon } from '@wpfb/helpers';
 
 export default function Edit( { attributes, setAttributes } ) {

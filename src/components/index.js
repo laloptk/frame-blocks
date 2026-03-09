@@ -2,7 +2,7 @@
 export { default as CodeHighlighter } from './CodeHighlighter';
 export { default as CodeEditorLine } from './CodeEditorLine';
 export { default as AppendBlockButton } from './AppendBlockButton';
-export * from './blocks';
+export * from './frame-parts';
 
 // Styling controls for InspectorControls
 export { default as StyleControls } from './style-controls';

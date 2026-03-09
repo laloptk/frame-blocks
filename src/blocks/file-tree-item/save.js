@@ -1,5 +1,5 @@
 import { useBlockProps } from '@wordpress/block-editor';
-import { FrameIcon } from '@wpfb/components';
+import { FrameIcon } from '@wpfb/frame-components';
 
 import { getTreeItemIcon, buildInlineStyle } from '@wpfb/helpers';
 
