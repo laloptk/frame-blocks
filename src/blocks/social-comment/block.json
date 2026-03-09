@@ -1,0 +1,66 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpframeblocks/social-comment",
+	"version": "0.1.0",
+	"title": "Social Comment",
+	"category": "media",
+	"icon": "admin-comments",
+	"description": "Display a single social media comment for Instagram or Facebook.",
+	"keywords": [ "social", "comment", "instagram", "facebook" ],
+	"example": {},
+	"usesContext": [ "wpframeblocks/social-platform", "wpframeblocks/social-theme" ],
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"platform": {
+			"type": "string",
+			"default": "instagram"
+		},
+		"theme": {
+			"type": "string",
+			"default": "light"
+		},
+		"syncWithContext": {
+			"type": "boolean",
+			"default": true
+		},
+		"authorName": {
+			"type": "string",
+			"default": "username"
+		},
+		"commentText": {
+			"type": "string",
+			"default": "Write a comment..."
+		},
+		"timeText": {
+			"type": "string",
+			"default": "5h"
+		},
+		"likesText": {
+			"type": "string",
+			"default": "1 like"
+		},
+		"replyText": {
+			"type": "string",
+			"default": "Reply"
+		},
+		"reactionCount": {
+			"type": "string",
+			"default": "366"
+		},
+		"avatarUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"avatarId": {
+			"type": "integer",
+			"default": 0
+		}
+	},
+	"textdomain": "wpframeblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}

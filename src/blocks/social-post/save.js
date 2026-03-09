@@ -1,17 +1,49 @@
-import { useBlockProps } from '@wordpress/block-editor';
+import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 import { buildInlineStyle, parseCaptionSegments } from '@wpfb/helpers';
 
 function SegmentedText( { segments, classPrefix } ) {
 	if ( ! segments.length ) return null;
+	const lines = [ [] ];
+
+	segments.forEach( ( seg ) => {
+		if ( seg.type === 'linebreak' ) {
+			lines.push( [] );
+			return;
+		}
+		lines[ lines.length - 1 ].push( seg );
+	} );
 
 	return (
 		<>
-			{ segments.map( ( seg, i ) => {
-				if ( seg.type === 'plain' ) return seg.text;
+			{ lines.map( ( line, lineIndex ) => {
 				return (
-					<span key={ i } className={ `${ classPrefix }${ seg.type }` }>
-						{ seg.text }
-					</span>
+					<p key={ lineIndex } className={ `${ classPrefix }line` }>
+						{ line.map( ( seg, segIndex ) => {
+							const key = `${ lineIndex }-${ segIndex }`;
+							if ( seg.type === 'plain' ) return seg.text;
+							if ( seg.type === 'url' ) {
+								const href = seg.text.startsWith( 'www.' )
+									? `https://${ seg.text }`
+									: seg.text;
+								return (
+									<a
+										key={ key }
+										className={ `${ classPrefix }url` }
+										href={ href }
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{ seg.text }
+									</a>
+								);
+							}
+							return (
+								<span key={ key } className={ `${ classPrefix }${ seg.type }` }>
+									{ seg.text }
+								</span>
+							);
+						} ) }
+					</p>
 				);
 			} ) }
 		</>
@@ -71,7 +103,7 @@ export default function save( { attributes } ) {
 	const isInstagram = platform === 'instagram';
 	const blockClassName = isInstagram
 		? `wp-block-frames-social wp-block-frames-ig wp-block-frames-ig--${ variant }`
-		: 'wp-block-frames-social wp-block-frames-fb';
+		: `wp-block-frames-social wp-block-frames-fb wp-block-frames-fb--${ variant }`;
 
 	const blockProps = useBlockProps.save( {
 		className: blockClassName,
@@ -251,6 +283,12 @@ export default function save( { attributes } ) {
 					<div className="wp-block-frames-ig__timestamp">{ timestamp }</div>
 				</div>
 			) }
+
+			<div className="wp-block-frames-social__section wp-block-frames-social__section--comments">
+				<div className="wp-block-frames-social__comments">
+					<InnerBlocks.Content />
+				</div>
+			</div>
 		</div>
 	);
 }

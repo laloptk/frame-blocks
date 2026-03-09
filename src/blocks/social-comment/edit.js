@@ -1,0 +1,277 @@
+import { __ } from '@wordpress/i18n';
+import { useEffect } from '@wordpress/element';
+import {
+	useBlockProps,
+	InspectorControls,
+	MediaUpload,
+	MediaUploadCheck,
+} from '@wordpress/block-editor';
+import {
+	BaseControl,
+	Button,
+	PanelBody,
+	SelectControl,
+	TextareaControl,
+	TextControl,
+	ToggleControl,
+} from '@wordpress/components';
+import { parseCaptionSegments } from '@wpfb/helpers';
+import './editor.scss';
+
+function SegmentedText( { text } ) {
+	const segments = parseCaptionSegments( text );
+	if ( ! segments.length ) return null;
+	const lines = [ [] ];
+
+	segments.forEach( ( seg ) => {
+		if ( seg.type === 'linebreak' ) {
+			lines.push( [] );
+			return;
+		}
+		lines[ lines.length - 1 ].push( seg );
+	} );
+
+	return (
+		<>
+			{ lines.map( ( line, lineIndex ) => {
+				return (
+					<p key={ lineIndex } className="wp-block-frames-social-comment__text-line">
+						{ line.map( ( seg, segIndex ) => {
+							const key = `${ lineIndex }-${ segIndex }`;
+							if ( seg.type === 'plain' ) return seg.text;
+							if ( seg.type === 'url' ) {
+								const href = seg.text.startsWith( 'www.' )
+									? `https://${ seg.text }`
+									: seg.text;
+								return (
+									<a
+										key={ key }
+										className="wp-block-frames-social-comment__text-url"
+										href={ href }
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{ seg.text }
+									</a>
+								);
+							}
+							return (
+								<span
+									key={ key }
+									className={ `wp-block-frames-social-comment__text-${ seg.type }` }
+								>
+									{ seg.text }
+								</span>
+							);
+						} ) }
+					</p>
+				);
+			} ) }
+		</>
+	);
+}
+
+export default function Edit( { attributes, setAttributes, context } ) {
+	const {
+		platform,
+		theme,
+		syncWithContext,
+		authorName,
+		commentText,
+		timeText,
+		likesText,
+		replyText,
+		reactionCount,
+		avatarUrl,
+		avatarId,
+	} = attributes;
+
+	const contextPlatform = context?.[ 'wpframeblocks/social-platform' ];
+	const contextTheme = context?.[ 'wpframeblocks/social-theme' ];
+	const hasContextPlatform =
+		contextPlatform === 'instagram' || contextPlatform === 'facebook';
+	const hasContextTheme = contextTheme === 'dark' || contextTheme === 'light';
+
+	useEffect( () => {
+		if ( ! syncWithContext ) return;
+
+		const nextAttributes = {};
+		if ( hasContextPlatform && platform !== contextPlatform ) {
+			nextAttributes.platform = contextPlatform;
+		}
+		if ( hasContextTheme && theme !== contextTheme ) {
+			nextAttributes.theme = contextTheme;
+		}
+
+		if ( Object.keys( nextAttributes ).length > 0 ) {
+			setAttributes( nextAttributes );
+		}
+	}, [
+		syncWithContext,
+		hasContextPlatform,
+		hasContextTheme,
+		platform,
+		theme,
+		contextPlatform,
+		contextTheme,
+		setAttributes,
+	] );
+
+	const blockProps = useBlockProps( {
+		className: `wp-block-frames-social-comment wp-block-frames-social-comment--${ platform } wp-block-frames-social-comment--${ theme }`,
+	} );
+
+	const avatarLetter = authorName ? authorName.charAt( 0 ).toUpperCase() : '?';
+
+	return (
+		<>
+			<InspectorControls>
+				<PanelBody title={ __( 'Comment Settings', 'wpframeblocks' ) }>
+					{ hasContextPlatform && (
+						<ToggleControl
+							label={ __( 'Sync with parent social post', 'wpframeblocks' ) }
+							checked={ syncWithContext }
+							onChange={ ( value ) => setAttributes( { syncWithContext: value } ) }
+						/>
+					) }
+					<SelectControl
+						label={ __( 'Platform', 'wpframeblocks' ) }
+						value={ platform }
+						disabled={ syncWithContext && hasContextPlatform }
+						help={
+							syncWithContext && hasContextPlatform
+								? __( 'Platform is inherited from the parent social post.', 'wpframeblocks' )
+								: undefined
+						}
+						options={ [
+							{ label: __( 'Instagram', 'wpframeblocks' ), value: 'instagram' },
+							{ label: __( 'Facebook', 'wpframeblocks' ), value: 'facebook' },
+						] }
+						onChange={ ( value ) => setAttributes( { platform: value } ) }
+					/>
+					<SelectControl
+						label={ __( 'Theme', 'wpframeblocks' ) }
+						value={ theme }
+						disabled={ syncWithContext && hasContextTheme }
+						help={
+							syncWithContext && hasContextTheme
+								? __( 'Theme is inherited from the parent social post.', 'wpframeblocks' )
+								: undefined
+						}
+						options={ [
+							{ label: __( 'Light', 'wpframeblocks' ), value: 'light' },
+							{ label: __( 'Dark', 'wpframeblocks' ), value: 'dark' },
+						] }
+						onChange={ ( value ) => setAttributes( { theme: value } ) }
+					/>
+					<BaseControl
+						label={ __( 'Avatar', 'wpframeblocks' ) }
+						id="wpfb-social-comment-avatar-upload"
+					>
+						<div className="wp-block-frames-social-comment__avatar-controls">
+							<MediaUploadCheck>
+								<MediaUpload
+									onSelect={ ( media ) =>
+										setAttributes( {
+											avatarUrl: media.url,
+											avatarId: media.id,
+										} )
+									}
+									allowedTypes={ [ 'image' ] }
+									value={ avatarId || undefined }
+									render={ ( { open } ) => (
+										<Button
+											id="wpfb-social-comment-avatar-upload"
+											onClick={ open }
+											variant="secondary"
+											size="small"
+										>
+											{ avatarUrl
+												? __( 'Change avatar', 'wpframeblocks' )
+												: __( 'Upload avatar', 'wpframeblocks' ) }
+										</Button>
+									) }
+								/>
+							</MediaUploadCheck>
+							{ avatarUrl && (
+								<Button
+									variant="link"
+									isDestructive
+									size="small"
+									onClick={ () => setAttributes( { avatarUrl: '', avatarId: 0 } ) }
+								>
+									{ __( 'Remove', 'wpframeblocks' ) }
+								</Button>
+							) }
+						</div>
+					</BaseControl>
+					<TextControl
+						label={ __( 'Author name', 'wpframeblocks' ) }
+						value={ authorName }
+						onChange={ ( value ) => setAttributes( { authorName: value } ) }
+					/>
+					<TextareaControl
+						label={ __( 'Comment text', 'wpframeblocks' ) }
+						value={ commentText }
+						onChange={ ( value ) => setAttributes( { commentText: value } ) }
+					/>
+					<TextControl
+						label={ __( 'Time', 'wpframeblocks' ) }
+						value={ timeText }
+						onChange={ ( value ) => setAttributes( { timeText: value } ) }
+					/>
+					<TextControl
+						label={ __( 'Likes label', 'wpframeblocks' ) }
+						value={ likesText }
+						onChange={ ( value ) => setAttributes( { likesText: value } ) }
+					/>
+					<TextControl
+						label={ __( 'Reply label', 'wpframeblocks' ) }
+						value={ replyText }
+						onChange={ ( value ) => setAttributes( { replyText: value } ) }
+					/>
+					{ platform === 'facebook' && (
+						<TextControl
+							label={ __( 'Reaction count', 'wpframeblocks' ) }
+							value={ reactionCount }
+							onChange={ ( value ) => setAttributes( { reactionCount: value } ) }
+						/>
+					) }
+				</PanelBody>
+			</InspectorControls>
+
+			<div { ...blockProps }>
+				<div className="wp-block-frames-social-comment__row">
+					<div
+						className="wp-block-frames-social-comment__avatar"
+						style={
+							avatarUrl
+								? { backgroundImage: `url(${ avatarUrl })` }
+								: undefined
+						}
+					>
+						{ ! avatarUrl && avatarLetter }
+					</div>
+					<div className="wp-block-frames-social-comment__content">
+						<div className="wp-block-frames-social-comment__message">
+							<span className="wp-block-frames-social-comment__author">{ authorName }</span>{ ' ' }
+							<div className="wp-block-frames-social-comment__text">
+								<SegmentedText text={ commentText } />
+							</div>
+						</div>
+						<div className="wp-block-frames-social-comment__meta">
+							<span>{ timeText }</span>
+							<span>{ likesText }</span>
+							<span>{ replyText }</span>
+							{ platform === 'facebook' && (
+								<span className="wp-block-frames-social-comment__reaction-count">
+									<i className="fa-solid fa-thumbs-up"></i> { reactionCount }
+								</span>
+							) }
+						</div>
+					</div>
+				</div>
+			</div>
+		</>
+	);
+}

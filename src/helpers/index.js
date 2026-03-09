@@ -1,50 +1,74 @@
 // Shared utility helpers
 
 /**
- * Parse a plain-text social-media caption and split it into segments tagged as
- * 'plain', 'hashtag' (#word), or 'mention' (@word).
+ * Parse a plain-text social-media string into semantic segments:
+ * plain text, hashtags, mentions, URLs, and line breaks.
  *
- * Rules:
- *   - Supports Latin, accented, and Cyrillic characters in tokens.
- *   - Hashtags made entirely of digits (#123) are treated as plain text.
- *
- * @param {string} text  Plain-text caption string.
- * @returns {Array<{text: string, type: 'plain'|'hashtag'|'mention'}>}
+ * @param {string} text  Plain-text caption/comment string.
+ * @returns {Array<{text: string, type: 'plain'|'hashtag'|'mention'|'url'|'linebreak'}>}
  */
 export function parseCaptionSegments( text ) {
 	if ( ! text ) return [];
 
 	const segments = [];
-	const TOKEN = /(#[\w\u00C0-\u024F\u0400-\u04FF]+|@[\w.]+)/gu;
+	const normalizedText = text.replace( /\r\n/g, '\n' );
+	const TOKEN =
+		/(https?:\/\/[^\s]+|www\.[^\s]+|#[\w\u00C0-\u024F\u0400-\u04FF]+|@[\w.]+|\n)/gu;
 	let lastIndex = 0;
 	let match;
 
-	while ( ( match = TOKEN.exec( text ) ) !== null ) {
+	while ( ( match = TOKEN.exec( normalizedText ) ) !== null ) {
 		if ( match.index > lastIndex ) {
 			segments.push( {
-				text: text.slice( lastIndex, match.index ),
+				text: normalizedText.slice( lastIndex, match.index ),
 				type: 'plain',
 			} );
 		}
 
 		const token = match[ 0 ];
-		const isHashtag = token[ 0 ] === '#';
+		const firstChar = token[ 0 ];
+		const isHashtag = firstChar === '#';
+		const isMention = firstChar === '@';
+		const isLineBreak = token === '\n';
+		const isUrl =
+			token.startsWith( 'http://' ) ||
+			token.startsWith( 'https://' ) ||
+			token.startsWith( 'www.' );
 
-		// Skip numeric-only hashtags — all platforms ignore these.
+		if ( isLineBreak ) {
+			segments.push( { text: token, type: 'linebreak' } );
+			lastIndex = TOKEN.lastIndex;
+			continue;
+		}
+
+		if ( isUrl ) {
+			const cleanedUrl = token.replace( /[),.!?;:]+$/u, '' );
+			const trailingText = token.slice( cleanedUrl.length );
+			segments.push( { text: cleanedUrl, type: 'url' } );
+			if ( trailingText ) {
+				segments.push( { text: trailingText, type: 'plain' } );
+			}
+			lastIndex = TOKEN.lastIndex;
+			continue;
+		}
+
+		// Skip numeric-only hashtags - all platforms ignore these.
 		if ( isHashtag && /^#\d+$/.test( token ) ) {
 			segments.push( { text: token, type: 'plain' } );
+		} else if ( isMention ) {
+			segments.push( { text: token, type: 'mention' } );
 		} else {
-			segments.push( {
-				text: token,
-				type: isHashtag ? 'hashtag' : 'mention',
-			} );
+			segments.push( { text: token, type: 'hashtag' } );
 		}
 
 		lastIndex = TOKEN.lastIndex;
 	}
 
-	if ( lastIndex < text.length ) {
-		segments.push( { text: text.slice( lastIndex ), type: 'plain' } );
+	if ( lastIndex < normalizedText.length ) {
+		segments.push( {
+			text: normalizedText.slice( lastIndex ),
+			type: 'plain',
+		} );
 	}
 
 	return segments;
@@ -179,3 +203,4 @@ export function parseBreadcrumb( filePath, fileName ) {
 	crumbs.push( { label: fileName || '', active: true } );
 	return crumbs;
 }
+

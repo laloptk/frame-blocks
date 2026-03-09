@@ -229,6 +229,11 @@
 	opacity: 0.88;
 }
 
+.wp-block-frames-ig__cap-line,
+.wp-block-frames-fb__text-line {
+	margin: 0;
+}
+
 // ── Verified badge ─────────────────────────────────────────────────────────
 // Inline after username in the header row and caption line.
 .wp-block-frames-ig__verified {
@@ -248,8 +253,10 @@
 
 // ── Hashtag & mention highlighting ────────────────────────────────────────
 .wp-block-frames-ig__cap-hashtag,
-.wp-block-frames-ig__cap-mention {
+.wp-block-frames-ig__cap-mention,
+.wp-block-frames-ig__cap-url {
 	color: var(--frames-ig-blue);
+	text-decoration: none;
 }
 
 // ── Liked heart ────────────────────────────────────────────────────────────
@@ -404,8 +411,10 @@
 
 // ── Hashtag & mention highlighting ─────────────────────────────────────────
 .wp-block-frames-fb__text-hashtag,
-.wp-block-frames-fb__text-mention {
+.wp-block-frames-fb__text-mention,
+.wp-block-frames-fb__text-url {
 	color: var(--frames-fb-blue);
+	text-decoration: none;
 }
 
 // ── Post image ─────────────────────────────────────────────────────────────
@@ -524,6 +533,38 @@
 	color: var(--frames-fb-blue);
 }
 
+.wp-block-frames-fb--dark {
+	background: #1e1f23;
+	border-color: #33363d;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.wp-block-frames-fb--dark .wp-block-frames-fb__name,
+.wp-block-frames-fb--dark .wp-block-frames-fb__body,
+.wp-block-frames-fb--dark .wp-block-frames-fb__action-btn {
+	color: #f2f3f5;
+}
+
+.wp-block-frames-fb--dark .wp-block-frames-fb__subtitle,
+.wp-block-frames-fb--dark .wp-block-frames-fb__more-btn,
+.wp-block-frames-fb--dark .wp-block-frames-fb__reactions-text,
+.wp-block-frames-fb--dark .wp-block-frames-fb__comments-count {
+	color: #b0b3b8;
+}
+
+.wp-block-frames-fb--dark .wp-block-frames-fb__body--placeholder {
+	color: #8d9096;
+}
+
+.wp-block-frames-fb--dark .wp-block-frames-fb__image {
+	background: #2a2d33;
+	color: #8d9096;
+}
+
+.wp-block-frames-fb--dark .wp-block-frames-fb__reactions-row {
+	border-bottom-color: #33363d;
+}
+
 .wp-block-frames-social.wp-block-frames-ig,
 .wp-block-frames-social.wp-block-frames-fb {
 	display: flex;
@@ -554,6 +595,10 @@
 	order: 50;
 }
 
+.wp-block-frames-fb .wp-block-frames-social__section--comments {
+	order: 60;
+}
+
 .wp-block-frames-ig .wp-block-frames-social__section--header {
 	order: 10;
 }
@@ -576,4 +621,12 @@
 
 .wp-block-frames-ig .wp-block-frames-social__section--timestamp {
 	order: 60;
+}
+
+.wp-block-frames-ig .wp-block-frames-social__section--comments {
+	order: 70;
+}
+
+.wp-block-frames-social__comments {
+	padding: 8px 12px 12px;
 }

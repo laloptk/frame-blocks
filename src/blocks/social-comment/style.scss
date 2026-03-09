@@ -1,0 +1,114 @@
+.wp-block-frames-social-comment {
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+		Arial, sans-serif;
+	color: var(--_comment-text);
+	--_comment-text: #050505;
+	--_comment-muted: #65676b;
+	--_comment-link: #1877f2;
+	--_comment-bubble: #f0f2f5;
+	--_comment-avatar-fallback: linear-gradient(135deg, #d7d7d7, #bdbdbd);
+}
+
+.wp-block-frames-social-comment__row {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.wp-block-frames-social-comment__avatar {
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	flex-shrink: 0;
+	background: var(--_comment-avatar-fallback);
+	background-size: cover;
+	background-position: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+	font-size: 13px;
+	color: #2f2f2f;
+}
+
+.wp-block-frames-social-comment__content {
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.wp-block-frames-social-comment__message {
+	font-size: 15px;
+	line-height: 1.4;
+	word-break: break-word;
+}
+
+.wp-block-frames-social-comment__author {
+	font-weight: 700;
+}
+
+.wp-block-frames-social-comment__text {
+	white-space: normal;
+}
+
+.wp-block-frames-social-comment__text-line {
+	margin: 0;
+}
+
+.wp-block-frames-social-comment__text-hashtag,
+.wp-block-frames-social-comment__text-mention,
+.wp-block-frames-social-comment__text-url {
+	color: var(--_comment-link);
+	text-decoration: none;
+}
+
+.wp-block-frames-social-comment__meta {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 14px;
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--_comment-muted);
+}
+
+.wp-block-frames-social-comment__reaction-count {
+	margin-left: auto;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	color: var(--_comment-muted);
+}
+
+.wp-block-frames-social-comment__reaction-count i {
+	color: var(--_comment-link);
+}
+
+.wp-block-frames-social-comment--facebook .wp-block-frames-social-comment__message {
+	border-radius: 16px;
+	padding: 10px 12px;
+}
+
+.wp-block-frames-social-comment--instagram .wp-block-frames-social-comment__message {
+	background: var(--_comment-bubble);
+	border-radius: 16px;
+	padding: 10px 12px;
+}
+
+.wp-block-frames-social-comment--dark {
+	--_comment-text: #f2f3f5;
+	--_comment-muted: #b0b3b8;
+	--_comment-link: #4ea1ff;
+	--_comment-bubble: #2f3136;
+	--_comment-avatar-fallback: linear-gradient(135deg, #54575f, #3a3d45);
+}
+
+.wp-block-frames-social-comment--dark .wp-block-frames-social-comment__avatar {
+	color: #f2f3f5;
+}
+
+.wp-block-frames-social-comment--facebook .wp-block-frames-social-comment__message,
+.wp-block-frames-social-comment--instagram .wp-block-frames-social-comment__message {
+	background: var(--_comment-bubble);
+}

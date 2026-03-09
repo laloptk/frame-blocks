@@ -13,6 +13,10 @@
 		"html": false,
 		"align": [ "wide", "full" ]
 	},
+	"providesContext": {
+		"wpframeblocks/social-platform": "platform",
+		"wpframeblocks/social-theme": "variant"
+	},
 	"attributes": {
 		"platform": {
 			"type": "string",

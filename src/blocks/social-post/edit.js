@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import {
 	useBlockProps,
+	InnerBlocks,
 	InspectorControls,
 	MediaUpload,
 	MediaUploadCheck,
@@ -15,22 +16,56 @@ import {
 	TextControl,
 	ToggleControl,
 } from '@wordpress/components';
-import { StyleControls } from '@wpfb/components';
+import { StyleControls, AppendBlockButton } from '@wpfb/components';
 import { buildInlineStyle, parseCaptionSegments } from '@wpfb/helpers';
 import './editor.scss';
+
+const ALLOWED_COMMENT_BLOCKS = [ 'wpframeblocks/social-comment' ];
 
 function SegmentedText( { text, classPrefix } ) {
 	const segments = parseCaptionSegments( text );
 	if ( ! segments.length ) return null;
+	const lines = [ [] ];
+
+	segments.forEach( ( seg ) => {
+		if ( seg.type === 'linebreak' ) {
+			lines.push( [] );
+			return;
+		}
+		lines[ lines.length - 1 ].push( seg );
+	} );
 
 	return (
 		<>
-			{ segments.map( ( seg, i ) => {
-				if ( seg.type === 'plain' ) return seg.text;
+			{ lines.map( ( line, lineIndex ) => {
 				return (
-					<span key={ i } className={ `${ classPrefix }${ seg.type }` }>
-						{ seg.text }
-					</span>
+					<p key={ lineIndex } className={ `${ classPrefix }line` }>
+						{ line.map( ( seg, segIndex ) => {
+							const key = `${ lineIndex }-${ segIndex }`;
+							if ( seg.type === 'plain' ) return seg.text;
+							if ( seg.type === 'url' ) {
+								const href = seg.text.startsWith( 'www.' )
+									? `https://${ seg.text }`
+									: seg.text;
+								return (
+									<a
+										key={ key }
+										className={ `${ classPrefix }url` }
+										href={ href }
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{ seg.text }
+									</a>
+								);
+							}
+							return (
+								<span key={ key } className={ `${ classPrefix }${ seg.type }` }>
+									{ seg.text }
+								</span>
+							);
+						} ) }
+					</p>
 				);
 			} ) }
 		</>
@@ -96,9 +131,9 @@ function SocialTextSection( {
 					></i>
 				) }{ ' ' }
 				{ caption ? (
-					<span className="wp-block-frames-ig__cap-text">
+					<div className="wp-block-frames-ig__cap-text">
 						<SegmentedText text={ caption } classPrefix="wp-block-frames-ig__cap-" />
-					</span>
+					</div>
 				) : (
 					<span className="wp-block-frames-social__cap-placeholder">
 						{ __( 'Write a caption...', 'wpframeblocks' ) }
@@ -119,7 +154,7 @@ function SocialTextSection( {
 	);
 }
 
-export default function Edit( { attributes, setAttributes } ) {
+export default function Edit( { attributes, setAttributes, clientId } ) {
 	const {
 		platform,
 		variant,
@@ -145,7 +180,7 @@ export default function Edit( { attributes, setAttributes } ) {
 	const isInstagram = platform === 'instagram';
 	const blockClassName = isInstagram
 		? `wp-block-frames-social wp-block-frames-ig wp-block-frames-ig--${ variant }`
-		: 'wp-block-frames-social wp-block-frames-fb';
+		: `wp-block-frames-social wp-block-frames-fb wp-block-frames-fb--${ variant }`;
 
 	const blockProps = useBlockProps( {
 		className: blockClassName,
@@ -198,17 +233,15 @@ export default function Edit( { attributes, setAttributes } ) {
 						step={ 1 }
 						onChange={ ( value ) => setAttributes( { maxWidth: value } ) }
 					/>
-					{ isInstagram && (
-						<SelectControl
-							label={ __( 'Variant', 'wpframeblocks' ) }
-							value={ variant }
-							options={ [
-								{ label: __( 'Dark', 'wpframeblocks' ), value: 'dark' },
-								{ label: __( 'Light', 'wpframeblocks' ), value: 'light' },
-							] }
-							onChange={ ( value ) => setAttributes( { variant: value } ) }
-						/>
-					) }
+					<SelectControl
+						label={ __( 'Theme', 'wpframeblocks' ) }
+						value={ variant }
+						options={ [
+							{ label: __( 'Dark', 'wpframeblocks' ), value: 'dark' },
+							{ label: __( 'Light', 'wpframeblocks' ), value: 'light' },
+						] }
+						onChange={ ( value ) => setAttributes( { variant: value } ) }
+					/>
 					<ToggleControl
 						label={
 							isInstagram
@@ -519,6 +552,23 @@ export default function Edit( { attributes, setAttributes } ) {
 						<div className="wp-block-frames-ig__timestamp">{ timestamp }</div>
 					</div>
 				) }
+
+				<div className="wp-block-frames-social__section wp-block-frames-social__section--comments">
+					<div className="wp-block-frames-social__comments">
+						<InnerBlocks
+							allowedBlocks={ ALLOWED_COMMENT_BLOCKS }
+							renderAppender={ false }
+						/>
+						<AppendBlockButton
+							blockName="wpframeblocks/social-comment"
+							blockAttributes={ {} }
+							clientId={ clientId }
+							className="wp-block-frames-social__add-comment"
+							tooltipLabel={ __( 'Add comment', 'wpframeblocks' ) }
+							buttonText={ __( 'Add comment', 'wpframeblocks' ) }
+						/>
+					</div>
+				</div>
 			</div>
 		</>
 	);
