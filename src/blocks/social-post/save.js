@@ -1,6 +1,5 @@
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 import { SocialPostTemplate, FrameIcon } from '@wpfb/frame-components';
-import { buildInlineStyle } from '@wpfb/helpers';
 
 export default function save( { attributes } ) {
 	const {
@@ -29,7 +28,6 @@ export default function save( { attributes } ) {
 	const blockProps = useBlockProps.save( {
 		className: blockClassName,
 		style: {
-			...buildInlineStyle( attributes ),
 			maxWidth: `${ maxWidth }px`,
 		},
 	} );

@@ -1,16 +1,15 @@
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
-import { buildInlineStyle } from '@wpfb/helpers';
-
 export default function save( { attributes } ) {
-	const { textColor, fontSize } = attributes;
+	const { textColor, backgroundColor, typography } = attributes;
+	const desktopFontSize = typography?.desktop?.fontSize || '';
 
 	const blockProps = useBlockProps.save( {
 		className: 'wp-block-frames-file-tree',
 		style: {
-			...buildInlineStyle( attributes ),
+			...( backgroundColor ? { backgroundColor } : {} ),
 			...( textColor ? { '--frames-file-tree-text': textColor } : {} ),
-			...( fontSize ? { '--frames-file-tree-font-size': fontSize } : {} ),
+			...( desktopFontSize ? { '--frames-file-tree-font-size': desktopFontSize } : {} ),
 		},
 	} );
 

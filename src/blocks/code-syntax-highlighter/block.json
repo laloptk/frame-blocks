@@ -50,25 +50,21 @@
 			"type": "string",
 			"default": "javascript"
 		},
-		"padding": {
-			"type": "string",
-			"default": "0"
+		"spacing": {
+			"type": "object",
+			"default": {
+				"desktop": { "padding": "", "margin": "" },
+				"tablet":  { "padding": "", "margin": "" },
+				"mobile":  { "padding": "", "margin": "" }
+			}
 		},
-		"margin": {
-			"type": "string",
-			"default": ""
-		},
-		"borderRadius": {
-			"type": "integer",
-			"default": 0
-		},
-		"borderWidth": {
-			"type": "integer",
-			"default": 0
-		},
-		"borderColor": {
-			"type": "string",
-			"default": ""
+		"border": {
+			"type": "object",
+			"default": {
+				"desktop": { "borderRadius": null, "borderColor": "", "borderWidth": null },
+				"tablet":  { "borderRadius": null, "borderColor": "", "borderWidth": null },
+				"mobile":  { "borderRadius": null, "borderColor": "", "borderWidth": null }
+			}
 		}
 	},
 	"textdomain": "wpframeblocks",

@@ -1,9 +1,11 @@
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 import { useBlockProps, InspectorControls, InnerBlocks } from '@wordpress/block-editor';
 import { PanelBody, TextControl } from '@wordpress/components';
-import { StyleControls } from '@wpfb/components';
+import { SpacingPanel, BorderPanel } from '@wpfb/components';
 import { VSCodeFrameTemplate } from '@wpfb/frame-components';
-import { buildInlineStyle } from '@wpfb/helpers';
+import { buildResponsiveStyles, useDeviceType } from '@wpfb/helpers';
+import ResponsiveControls from '@wpfb/components/style-controls/ResponsiveControls';
 
 import './editor.scss';
 
@@ -24,32 +26,55 @@ const TEMPLATE = [
 			className: 'wp-block-frames-vscode__terminal-zone',
 			lock: { move: true, remove: true },
 			isTerminal: true,
-			padding: '0 0 0 15px',
+			spacing: {
+				desktop: { padding: '0 0 0 15px', margin: '' },
+				tablet: { padding: '', margin: '' },
+				mobile: { padding: '', margin: '' },
+			},
 		},
 	],
 ];
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { projectName, fileName, filePath, language, branch } = attributes;
+	const { projectName, fileName, filePath, language, branch, spacing, border } = attributes;
+	const [spacingView, setSpacingView] = useState('desktop');
+	const [borderView, setBorderView] = useState('desktop');
+	const deviceType = useDeviceType();
 
 	const blockProps = useBlockProps( {
 		className: 'wp-block-frames-vscode',
-		style: buildInlineStyle( attributes ),
+		style: buildResponsiveStyles( attributes, deviceType ),
 		role: 'img',
 		'aria-label': `VS Code editor - ${ projectName }`,
 	} );
 
 	return (
 		<>
-			<StyleControls
-				attributes={ attributes }
-				setAttributes={ setAttributes }
-				enable={ {
-					spacing: true,
-					border: true,
-				} }
-			/>
 			<InspectorControls>
+				<ResponsiveControls
+					panelTitle={ __( 'Spacing', 'wpframeblocks' ) }
+					view={ spacingView }
+					handleView={ setSpacingView }
+				>
+					<SpacingPanel
+						attributes={ spacing }
+						setAttributes={ setAttributes }
+						enabled={ true }
+						view={ spacingView }
+					/>
+				</ResponsiveControls>
+				<ResponsiveControls
+					panelTitle={ __( 'Border', 'wpframeblocks' ) }
+					view={ borderView }
+					handleView={ setBorderView }
+				>
+					<BorderPanel
+						attributes={ border }
+						setAttributes={ setAttributes }
+						enabled={ true }
+						view={ borderView }
+					/>
+				</ResponsiveControls>
 				<PanelBody title={ __( 'Editor Settings', 'wpframeblocks' ) }>
 					<TextControl
 						label={ __( 'Project Name', 'wpframeblocks' ) }

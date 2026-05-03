@@ -22,17 +22,13 @@
 		"reusable": false
 	},
 	"attributes": {
-		"fontSize": {
-			"type": "string",
-			"default": ""
-		},
-		"fontWeight": {
-			"type": "string",
-			"default": ""
-		},
-		"lineHeight": {
-			"type": "number",
-			"default": 0
+		"typography": {
+			"type": "object",
+			"default": {
+				"desktop": { "fontSize": "", "fontWeight": "", "lineHeight": "" },
+				"tablet":  { "fontSize": "", "fontWeight": "", "lineHeight": "" },
+				"mobile":  { "fontSize": "", "fontWeight": "", "lineHeight": "" }
+			}
 		},
 		"label": {
 			"type": "string",

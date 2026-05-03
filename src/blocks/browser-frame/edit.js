@@ -6,56 +6,62 @@ import {
 	InnerBlocks,
 } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
-import { SpacingPanel, BorderPanel } from '@wpfb/components';
+import { SpacingPanel, BorderPanel, TypographyPanel } from '@wpfb/components';
 import { BrowserFrameTemplate } from '@wpfb/frame-components';
-import { buildInlineStyle } from '@wpfb/helpers';
+import { buildResponsiveStyles, useDeviceType } from '@wpfb/helpers';
 import ResponsiveControls from '@wpfb/components/style-controls/ResponsiveControls';
 
 import './editor.scss';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { browserVariant, url, tabTitle, spacing, border } = attributes;
+	const { browserVariant, url, tabTitle, spacing, border, typography } = attributes;
 	const [spacingView, setSpacingView] = useState('desktop');
 	const [borderView, setBorderView] = useState('desktop');
-	
+	const [typographyView, setTypographyView] = useState('desktop');
+	const deviceType = useDeviceType();
+
 	const blockProps = useBlockProps( {
 		className: `wp-block-frames-${ browserVariant }`,
-		style: buildInlineStyle( attributes ),
+		style: buildResponsiveStyles( attributes, deviceType ),
 	} );
-
-	const handleSpacingView = (screenView) => {
-		setSpacingView(screenView);
-	};
-
-	const handleBorderView = (screenView) => {
-		setBorderView(screenView);
-	};
 
 	return (
 		<>
 			<InspectorControls>
-				<ResponsiveControls 
-					panelTitle={__("Spacing", 'wpframeblocks')}
-					view={spacingView ?? "desktop"}
-					handleView={ handleSpacingView }
+				<ResponsiveControls
+					panelTitle={__('Spacing', 'wpframeblocks')}
+					view={spacingView}
+					handleView={ setSpacingView }
 				>
-					<SpacingPanel 
-						attributes={spacing} 
-						setAttributes={setAttributes} 
+					<SpacingPanel
+						group={spacing}
+						setAttributes={setAttributes}
 						enabled={true}
-						view={spacingView ?? 'desktop'}
+						view={spacingView}
 					/>
 				</ResponsiveControls>
-				<ResponsiveControls 
-					panelTitle={__("Border", "wpframeblocks")}
-					view={borderView ?? "desktop"}
-					handleView={ handleBorderView }
+				<ResponsiveControls
+					panelTitle={__('Border', 'wpframeblocks')}
+					view={borderView}
+					handleView={ setBorderView }
 				>
-					<BorderPanel 
-						attributes={border} 
-						setAttributes={setAttributes} 
+					<BorderPanel
+						group={border}
+						setAttributes={setAttributes}
 						enabled={true}
-						view={borderView ?? 'desktop'}
+						view={borderView}
+					/>
+				</ResponsiveControls>
+				<ResponsiveControls
+					panelTitle={__('Typography', 'wpframeblocks')}
+					view={typographyView}
+					handleView={ setTypographyView }
+				>
+					<TypographyPanel
+						group={typography}
+						setAttributes={setAttributes}
+						enabled={true}
+						view={typographyView}
 					/>
 				</ResponsiveControls>
 				<PanelBody title={ __( 'Browser Settings', 'wpframeblocks' ) }>

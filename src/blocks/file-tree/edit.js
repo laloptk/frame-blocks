@@ -1,8 +1,10 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { useState } from '@wordpress/element';
+import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 
-import { StyleControls, AppendBlockButton } from '@wpfb/components';
-import { buildInlineStyle } from '@wpfb/helpers';
+import { SpacingPanel, BorderPanel, TypographyPanel, ColorPanel, AppendBlockButton } from '@wpfb/components';
+import { buildResponsiveStyles, useDeviceType } from '@wpfb/helpers';
+import ResponsiveControls from '@wpfb/components/style-controls/ResponsiveControls';
 
 import './editor.scss';
 
@@ -18,29 +20,70 @@ const DEFAULT_TEMPLATE = [
 ];
 
 export default function Edit({ attributes, setAttributes, clientId }) {
-	const { textColor, fontSize } = attributes;
+	const { textColor, backgroundColor, spacing, border, typography } = attributes;
+	const [spacingView, setSpacingView] = useState('desktop');
+	const [borderView, setBorderView] = useState('desktop');
+	const [typographyView, setTypographyView] = useState('desktop');
+	const deviceType = useDeviceType();
+
+	const resolvedStyle = buildResponsiveStyles(attributes, deviceType);
 
 	const blockProps = useBlockProps({
 		className: 'wp-block-frames-file-tree',
 		style: {
-			...buildInlineStyle(attributes),
+			...resolvedStyle,
+			...( backgroundColor ? { backgroundColor } : {} ),
 			...( textColor ? { '--frames-file-tree-text': textColor } : {} ),
-			...( fontSize ? { '--frames-file-tree-font-size': fontSize } : {} ),
+			...( resolvedStyle.fontSize ? { '--frames-file-tree-font-size': resolvedStyle.fontSize } : {} ),
 		},
 	});
 
 	return (
 		<>
-			<StyleControls
-				attributes={attributes}
-				setAttributes={setAttributes}
-				enable={{
-					typography: true,
-					colors: { text: true, background: true },
-					spacing: true,
-					border: true,
-				}}
-			/>
+			<InspectorControls>
+				<ColorPanel
+					attributes={ attributes }
+					setAttributes={ setAttributes }
+					enabled={ { text: true, background: true } }
+				/>
+				<ResponsiveControls
+					panelTitle={ __( 'Typography', 'wpframeblocks' ) }
+					view={ typographyView }
+					handleView={ setTypographyView }
+				>
+					<TypographyPanel
+						attributes={ typography }
+						setAttributes={ setAttributes }
+						enabled={ true }
+						view={ typographyView }
+					/>
+				</ResponsiveControls>
+				<ResponsiveControls
+					panelTitle={ __( 'Spacing', 'wpframeblocks' ) }
+					view={ spacingView }
+					handleView={ setSpacingView }
+				>
+					<SpacingPanel
+						attributes={ spacing }
+						setAttributes={ setAttributes }
+						enabled={ true }
+						view={ spacingView }
+					/>
+				</ResponsiveControls>
+				<ResponsiveControls
+					panelTitle={ __( 'Border', 'wpframeblocks' ) }
+					view={ borderView }
+					handleView={ setBorderView }
+				>
+					<BorderPanel
+						attributes={ border }
+						setAttributes={ setAttributes }
+						enabled={ true }
+						view={ borderView }
+					/>
+				</ResponsiveControls>
+			</InspectorControls>
+
 			<div {...blockProps}>
 				<InnerBlocks
 					allowedBlocks={ALLOWED_BLOCKS}
@@ -49,7 +92,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					renderAppender={false}
 				/>
 
-				<AppendBlockButton 
+				<AppendBlockButton
 					blockName="wpframeblocks/file-tree-item"
 					blockAttributes={ {
 						label: 'new-tree-item',

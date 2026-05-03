@@ -1,4 +1,5 @@
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 import { useBlockProps, InspectorControls, ColorPalette } from '@wordpress/block-editor';
 import {
 	PanelBody,
@@ -8,12 +9,15 @@ import {
 	ToggleControl,
 	BaseControl,
 } from '@wordpress/components';
-import { StyleControls } from '@wpfb/components';
+import { TypographyPanel } from '@wpfb/components';
 import { FrameIcon } from '@wpfb/frame-components';
-import { buildInlineStyle, getTreeItemIcon } from '@wpfb/helpers';
+import { buildResponsiveStyles, useDeviceType, getTreeItemIcon } from '@wpfb/helpers';
+import ResponsiveControls from '@wpfb/components/style-controls/ResponsiveControls';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { label, itemType, depth, isActive, isOpen, fileExt, activeColor, activeTextColor } = attributes;
+	const { typography, label, itemType, depth, isActive, isOpen, fileExt, activeColor, activeTextColor } = attributes;
+	const [typographyView, setTypographyView] = useState('desktop');
+	const deviceType = useDeviceType();
 
 	const { iconFA, iconMod } = getTreeItemIcon( itemType, fileExt, isOpen );
 
@@ -24,6 +28,10 @@ export default function Edit( { attributes, setAttributes } ) {
 				: 'fa-solid fa-chevron-right'
 			: 'fa-solid fa-angle-right';
 
+	const resolvedStyle = buildResponsiveStyles(attributes, deviceType);
+	const fs = resolvedStyle.fontSize || undefined;
+	const lh = resolvedStyle.lineHeight || undefined;
+
 	const blockProps = useBlockProps( {
 		className: [
 			'wp-block-frames-file-tree__item',
@@ -33,25 +41,27 @@ export default function Edit( { attributes, setAttributes } ) {
 			.filter( Boolean )
 			.join( ' ' ),
 		style: {
-			...buildInlineStyle( attributes ),
+			...resolvedStyle,
 			...( isActive && activeColor ? { '--frames-file-tree-active-bg': activeColor } : {} ),
 			...( isActive && activeTextColor ? { color: activeTextColor } : {} ),
 		},
 	} );
 
-	const fs = attributes.fontSize || undefined;
-	const lh = attributes.lineHeight || undefined;
-
 	return (
 		<>
-			<StyleControls
-				attributes={ attributes }
-				setAttributes={ setAttributes }
-				enable={ {
-					typography: true,
-				} }
-			/>
 			<InspectorControls>
+				<ResponsiveControls
+					panelTitle={ __( 'Typography', 'wpframeblocks' ) }
+					view={ typographyView }
+					handleView={ setTypographyView }
+				>
+					<TypographyPanel
+						attributes={ typography }
+						setAttributes={ setAttributes }
+						enabled={ true }
+						view={ typographyView }
+					/>
+				</ResponsiveControls>
 				<PanelBody title={ __( 'Item Settings', 'wpframeblocks' ) }>
 					<TextControl
 						label={ __( 'Label', 'wpframeblocks' ) }

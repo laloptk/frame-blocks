@@ -1,4 +1,5 @@
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 import {
 	useBlockProps,
 	InnerBlocks,
@@ -16,12 +17,10 @@ import {
 	TextControl,
 	ToggleControl,
 } from '@wordpress/components';
-import {
-	StyleControls,
-	AppendBlockButton,
-} from '@wpfb/components';
+import { SpacingPanel, BorderPanel, AppendBlockButton } from '@wpfb/components';
 import { SocialPostTemplate, FrameIcon } from '@wpfb/frame-components';
-import { buildInlineStyle } from '@wpfb/helpers';
+import { buildResponsiveStyles, useDeviceType } from '@wpfb/helpers';
+import ResponsiveControls from '@wpfb/components/style-controls/ResponsiveControls';
 import './editor.scss';
 
 const ALLOWED_COMMENT_BLOCKS = [ 'wpframeblocks/social-comment' ];
@@ -87,7 +86,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		maxWidth,
 		isVerified,
 		isLiked,
+		spacing,
+		border,
 	} = attributes;
+
+	const [spacingView, setSpacingView] = useState('desktop');
+	const [borderView, setBorderView] = useState('desktop');
+	const deviceType = useDeviceType();
 
 	const isInstagram = platform === 'instagram';
 	const blockClassName = isInstagram
@@ -97,7 +102,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const blockProps = useBlockProps( {
 		className: blockClassName,
 		style: {
-			...buildInlineStyle( attributes ),
+			...buildResponsiveStyles( attributes, deviceType ),
 			maxWidth: `${ maxWidth }px`,
 		},
 	} );
@@ -109,12 +114,31 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 	return (
 		<>
-			<StyleControls
-				attributes={ attributes }
-				setAttributes={ setAttributes }
-				enable={ { spacing: true, border: true } }
-			/>
 			<InspectorControls>
+				<ResponsiveControls
+					panelTitle={ __( 'Spacing', 'wpframeblocks' ) }
+					view={ spacingView }
+					handleView={ setSpacingView }
+				>
+					<SpacingPanel
+						attributes={ spacing }
+						setAttributes={ setAttributes }
+						enabled={ true }
+						view={ spacingView }
+					/>
+				</ResponsiveControls>
+				<ResponsiveControls
+					panelTitle={ __( 'Border', 'wpframeblocks' ) }
+					view={ borderView }
+					handleView={ setBorderView }
+				>
+					<BorderPanel
+						attributes={ border }
+						setAttributes={ setAttributes }
+						enabled={ true }
+						view={ borderView }
+					/>
+				</ResponsiveControls>
 				<PanelBody title={ __( 'Post Settings', 'wpframeblocks' ) }>
 					<SelectControl
 						label={ __( 'Platform', 'wpframeblocks' ) }

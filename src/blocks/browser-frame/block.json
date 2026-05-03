@@ -26,26 +26,6 @@
 			"type": "string",
 			"default": "My Page"
 		},
-		"padding": {
-			"type": "string",
-			"default": ""
-		},
-		"margin": {
-			"type": "string",
-			"default": ""
-		},
-		"borderRadius": {
-			"type": "integer",
-			"default": 0
-		},
-		"borderWidth": {
-			"type": "integer",
-			"default": 0
-		},
-		"borderColor": {
-			"type": "string",
-			"default": ""
-		},
 		"spacing": {
 			"type": "object",
 			"default": {
@@ -58,19 +38,39 @@
 			"type": "object",
 			"default": {
 				"desktop": {
-					"borderRadius": 0,
-					"borderColor": "transparent",
-					"borderWidth": 0
+					"borderRadius": null,
+					"borderColor": "",
+					"borderWidth": null
 				},
 				"tablet": {
-					"borderRadius": 0,
-					"borderColor": "transparent",
-					"borderWidth": 0
+					"borderRadius": null,
+					"borderColor": "",
+					"borderWidth": null
 				},
 				"mobile": {
-					"borderRadius": 0,
-					"borderColor": "transparent",
-					"borderWidth": 0
+					"borderRadius": null,
+					"borderColor": "",
+					"borderWidth": null
+				}
+			}
+		},
+		"typography": {
+			"type": "object",
+			"default": {
+				"desktop": {
+					"fontSize": "",
+					"fontWeight": "",
+					"lineHeight": ""
+				},
+				"tablet": {
+					"fontSize": "",
+					"fontWeight": "",
+					"lineHeight": ""
+				},
+				"mobile": {
+					"fontSize": "",
+					"fontWeight": "",
+					"lineHeight": ""
 				}
 			}
 		}

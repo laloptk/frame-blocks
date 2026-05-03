@@ -1,14 +1,15 @@
 import { __ } from '@wordpress/i18n';
+import { useState, useEffect, useMemo } from '@wordpress/element';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, TextControl, TextareaControl, ToggleControl } from '@wordpress/components';
-import { useEffect, useMemo } from '@wordpress/element';
 
 import CodeHighlighter from '@wpfb/components/CodeHighlighter';
 import useTokens from '@wpfb/components/hooks/useTokens';
+import { SpacingPanel, BorderPanel } from '@wpfb/components';
+import { buildResponsiveStyles, useDeviceType } from '@wpfb/helpers';
+import ResponsiveControls from '@wpfb/components/style-controls/ResponsiveControls';
 
 import './editor.scss';
-import { StyleControls } from '@wpfb/components';
-import { buildInlineStyle } from '@wpfb/helpers';
 
 const DEFAULT_BG = '#0F172A';
 
@@ -62,10 +63,16 @@ export default function Edit({ attributes, setAttributes }) {
 		bg,
 		code,
 		codeLang,
-		isTerminal, 
-		terminalPrompt, 
+		isTerminal,
+		terminalPrompt,
 		terminalCommand,
+		spacing,
+		border,
 	} = attributes;
+
+	const [spacingView, setSpacingView] = useState('desktop');
+	const [borderView, setBorderView] = useState('desktop');
+	const deviceType = useDeviceType();
 
 	const toTokenize = isTerminal ? `${terminalPrompt} ${terminalCommand}` : code;
 	const activeLanguage = isTerminal ? terminalLang : codeLang;
@@ -94,25 +101,42 @@ export default function Edit({ attributes, setAttributes }) {
 		if (hasStoredTokens) return { tokens };
 		return null;
 	}, [hasLiveTokens, hasStoredTokens, tokensData, tokens]);
+
 	const blockProps = useBlockProps({
 		className: `wp-block-frames-code ${isTerminal ? 'is-terminal-code' : ''}`,
 		style: {
 			'--frames-code-bg': bg,
-			...buildInlineStyle(attributes)
+			...buildResponsiveStyles(attributes, deviceType),
 		},
 	});
 
 	return (
 		<>
-			<StyleControls
-				attributes={attributes}
-				setAttributes={setAttributes}
-				enable={{
-					spacing: true,
-					border: true,
-				}}
-			/>
 			<InspectorControls>
+				<ResponsiveControls
+					panelTitle={ __( 'Spacing', 'wpframeblocks' ) }
+					view={ spacingView }
+					handleView={ setSpacingView }
+				>
+					<SpacingPanel
+						attributes={ spacing }
+						setAttributes={ setAttributes }
+						enabled={ true }
+						view={ spacingView }
+					/>
+				</ResponsiveControls>
+				<ResponsiveControls
+					panelTitle={ __( 'Border', 'wpframeblocks' ) }
+					view={ borderView }
+					handleView={ setBorderView }
+				>
+					<BorderPanel
+						attributes={ border }
+						setAttributes={ setAttributes }
+						enabled={ true }
+						view={ borderView }
+					/>
+				</ResponsiveControls>
 				<PanelBody
 					title={__('Syntax Highlighter', 'wpframeblocks')}
 				>
@@ -177,7 +201,7 @@ export default function Edit({ attributes, setAttributes }) {
 
 					{showLoading && (
 						<p className="wp-block-frames-code__status">
-							{__('Highlighting code\u2026', 'wpframeblocks')}
+							{__('Highlighting code…', 'wpframeblocks')}
 						</p>
 					)}
 

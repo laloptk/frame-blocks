@@ -10,17 +10,12 @@ import CodeHighlighter from '@wpfb/components/CodeHighlighter';
  * to inline-colored spans — no JS or Shiki needed on the frontend.
  */
 export default function save( { attributes } ) {
-	const { tokens, bg, isTerminal, padding, margin, borderRadius, borderWidth, borderColor } = attributes;
+	const { tokens, bg, isTerminal } = attributes;
 
 	const blockProps = useBlockProps.save( {
 		className: `wp-block-frames-code ${ isTerminal ? 'is-terminal-code' : '' }`,
 		style: {
 			'--frames-code-bg': bg,
-			padding: padding || undefined,
-			margin: margin || undefined,
-			borderRadius: borderRadius || undefined,
-			borderWidth: borderWidth || undefined,
-			borderColor: borderColor || undefined,
 		},
 	} );
 
