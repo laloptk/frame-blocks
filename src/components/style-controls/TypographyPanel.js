@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { PanelBody, SelectControl, RangeControl, TextControl } from '@wordpress/components';
+import { SelectControl, RangeControl, TextControl } from '@wordpress/components';
 
 const FONT_WEIGHTS = [
 	{ label: __( 'Default', 'wpframeblocks' ), value: '' },
@@ -12,18 +12,14 @@ const FONT_WEIGHTS = [
 /**
  * Typography inspector panel.
  *
- * Required block attributes (define in block.json as needed):
- *   fontSize       string   CSS value, e.g. "14px", "1rem"
- *   fontWeight     string   e.g. "400", "700"
- *   lineHeight     number   unitless ratio, e.g. 1.5
- *
- * @param {Object}   props
- * @param {Object}   props.attributes
- * @param {Function} props.setAttributes
- * @param {Object|true} props.enabled  true = all on; object = per-control flags
+ * @param {Object}      props
+ * @param {Object}      props.group         Responsive typography group: { desktop, tablet, mobile }
+ * @param {Function}    props.setAttributes
+ * @param {Object|true} props.enabled       true = all on; object = per-control flags
+ * @param {string}      props.view          'desktop' | 'tablet' | 'mobile'
  */
-export default function TypographyPanel( { attributes, setAttributes, enabled } ) {
-	const { fontSize, fontWeight, lineHeight } = attributes;
+export default function TypographyPanel( { group, setAttributes, enabled, view } ) {
+	const { fontSize, fontWeight, lineHeight } = group[view];
 
 	const show =
 		enabled === true
@@ -31,10 +27,7 @@ export default function TypographyPanel( { attributes, setAttributes, enabled } 
 			: enabled;
 
 	return (
-		<PanelBody
-			title={ __( 'Typography', 'wpframeblocks' ) }
-			initialOpen={ false }
-		>
+		<>
 			{ show.fontSize && (
 				<TextControl
 					label={ __( 'Font Size', 'wpframeblocks' ) }
@@ -42,7 +35,15 @@ export default function TypographyPanel( { attributes, setAttributes, enabled } 
 					placeholder="e.g. 14px, 1rem"
 					help={ __( 'Any valid CSS font-size value.', 'wpframeblocks' ) }
 					onChange={ ( value ) =>
-						setAttributes( { fontSize: value } )
+						setAttributes({
+							typography: {
+								...group,
+								[view]: {
+									...group[view],
+									fontSize: value,
+								},
+							},
+						})
 					}
 				/>
 			) }
@@ -52,7 +53,15 @@ export default function TypographyPanel( { attributes, setAttributes, enabled } 
 					value={ fontWeight || '' }
 					options={ FONT_WEIGHTS }
 					onChange={ ( value ) =>
-						setAttributes( { fontWeight: value } )
+						setAttributes({
+							typography: {
+								...group,
+								[view]: {
+									...group[view],
+									fontWeight: value,
+								},
+							},
+						})
 					}
 				/>
 			) }
@@ -64,10 +73,18 @@ export default function TypographyPanel( { attributes, setAttributes, enabled } 
 					max={ 3 }
 					step={ 0.05 }
 					onChange={ ( value ) =>
-						setAttributes( { lineHeight: value } )
+						setAttributes({
+							typography: {
+								...group,
+								[view]: {
+									...group[view],
+									lineHeight: value,
+								},
+							},
+						})
 					}
 				/>
 			) }
-		</PanelBody>
+		</>
 	);
 }

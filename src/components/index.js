@@ -5,10 +5,4 @@ export { default as AppendBlockButton } from './AppendBlockButton';
 export * from './frame-parts';
 
 // Styling controls for InspectorControls
-export { default as StyleControls } from './style-controls';
-export {
-	TypographyPanel,
-	ColorPanel,
-	SpacingPanel,
-	BorderPanel,
-} from './style-controls';
+export { TypographyPanel, ColorPanel, SpacingPanel, BorderPanel } from './style-controls';

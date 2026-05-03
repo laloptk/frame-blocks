@@ -1,22 +1,18 @@
 import { __ } from '@wordpress/i18n';
-import { PanelBody, RangeControl, BaseControl } from '@wordpress/components';
+import { RangeControl, BaseControl } from '@wordpress/components';
 import { ColorPalette } from '@wordpress/block-editor';
 
 /**
  * Border inspector panel.
  *
- * Required block attributes (define in block.json as needed):
- *   borderRadius  number   px value, e.g. 8
- *   borderWidth   number   px value, e.g. 1
- *   borderColor   string   CSS color value
- *
- * @param {Object}  props
- * @param {Object}  props.attributes
- * @param {Function} props.setAttributes
- * @param {Object|true} props.enabled  true = all on; object = { radius, width, color }
+ * @param {Object}      props
+ * @param {Object}      props.group         Responsive border group: { desktop, tablet, mobile }
+ * @param {Function}    props.setAttributes
+ * @param {Object|true} props.enabled       true = all on; object = { radius, width, color }
+ * @param {string}      props.view          'desktop' | 'tablet' | 'mobile'
  */
-export default function BorderPanel({ attributes, setAttributes, enabled, view }) {
-	const { borderRadius, borderWidth, borderColor } = attributes[view];
+export default function BorderPanel({ group, setAttributes, enabled, view }) {
+	const { borderRadius, borderWidth, borderColor } = group[view];
 
 	const show =
 		enabled === true
@@ -32,19 +28,15 @@ export default function BorderPanel({ attributes, setAttributes, enabled, view }
 					min={0}
 					max={50}
 					onChange={(value) =>
-						setAttributes(
-							{
-								border:
-								{
-									...attributes,
-									[view]:
-									{
-										...attributes[view],
-										borderRadius: value
-									}
-								}
-							}
-						)
+						setAttributes({
+							border: {
+								...group,
+								[view]: {
+									...group[view],
+									borderRadius: value,
+								},
+							},
+						})
 					}
 				/>
 			)}
@@ -55,19 +47,15 @@ export default function BorderPanel({ attributes, setAttributes, enabled, view }
 					min={0}
 					max={10}
 					onChange={(value) =>
-						setAttributes(
-							{
-								border:
-								{
-									...attributes,
-									[view]:
-									{
-										...attributes[view],
-										borderWidth: value
-									}
-								}
-							}
-						)
+						setAttributes({
+							border: {
+								...group,
+								[view]: {
+									...group[view],
+									borderWidth: value,
+								},
+							},
+						})
 					}
 				/>
 			)}
@@ -79,19 +67,15 @@ export default function BorderPanel({ attributes, setAttributes, enabled, view }
 					<ColorPalette
 						value={borderColor || ''}
 						onChange={(value) =>
-							setAttributes(
-								{
-									border:
-									{
-										...attributes,
-										[view]:
-										{
-											...attributes[view],
-											borderColor: value
-										}
-									}
-								}
-							)
+							setAttributes({
+								border: {
+									...group,
+									[view]: {
+										...group[view],
+										borderColor: value,
+									},
+								},
+							})
 						}
 					/>
 				</BaseControl>
