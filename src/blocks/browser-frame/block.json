@@ -45,6 +45,34 @@
 		"borderColor": {
 			"type": "string",
 			"default": ""
+		},
+		"spacing": {
+			"type": "object",
+			"default": {
+				"desktop": {"padding": "", "margin": ""},
+				"tablet": {"padding": "", "margin": ""},
+				"mobile": {"padding": "", "margin": ""}
+			}
+		},
+		"border": {
+			"type": "object",
+			"default": {
+				"desktop": {
+					"borderRadius": 0,
+					"borderColor": "transparent",
+					"borderWidth": 0
+				},
+				"tablet": {
+					"borderRadius": 0,
+					"borderColor": "transparent",
+					"borderWidth": 0
+				},
+				"mobile": {
+					"borderRadius": 0,
+					"borderColor": "transparent",
+					"borderWidth": 0
+				}
+			}
 		}
 	},
 	"textdomain": "wpframeblocks",

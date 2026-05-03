@@ -1,3 +1,6 @@
-.wpf-device-frame {
-	// Editor-only overrides
+.wp-block-frames-device {
+	// Keep block controls/selection visible in editor.
+	&__screen {
+		overflow: visible;
+	}
 }

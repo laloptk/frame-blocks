@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { PanelBody, TextControl } from '@wordpress/components';
+import { TextControl } from '@wordpress/components';
 
 /**
  * Spacing inspector panel.
@@ -13,39 +13,60 @@ import { PanelBody, TextControl } from '@wordpress/components';
  * @param {Function} props.setAttributes
  * @param {Object|true} props.enabled  true = all on; object = { padding, margin }
  */
-export default function SpacingPanel( { attributes, setAttributes, enabled } ) {
-	const { padding, margin } = attributes;
+export default function SpacingPanel({ attributes, setAttributes, enabled, view }) {
+	const { padding, margin } = attributes[view];
 
 	const show =
 		enabled === true ? { padding: true, margin: true } : enabled;
 
 	return (
-		<PanelBody
-			title={ __( 'Spacing', 'wpframeblocks' ) }
-			initialOpen={ false }
-		>
-			{ show.padding && (
+		<>
+			{show.padding && (
 				<TextControl
-					label={ __( 'Padding', 'wpframeblocks' ) }
-					value={ padding || '' }
+					label={__('Padding', 'wpframeblocks')}
+					value={padding || ''}
 					placeholder="e.g. 8px 16px"
-					help={ __( 'CSS shorthand: top right bottom left.', 'wpframeblocks' ) }
-					onChange={ ( value ) =>
-						setAttributes( { padding: value } )
+					help={__('CSS shorthand: top right bottom left.', 'wpframeblocks')}
+					onChange={(value) =>
+						setAttributes(
+							{
+								spacing:
+								{
+									...attributes,
+									[view]:
+									{
+										...attributes[view],
+										padding: value
+									}
+								}
+							}
+						)
 					}
 				/>
-			) }
-			{ show.margin && (
+			)}
+			{show.margin && (
 				<TextControl
-					label={ __( 'Margin', 'wpframeblocks' ) }
-					value={ margin || '' }
+					label={__('Margin', 'wpframeblocks')}
+					value={margin || ''}
 					placeholder="e.g. 16px 0"
-					help={ __( 'CSS shorthand: top/bottom only.', 'wpframeblocks' ) }
-					onChange={ ( value ) =>
-						setAttributes( { margin: value } )
+					help={__('CSS shorthand: top/bottom only.', 'wpframeblocks')}
+					onChange={(value) =>
+						setAttributes(
+							{
+								spacing:
+								{
+									...attributes,
+									[view]:
+									{
+										...attributes[view],
+										margin: value
+									}
+								}
+							}
+						)
 					}
 				/>
-			) }
-		</PanelBody>
+			)}
+		</>
 	);
 }

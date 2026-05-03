@@ -6,8 +6,8 @@
 	"title": "Device Frame",
 	"category": "media",
 	"icon": "smartphone",
-	"description": "Display content inside a device frame (phone, tablet, desktop).",
-	"keywords": ["device", "frame", "phone", "tablet", "mockup"],
+	"description": "Display content inside a scalable device frame (laptop, tablet, phone).",
+	"keywords": ["device", "frame", "laptop", "tablet", "phone", "mockup"],
 	"example": {},
 	"supports": {
 		"html": false,
@@ -16,7 +16,7 @@
 	"attributes": {
 		"deviceType": {
 			"type": "string",
-			"default": "mobile"
+			"default": "phone"
 		}
 	},
 	"textdomain": "wpframeblocks",

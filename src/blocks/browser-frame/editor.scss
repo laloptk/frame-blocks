@@ -6,3 +6,10 @@
 .wp-block-frames-chrome__viewport {
 	overflow: visible;
 }
+
+.responsive-view-btns {
+	display: flex;
+	justify-content: flex-end;
+	gap: 7px;
+	padding: 10px 20px;
+}

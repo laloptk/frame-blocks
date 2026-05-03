@@ -3,14 +3,23 @@ import { DeviceFrameTemplate } from '@wpfb/frame-components';
 
 export default function save( { attributes } ) {
 	const { deviceType } = attributes;
+	const normalizedDeviceType =
+		deviceType === 'mobile'
+			? 'phone'
+			: deviceType === 'desktop'
+				? 'laptop'
+				: deviceType;
 
 	const blockProps = useBlockProps.save( {
-		className: `wpf-device-frame wpf-device-frame--${ deviceType }`,
+		className: `wp-block-frames-device wp-block-frames-device--${ normalizedDeviceType }`,
 	} );
 
 	return (
 		<div { ...blockProps }>
-			<DeviceFrameTemplate renderScreen={ () => <InnerBlocks.Content /> } />
+			<DeviceFrameTemplate
+				deviceType={ normalizedDeviceType }
+				renderScreen={ () => <InnerBlocks.Content /> }
+			/>
 		</div>
 	);
 }

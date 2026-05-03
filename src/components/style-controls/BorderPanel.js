@@ -15,8 +15,8 @@ import { ColorPalette } from '@wordpress/block-editor';
  * @param {Function} props.setAttributes
  * @param {Object|true} props.enabled  true = all on; object = { radius, width, color }
  */
-export default function BorderPanel( { attributes, setAttributes, enabled } ) {
-	const { borderRadius, borderWidth, borderColor } = attributes;
+export default function BorderPanel({ attributes, setAttributes, enabled, view }) {
+	const { borderRadius, borderWidth, borderColor } = attributes[view];
 
 	const show =
 		enabled === true
@@ -24,45 +24,78 @@ export default function BorderPanel( { attributes, setAttributes, enabled } ) {
 			: enabled;
 
 	return (
-		<PanelBody
-			title={ __( 'Border', 'wpframeblocks' ) }
-			initialOpen={ false }
-		>
-			{ show.radius && (
+		<>
+			{show.radius && (
 				<RangeControl
-					label={ __( 'Border Radius', 'wpframeblocks' ) }
-					value={ borderRadius ?? 0 }
-					min={ 0 }
-					max={ 50 }
-					onChange={ ( value ) =>
-						setAttributes( { borderRadius: value } )
+					label={__('Border Radius', 'wpframeblocks')}
+					value={borderRadius ?? 0}
+					min={0}
+					max={50}
+					onChange={(value) =>
+						setAttributes(
+							{
+								border:
+								{
+									...attributes,
+									[view]:
+									{
+										...attributes[view],
+										borderRadius: value
+									}
+								}
+							}
+						)
 					}
 				/>
-			) }
-			{ show.width && (
+			)}
+			{show.width && (
 				<RangeControl
-					label={ __( 'Border Width', 'wpframeblocks' ) }
-					value={ borderWidth ?? 0 }
-					min={ 0 }
-					max={ 10 }
-					onChange={ ( value ) =>
-						setAttributes( { borderWidth: value } )
+					label={__('Border Width', 'wpframeblocks')}
+					value={borderWidth ?? 0}
+					min={0}
+					max={10}
+					onChange={(value) =>
+						setAttributes(
+							{
+								border:
+								{
+									...attributes,
+									[view]:
+									{
+										...attributes[view],
+										borderWidth: value
+									}
+								}
+							}
+						)
 					}
 				/>
-			) }
-			{ show.color && (
+			)}
+			{show.color && (
 				<BaseControl
-					label={ __( 'Border Color', 'wpframeblocks' ) }
+					label={__('Border Color', 'wpframeblocks')}
 					id="wpfb-border-color"
 				>
 					<ColorPalette
-						value={ borderColor || '' }
-						onChange={ ( value ) =>
-							setAttributes( { borderColor: value } )
+						value={borderColor || ''}
+						onChange={(value) =>
+							setAttributes(
+								{
+									border:
+									{
+										...attributes,
+										[view]:
+										{
+											...attributes[view],
+											borderColor: value
+										}
+									}
+								}
+							)
 						}
 					/>
 				</BaseControl>
-			) }
-		</PanelBody>
+			)}
+		</>
 	);
 }

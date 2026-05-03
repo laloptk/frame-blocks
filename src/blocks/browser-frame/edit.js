@@ -1,35 +1,63 @@
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 import {
 	useBlockProps,
 	InspectorControls,
 	InnerBlocks,
 } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
-import { StyleControls } from '@wpfb/components';
+import { SpacingPanel, BorderPanel } from '@wpfb/components';
 import { BrowserFrameTemplate } from '@wpfb/frame-components';
 import { buildInlineStyle } from '@wpfb/helpers';
+import ResponsiveControls from '@wpfb/components/style-controls/ResponsiveControls';
 
 import './editor.scss';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { browserVariant, url, tabTitle } = attributes;
-
+	const { browserVariant, url, tabTitle, spacing, border } = attributes;
+	const [spacingView, setSpacingView] = useState('desktop');
+	const [borderView, setBorderView] = useState('desktop');
+	
 	const blockProps = useBlockProps( {
 		className: `wp-block-frames-${ browserVariant }`,
 		style: buildInlineStyle( attributes ),
 	} );
 
+	const handleSpacingView = (screenView) => {
+		setSpacingView(screenView);
+	};
+
+	const handleBorderView = (screenView) => {
+		setBorderView(screenView);
+	};
+
 	return (
 		<>
-			<StyleControls
-				attributes={ attributes }
-				setAttributes={ setAttributes }
-				enable={ {
-					spacing: true,
-					border: true,
-				} }
-			/>
 			<InspectorControls>
+				<ResponsiveControls 
+					panelTitle={__("Spacing", 'wpframeblocks')}
+					view={spacingView ?? "desktop"}
+					handleView={ handleSpacingView }
+				>
+					<SpacingPanel 
+						attributes={spacing} 
+						setAttributes={setAttributes} 
+						enabled={true}
+						view={spacingView ?? 'desktop'}
+					/>
+				</ResponsiveControls>
+				<ResponsiveControls 
+					panelTitle={__("Border", "wpframeblocks")}
+					view={borderView ?? "desktop"}
+					handleView={ handleBorderView }
+				>
+					<BorderPanel 
+						attributes={border} 
+						setAttributes={setAttributes} 
+						enabled={true}
+						view={borderView ?? 'desktop'}
+					/>
+				</ResponsiveControls>
 				<PanelBody title={ __( 'Browser Settings', 'wpframeblocks' ) }>
 					<SelectControl
 						label={ __( 'Browser', 'wpframeblocks' ) }

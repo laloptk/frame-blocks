@@ -5,3 +5,5 @@ build/
 # Local editor / tool settings
 .claude/
 ai-context
+CLAUDE.md 
+AGENTS.md

@@ -7,9 +7,15 @@ import './editor.scss';
 
 export default function Edit( { attributes, setAttributes } ) {
 	const { deviceType } = attributes;
+	const normalizedDeviceType =
+		deviceType === 'mobile'
+			? 'phone'
+			: deviceType === 'desktop'
+				? 'laptop'
+				: deviceType;
 
 	const blockProps = useBlockProps( {
-		className: `wpf-device-frame wpf-device-frame--${ deviceType }`,
+		className: `wp-block-frames-device wp-block-frames-device--${ normalizedDeviceType }`,
 	} );
 
 	return (
@@ -18,11 +24,11 @@ export default function Edit( { attributes, setAttributes } ) {
 				<PanelBody title={ __( 'Device Settings', 'wpframeblocks' ) }>
 					<SelectControl
 						label={ __( 'Device Type', 'wpframeblocks' ) }
-						value={ deviceType }
+						value={ normalizedDeviceType }
 						options={ [
-							{ label: __( 'Mobile', 'wpframeblocks' ), value: 'mobile' },
+							{ label: __( 'Phone', 'wpframeblocks' ), value: 'phone' },
 							{ label: __( 'Tablet', 'wpframeblocks' ), value: 'tablet' },
-							{ label: __( 'Desktop', 'wpframeblocks' ), value: 'desktop' },
+							{ label: __( 'Laptop', 'wpframeblocks' ), value: 'laptop' },
 						] }
 						onChange={ ( value ) => setAttributes( { deviceType: value } ) }
 					/>
@@ -30,7 +36,10 @@ export default function Edit( { attributes, setAttributes } ) {
 			</InspectorControls>
 
 			<div { ...blockProps }>
-				<DeviceFrameTemplate renderScreen={ () => <InnerBlocks /> } />
+				<DeviceFrameTemplate
+					deviceType={ normalizedDeviceType }
+					renderScreen={ () => <InnerBlocks /> }
+				/>
 			</div>
 		</>
 	);
