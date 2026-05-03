@@ -1,3 +1,2 @@
 // Shared custom React hooks
-// Export hooks from this file as they are created.
-// Example: export { default as useFrameAttributes } from './useFrameAttributes';
+export { default as useTokens } from '../components/hooks/useTokens';
