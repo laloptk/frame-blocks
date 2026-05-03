@@ -1,4 +1,5 @@
 // Shared utility helpers
+import { useSelect } from '@wordpress/data';
 
 /**
  * Parse a plain-text social-media string into semantic segments:
@@ -13,7 +14,7 @@ export function parseCaptionSegments(text) {
 	const segments = [];
 	const normalizedText = text.replace(/\r\n/g, '\n');
 	const TOKEN =
-		/(https?:\/\/[^\s]+|www\.[^\s]+|#[\w\u00C0-\u024F\u0400-\u04FF]+|@[\w.]+|\n)/gu;
+		/(https?:\/\/[^\s]+|www\.[^\s]+|#[\wÀ-ɏЀ-ӿ]+|@[\w.]+|\n)/gu;
 	let lastIndex = 0;
 	let match;
 
@@ -75,40 +76,108 @@ export function parseCaptionSegments(text) {
 }
 
 /**
- * Builds a React inline style object from the standard StyleControls attributes.
- * Only includes properties that have a meaningful non-default value, so the
- * output is clean and doesn't override CSS-token defaults unnecessarily.
+ * Resolves a single responsive value with fallback chain:
+ *   desktop → desktop value only
+ *   tablet  → tablet → desktop
+ *   mobile  → mobile → tablet → desktop
  *
- * @param {Object} attributes  Block attributes (superset of style attributes is fine)
- * @return {Object} React style object
+ * Treats '', null, and undefined as "no value" and falls back.
+ * Treats 0 as a valid value — it does NOT trigger fallback.
+ *
+ * @param {Object} groupAttr  Responsive group object (e.g. attributes.spacing).
+ * @param {string} key        Property key to resolve (e.g. 'padding').
+ * @param {string} deviceType 'Desktop' | 'Tablet' | 'Mobile'
+ * @returns {*} Resolved value, or undefined if nothing found in the chain.
  */
-export function buildInlineStyle({
-	fontSize,
-	fontWeight,
-	lineHeight,
-	backgroundColor,
-	padding,
-	margin,
-	borderRadius,
-	borderWidth,
-	borderColor,
-} = {}) {
-	const style = {};
+export function resolveResponsiveValue(groupAttr, key, deviceType) {
+	if (!groupAttr) return undefined;
+	const device = (deviceType || 'Desktop').toLowerCase();
+	const hasValue = (v) => v !== '' && v !== null && v !== undefined;
+	const desktop = groupAttr.desktop?.[key];
+	const tablet = groupAttr.tablet?.[key];
+	const mobile = groupAttr.mobile?.[key];
+	if (device === 'mobile') {
+		if (hasValue(mobile)) return mobile;
+		if (hasValue(tablet)) return tablet;
+		if (hasValue(desktop)) return desktop;
+	} else if (device === 'tablet') {
+		if (hasValue(tablet)) return tablet;
+		if (hasValue(desktop)) return desktop;
+	} else {
+		if (hasValue(desktop)) return desktop;
+	}
+	return undefined;
+}
 
-	if (fontSize) style.fontSize = fontSize;
-	if (fontWeight) style.fontWeight = fontWeight;
-	if (lineHeight) style.lineHeight = lineHeight;
-	if (backgroundColor) style.backgroundColor = backgroundColor;
+/**
+ * Builds a React inline style object from responsive block attributes and the
+ * current device type. Applies the fallback chain via resolveResponsiveValue.
+ *
+ * Property mapping:
+ *   spacing.padding      → padding
+ *   spacing.margin       → margin
+ *   border.borderRadius  → borderRadius as "${n}px" (only if > 0)
+ *   border.borderWidth   → borderWidth as "${n}px" + borderStyle: 'solid' (only if > 0)
+ *   border.borderColor   → borderColor
+ *   typography.fontSize  → fontSize
+ *   typography.fontWeight → fontWeight
+ *   typography.lineHeight → lineHeight
+ *
+ * Missing groups are silently skipped — blocks without a typography attribute
+ * will not throw.
+ *
+ * @param {Object} attributes  Full block attributes object.
+ * @param {string} deviceType  'Desktop' | 'Tablet' | 'Mobile'
+ * @returns {Object} React style object.
+ */
+export function buildResponsiveStyles(attributes, deviceType) {
+	const style = {};
+	const r = (group, key) =>
+		resolveResponsiveValue(attributes[group], key, deviceType);
+
+	const padding = r('spacing', 'padding');
+	const margin = r('spacing', 'margin');
+	const borderRadius = r('border', 'borderRadius');
+	const borderWidth = r('border', 'borderWidth');
+	const borderColor = r('border', 'borderColor');
+	const fontSize = r('typography', 'fontSize');
+	const fontWeight = r('typography', 'fontWeight');
+	const lineHeight = r('typography', 'lineHeight');
+
+	if (padding) style.padding = padding;
+	if (margin) style.margin = margin;
 	if (borderRadius > 0) style.borderRadius = `${borderRadius}px`;
 	if (borderWidth > 0) {
 		style.borderWidth = `${borderWidth}px`;
 		style.borderStyle = 'solid';
 	}
 	if (borderColor) style.borderColor = borderColor;
-	if (padding) style.padding = padding;
-	if (margin) style.margin = margin;
+	if (fontSize) style.fontSize = fontSize;
+	if (fontWeight) style.fontWeight = fontWeight;
+	if (lineHeight) style.lineHeight = lineHeight;
 
 	return style;
+}
+
+/**
+ * Hook: returns the current global device preview type from the editor store.
+ * Checks core/edit-post, then core/editor, then core/edit-site for compatibility
+ * across post editor, site editor, and future contexts.
+ *
+ * @returns {'Desktop'|'Tablet'|'Mobile'}
+ */
+export function useDeviceType() {
+	return (
+		useSelect((select) => {
+			const editPost = select('core/edit-post');
+			if (editPost?.getDeviceType) return editPost.getDeviceType();
+			const editor = select('core/editor');
+			if (editor?.getDeviceType) return editor.getDeviceType();
+			const editSite = select('core/edit-site');
+			if (editSite?.getDeviceType) return editSite.getDeviceType();
+			return 'Desktop';
+		}, []) ?? 'Desktop'
+	);
 }
 
 /**
@@ -203,4 +272,3 @@ export function parseBreadcrumb(filePath, fileName) {
 	crumbs.push({ label: fileName || '', active: true });
 	return crumbs;
 }
-
