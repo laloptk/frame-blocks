@@ -17,10 +17,9 @@ import {
 	TextControl,
 	ToggleControl,
 } from '@wordpress/components';
-import { SpacingPanel, BorderPanel, AppendBlockButton } from '@wpfb/components';
+import { SpacingPanel, BorderPanel, AppendBlockButton, ResponsiveControls } from '@wpfb/components';
 import { SocialPostTemplate, FrameIcon } from '@wpfb/frame-components';
 import { buildResponsiveStyles, useDeviceType } from '@wpfb/helpers';
-import ResponsiveControls from '@wpfb/components/style-controls/ResponsiveControls';
 import './editor.scss';
 
 const ALLOWED_COMMENT_BLOCKS = [ 'wpframeblocks/social-comment' ];

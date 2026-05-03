@@ -2,10 +2,9 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { useBlockProps, InspectorControls, InnerBlocks } from '@wordpress/block-editor';
 import { PanelBody, TextControl } from '@wordpress/components';
-import { SpacingPanel, BorderPanel } from '@wpfb/components';
+import { SpacingPanel, BorderPanel, ResponsiveControls } from '@wpfb/components';
 import { VSCodeFrameTemplate } from '@wpfb/frame-components';
 import { buildResponsiveStyles, useDeviceType } from '@wpfb/helpers';
-import ResponsiveControls from '@wpfb/components/style-controls/ResponsiveControls';
 
 import './editor.scss';
 

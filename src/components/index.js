@@ -6,3 +6,7 @@ export * from './frame-parts';
 
 // Styling controls for InspectorControls
 export { TypographyPanel, ColorPanel, SpacingPanel, BorderPanel } from './style-controls';
+export { default as ResponsiveControls } from './style-controls/ResponsiveControls';
+
+// Hooks
+export { default as useTokens } from './hooks/useTokens';

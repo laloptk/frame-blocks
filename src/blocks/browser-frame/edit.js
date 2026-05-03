@@ -6,10 +6,9 @@ import {
 	InnerBlocks,
 } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
-import { SpacingPanel, BorderPanel, TypographyPanel } from '@wpfb/components';
+import { SpacingPanel, BorderPanel, TypographyPanel, ResponsiveControls } from '@wpfb/components';
 import { BrowserFrameTemplate } from '@wpfb/frame-components';
 import { buildResponsiveStyles, useDeviceType } from '@wpfb/helpers';
-import ResponsiveControls from '@wpfb/components/style-controls/ResponsiveControls';
 
 import './editor.scss';
 

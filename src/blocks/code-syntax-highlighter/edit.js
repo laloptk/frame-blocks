@@ -3,11 +3,8 @@ import { useState, useEffect, useMemo } from '@wordpress/element';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, TextControl, TextareaControl, ToggleControl } from '@wordpress/components';
 
-import CodeHighlighter from '@wpfb/components/CodeHighlighter';
-import useTokens from '@wpfb/components/hooks/useTokens';
-import { SpacingPanel, BorderPanel } from '@wpfb/components';
+import { CodeHighlighter, useTokens, SpacingPanel, BorderPanel, ResponsiveControls } from '@wpfb/components';
 import { buildResponsiveStyles, useDeviceType } from '@wpfb/helpers';
-import ResponsiveControls from '@wpfb/components/style-controls/ResponsiveControls';
 
 import './editor.scss';
 

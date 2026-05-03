@@ -1,6 +1,6 @@
 import { useBlockProps } from '@wordpress/block-editor';
 
-import CodeHighlighter from '@wpfb/components/CodeHighlighter';
+import { CodeHighlighter } from '@wpfb/components';
 
 /**
  * Serialize the block to static HTML.

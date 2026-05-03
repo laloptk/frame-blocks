@@ -9,10 +9,9 @@ import {
 	ToggleControl,
 	BaseControl,
 } from '@wordpress/components';
-import { TypographyPanel } from '@wpfb/components';
+import { TypographyPanel, ResponsiveControls } from '@wpfb/components';
 import { FrameIcon } from '@wpfb/frame-components';
 import { buildResponsiveStyles, useDeviceType, getTreeItemIcon } from '@wpfb/helpers';
-import ResponsiveControls from '@wpfb/components/style-controls/ResponsiveControls';
 
 export default function Edit( { attributes, setAttributes } ) {
 	const { typography, label, itemType, depth, isActive, isOpen, fileExt, activeColor, activeTextColor } = attributes;

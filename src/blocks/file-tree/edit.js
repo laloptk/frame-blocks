@@ -2,9 +2,8 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 
-import { SpacingPanel, BorderPanel, TypographyPanel, ColorPanel, AppendBlockButton } from '@wpfb/components';
+import { SpacingPanel, BorderPanel, TypographyPanel, ColorPanel, AppendBlockButton, ResponsiveControls } from '@wpfb/components';
 import { buildResponsiveStyles, useDeviceType } from '@wpfb/helpers';
-import ResponsiveControls from '@wpfb/components/style-controls/ResponsiveControls';
 
 import './editor.scss';
 
