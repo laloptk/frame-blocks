@@ -25,6 +25,7 @@ export default function PostTextSection( {
 					<span className="wp-block-frames-ig__text-user">{ username }</span>
 					{ isVerified && (
 						<FrameIcon
+							as="span"
 							iconClass="fa-solid fa-circle-check wp-block-frames-ig__verified wp-block-frames-ig__verified--inline"
 							iconProps={ { 'aria-hidden': 'true' } }
 						/>

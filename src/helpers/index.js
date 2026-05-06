@@ -132,17 +132,17 @@ export function resolveResponsiveValue(groupAttr, key, deviceType) {
  */
 export function buildResponsiveStyles(attributes, deviceType) {
 	const style = {};
-	const r = (group, key) =>
+	const resolve = (group, key) =>
 		resolveResponsiveValue(attributes[group], key, deviceType);
 
-	const padding = r('spacing', 'padding');
-	const margin = r('spacing', 'margin');
-	const borderRadius = r('border', 'borderRadius');
-	const borderWidth = r('border', 'borderWidth');
-	const borderColor = r('border', 'borderColor');
-	const fontSize = r('typography', 'fontSize');
-	const fontWeight = r('typography', 'fontWeight');
-	const lineHeight = r('typography', 'lineHeight');
+	const padding = resolve('spacing', 'padding');
+	const margin = resolve('spacing', 'margin');
+	const borderRadius = resolve('border', 'borderRadius');
+	const borderWidth = resolve('border', 'borderWidth');
+	const borderColor = resolve('border', 'borderColor');
+	const fontSize = resolve('typography', 'fontSize');
+	const fontWeight = resolve('typography', 'fontWeight');
+	const lineHeight = resolve('typography', 'lineHeight');
 
 	if (padding) style.padding = padding;
 	if (margin) style.margin = margin;
