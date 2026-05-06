@@ -1,7 +1,7 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "wpframeblocks/social-comment",
+	"name": "frameblocks/social-comment",
 	"version": "0.1.0",
 	"title": "Social Comment",
 	"category": "media",
@@ -9,7 +9,7 @@
 	"description": "Display a single social media comment for Instagram or Facebook.",
 	"keywords": [ "social", "comment", "instagram", "facebook" ],
 	"example": {},
-	"usesContext": [ "wpframeblocks/social-platform", "wpframeblocks/social-theme" ],
+	"usesContext": [ "frameblocks/social-platform", "frameblocks/social-theme" ],
 	"supports": {
 		"html": false
 	},
@@ -59,7 +59,7 @@
 			"default": 0
 		}
 	},
-	"textdomain": "wpframeblocks",
+	"textdomain": "frame-blocks",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css"

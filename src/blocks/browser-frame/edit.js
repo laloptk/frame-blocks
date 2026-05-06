@@ -28,7 +28,7 @@ export default function Edit( { attributes, setAttributes } ) {
 		<>
 			<InspectorControls>
 				<ResponsiveControls
-					panelTitle={__('Spacing', 'wpframeblocks')}
+					panelTitle={__('Spacing', 'frame-blocks')}
 					view={spacingView}
 					handleView={ setSpacingView }
 				>
@@ -40,7 +40,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					/>
 				</ResponsiveControls>
 				<ResponsiveControls
-					panelTitle={__('Border', 'wpframeblocks')}
+					panelTitle={__('Border', 'frame-blocks')}
 					view={borderView}
 					handleView={ setBorderView }
 				>
@@ -52,7 +52,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					/>
 				</ResponsiveControls>
 				<ResponsiveControls
-					panelTitle={__('Typography', 'wpframeblocks')}
+					panelTitle={__('Typography', 'frame-blocks')}
 					view={typographyView}
 					handleView={ setTypographyView }
 				>
@@ -63,9 +63,11 @@ export default function Edit( { attributes, setAttributes } ) {
 						view={typographyView}
 					/>
 				</ResponsiveControls>
-				<PanelBody title={ __( 'Browser Settings', 'wpframeblocks' ) }>
+				<PanelBody title={ __( 'Browser Settings', 'frame-blocks' ) }>
 					<SelectControl
-						label={ __( 'Browser', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Browser', 'frame-blocks' ) }
 						value={ browserVariant }
 						options={ [
 							{ label: 'Safari', value: 'safari' },
@@ -76,15 +78,19 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 					/>
 					<TextControl
-						label={ __( 'URL', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'URL', 'frame-blocks' ) }
 						value={ url }
 						placeholder="example.com"
 						onChange={ ( value ) => setAttributes( { url: value } ) }
 					/>
 					<TextControl
-						label={ __( 'Tab Title', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Tab Title', 'frame-blocks' ) }
 						value={ tabTitle }
-						placeholder={ __( 'My Page', 'wpframeblocks' ) }
+						placeholder={ __( 'My Page', 'frame-blocks' ) }
 						onChange={ ( value ) =>
 							setAttributes( { tabTitle: value } )
 						}
@@ -96,7 +102,7 @@ export default function Edit( { attributes, setAttributes } ) {
 				<BrowserFrameTemplate
 					browserVariant={ browserVariant }
 					url={ url }
-					tabTitle={ tabTitle || __( 'My Page', 'wpframeblocks' ) }
+					tabTitle={ tabTitle || __( 'My Page', 'frame-blocks' ) }
 					renderViewport={ () => (
 						<InnerBlocks renderAppender={ () => <InnerBlocks.ButtonBlockAppender /> } />
 					) }

@@ -1,13 +1,13 @@
-# Prompt: Build `wpframeblocks/code-editor-frame` Block
+# Prompt: Build `frameblocks/code-editor-frame` Block
 
 ```text
 You are a senior WordPress Gutenberg engineer working in a Gutenberg block plugin.
 
-Build block: wpframeblocks/code-editor-frame
+Build block: frameblocks/code-editor-frame
 Goal: 
   * A VS Code editor shell (Dark+ theme) that wraps a single
 InnerBlocks zone — styled with a CSS-grid (4 rows by 4 columns) split that positions a `core/list`
-block in the right sidebar column (spans 4 rows and one column), a `wpframeblocks/code-syntax-highlighter` block in the editor column (spans 3 rows and 3 columns), and a terminal strip which also has a `wpframeblocks/code-syntax-highlighter` — all inside a pixel-perfect, fluid-scaling VS Code
+block in the right sidebar column (spans 4 rows and one column), a `frameblocks/code-syntax-highlighter` block in the editor column (spans 3 rows and 3 columns), and a terminal strip which also has a `frameblocks/code-syntax-highlighter` — all inside a pixel-perfect, fluid-scaling VS Code
 UI.
 
 ---
@@ -41,7 +41,7 @@ Read all three before writing any code.
 - Fonts: `'Segoe UI', system-ui, sans-serif` for UI chrome;
   `'Fira Code', 'Source Code Pro', Consolas, monospace` for code/terminal areas.
 - No `transform: scale()` anywhere.
-- API version 3, static `save.js` (no `render.php`). Text domain: `wpframeblocks`.
+- API version 3, static `save.js` (no `render.php`). Text domain: `frameblocks`.
 - WordPress 6.8+.
 
 ---
@@ -108,7 +108,7 @@ Define in `block.json`:
 | `branch`      | string | `"main"`                   | Shown in statusbar left (git branch)     |
 
 Persist only these five scalar attributes. No tokens/code stored at this level —
-those live inside the inner `wpframeblocks/code-syntax-highlighter` block.
+those live inside the inner `frameblocks/code-syntax-highlighter` block.
 
 ### 2) InnerBlocks — single zone with CSS-grid split
 
@@ -125,10 +125,10 @@ const TEMPLATE = [
       className: 'wp-block-frames-vscode__tree-list',
       placeholder: 'Add files and folders…',
   } ],
-  [ 'wpframeblocks/code-syntax-highlighter', {
+  [ 'frameblocks/code-syntax-highlighter', {
       className: 'wp-block-frames-vscode__code-zone',
   } ],
-  [ 'wpframeblocks/code-syntax-highlighter', {
+  [ 'frameblocks/code-syntax-highlighter', {
       className: 'wp-block-frames-vscode__terminal-zone',
   } ],
 ];
@@ -436,9 +436,9 @@ Use these exact clamp values (derived from `native_px / 900 * 100cqw`):
    - Edit `projectName`, `fileName`, `filePath`, `language`, `branch` in
      Inspector — verify all chrome updates live.
    - Click the list block zone — verify only list blocks can be inserted.
-   - Click the code editor zone — verify only `wpframeblocks/code-syntax-highlighter`
+   - Click the code editor zone — verify only `frameblocks/code-syntax-highlighter`
      can be inserted.
-   - Click the terminal strip zone — verify only `wpframeblocks/code-syntax-highlighter`
+   - Click the terminal strip zone — verify only `frameblocks/code-syntax-highlighter`
      can be inserted; enable `isTerminal` mode and confirm terminal syntax styling.
    - Save post and verify frontend HTML matches editor preview.
    - Verify no validation errors in the block editor after save/reload.

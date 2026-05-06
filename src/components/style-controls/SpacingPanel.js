@@ -20,10 +20,12 @@ export default function SpacingPanel({ group, setAttributes, enabled, view }) {
 		<>
 			{show.padding && (
 				<TextControl
-					label={__('Padding', 'wpframeblocks')}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={__('Padding', 'frame-blocks')}
 					value={padding || ''}
 					placeholder="e.g. 8px 16px"
-					help={__('CSS shorthand: top right bottom left.', 'wpframeblocks')}
+					help={__('CSS shorthand: top right bottom left.', 'frame-blocks')}
 					onChange={(value) =>
 						setAttributes({
 							spacing: {
@@ -39,10 +41,12 @@ export default function SpacingPanel({ group, setAttributes, enabled, view }) {
 			)}
 			{show.margin && (
 				<TextControl
-					label={__('Margin', 'wpframeblocks')}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={__('Margin', 'frame-blocks')}
 					value={margin || ''}
 					placeholder="e.g. 16px 0"
-					help={__('CSS shorthand: top/bottom only.', 'wpframeblocks')}
+					help={__('CSS shorthand: top/bottom only.', 'frame-blocks')}
 					onChange={(value) =>
 						setAttributes({
 							spacing: {

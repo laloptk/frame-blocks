@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- Root plugin files: `wp-frame-blocks.php`, `package.json`, `webpack.config.js`.
+- Root plugin files: `frame-blocks.php`, `package.json`, `webpack.config.js`.
 - Source code lives in `src/`:
   - `src/blocks/<block-name>/`: Gutenberg block implementation (`block.json`, `edit`, `save`, styles).
   - `src/components/`: shared UI/components (including `style-controls`).

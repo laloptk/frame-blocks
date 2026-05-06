@@ -1,7 +1,7 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "wpframeblocks/file-tree",
+	"name": "frameblocks/file-tree",
 	"version": "0.1.0",
 	"title": "File Tree",
 	"category": "text",
@@ -53,7 +53,7 @@
 			}
 		}
 	},
-	"textdomain": "wpframeblocks",
+	"textdomain": "frame-blocks",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css"

@@ -23,7 +23,9 @@ export default function BorderPanel({ group, setAttributes, enabled, view }) {
 		<>
 			{show.radius && (
 				<RangeControl
-					label={__('Border Radius', 'wpframeblocks')}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={__('Border Radius', 'frame-blocks')}
 					value={borderRadius ?? 0}
 					min={0}
 					max={50}
@@ -42,7 +44,9 @@ export default function BorderPanel({ group, setAttributes, enabled, view }) {
 			)}
 			{show.width && (
 				<RangeControl
-					label={__('Border Width', 'wpframeblocks')}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={__('Border Width', 'frame-blocks')}
 					value={borderWidth ?? 0}
 					min={0}
 					max={10}
@@ -61,7 +65,8 @@ export default function BorderPanel({ group, setAttributes, enabled, view }) {
 			)}
 			{show.color && (
 				<BaseControl
-					label={__('Border Color', 'wpframeblocks')}
+					__nextHasNoMarginBottom
+					label={__('Border Color', 'frame-blocks')}
 					id="wpfb-border-color"
 				>
 					<ColorPalette

@@ -22,7 +22,7 @@ import { SocialPostTemplate, FrameIcon } from '@wpfb/frame-components';
 import { buildResponsiveStyles, useDeviceType } from '@wpfb/helpers';
 import './editor.scss';
 
-const ALLOWED_COMMENT_BLOCKS = [ 'wpframeblocks/social-comment' ];
+const ALLOWED_COMMENT_BLOCKS = [ 'frameblocks/social-comment' ];
 
 function SocialImageUpload( {
 	imageUrl,
@@ -46,7 +46,7 @@ function SocialImageUpload( {
 									className="wp-block-frames-social__image-edit"
 									onClick={ open }
 								>
-									{ __( 'Change Image', 'wpframeblocks' ) }
+									{ __( 'Change Image', 'frame-blocks' ) }
 								</button>
 							</>
 						) : (
@@ -55,7 +55,7 @@ function SocialImageUpload( {
 								onClick={ open }
 							>
 								<FrameIcon iconClass="fa-regular fa-image" />
-								<span>{ __( 'Upload Image', 'wpframeblocks' ) }</span>
+								<span>{ __( 'Upload Image', 'frame-blocks' ) }</span>
 							</button>
 						) }
 					</div>
@@ -115,41 +115,45 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		<>
 			<InspectorControls>
 				<ResponsiveControls
-					panelTitle={ __( 'Spacing', 'wpframeblocks' ) }
+					panelTitle={ __( 'Spacing', 'frame-blocks' ) }
 					view={ spacingView }
 					handleView={ setSpacingView }
 				>
 					<SpacingPanel
-						attributes={ spacing }
+						group={ spacing }
 						setAttributes={ setAttributes }
 						enabled={ true }
 						view={ spacingView }
 					/>
 				</ResponsiveControls>
 				<ResponsiveControls
-					panelTitle={ __( 'Border', 'wpframeblocks' ) }
+					panelTitle={ __( 'Border', 'frame-blocks' ) }
 					view={ borderView }
 					handleView={ setBorderView }
 				>
 					<BorderPanel
-						attributes={ border }
+						group={ border }
 						setAttributes={ setAttributes }
 						enabled={ true }
 						view={ borderView }
 					/>
 				</ResponsiveControls>
-				<PanelBody title={ __( 'Post Settings', 'wpframeblocks' ) }>
+				<PanelBody title={ __( 'Post Settings', 'frame-blocks' ) }>
 					<SelectControl
-						label={ __( 'Platform', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Platform', 'frame-blocks' ) }
 						value={ platform }
 						options={ [
-							{ label: __( 'Instagram', 'wpframeblocks' ), value: 'instagram' },
-							{ label: __( 'Facebook', 'wpframeblocks' ), value: 'facebook' },
+							{ label: __( 'Instagram', 'frame-blocks' ), value: 'instagram' },
+							{ label: __( 'Facebook', 'frame-blocks' ), value: 'facebook' },
 						] }
 						onChange={ handlePlatformChange }
 					/>
 					<RangeControl
-						label={ __( 'Width (px)', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Width (px)', 'frame-blocks' ) }
 						value={ maxWidth }
 						min={ 280 }
 						max={ widthMax }
@@ -157,30 +161,35 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						onChange={ ( value ) => setAttributes( { maxWidth: value } ) }
 					/>
 					<SelectControl
-						label={ __( 'Theme', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Theme', 'frame-blocks' ) }
 						value={ variant }
 						options={ [
-							{ label: __( 'Dark', 'wpframeblocks' ), value: 'dark' },
-							{ label: __( 'Light', 'wpframeblocks' ), value: 'light' },
+							{ label: __( 'Dark', 'frame-blocks' ), value: 'dark' },
+							{ label: __( 'Light', 'frame-blocks' ), value: 'light' },
 						] }
 						onChange={ ( value ) => setAttributes( { variant: value } ) }
 					/>
 					<ToggleControl
+						__nextHasNoMarginBottom
 						label={
 							isInstagram
-								? __( 'Verified account', 'wpframeblocks' )
-								: __( 'Verified page', 'wpframeblocks' )
+								? __( 'Verified account', 'frame-blocks' )
+								: __( 'Verified page', 'frame-blocks' )
 						}
 						checked={ isVerified }
 						onChange={ ( value ) => setAttributes( { isVerified: value } ) }
 					/>
 					<ToggleControl
-						label={ __( 'Post liked', 'wpframeblocks' ) }
+						__nextHasNoMarginBottom
+						label={ __( 'Post liked', 'frame-blocks' ) }
 						checked={ isLiked }
 						onChange={ ( value ) => setAttributes( { isLiked: value } ) }
 					/>
 					<BaseControl
-						label={ __( 'Profile photo', 'wpframeblocks' ) }
+						__nextHasNoMarginBottom
+						label={ __( 'Profile photo', 'frame-blocks' ) }
 						id="wpfb-social-avatar-upload"
 					>
 						<div className="wp-block-frames-social__avatar-controls">
@@ -202,8 +211,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 											size="small"
 										>
 											{ avatarUrl
-												? __( 'Change photo', 'wpframeblocks' )
-												: __( 'Upload photo', 'wpframeblocks' ) }
+												? __( 'Change photo', 'frame-blocks' )
+												: __( 'Upload photo', 'frame-blocks' ) }
 										</Button>
 									) }
 								/>
@@ -220,16 +229,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 										} )
 									}
 								>
-									{ __( 'Remove', 'wpframeblocks' ) }
+									{ __( 'Remove', 'frame-blocks' ) }
 								</Button>
 							) }
 						</div>
 					</BaseControl>
 					<TextControl
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 						label={
 							isInstagram
-								? __( 'Username', 'wpframeblocks' )
-								: __( 'Page / Name', 'wpframeblocks' )
+								? __( 'Username', 'frame-blocks' )
+								: __( 'Page / Name', 'frame-blocks' )
 						}
 						value={ username }
 						onChange={ ( value ) => setAttributes( { username: value } ) }
@@ -238,22 +249,27 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					{ isInstagram ? (
 						<>
 							<TextControl
-								label={ __( 'Likes', 'wpframeblocks' ) }
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								label={ __( 'Likes', 'frame-blocks' ) }
 								value={ likesCount }
 								placeholder="1,234 likes"
 								onChange={ ( value ) => setAttributes( { likesCount: value } ) }
 							/>
 							<TextControl
-								label={ __( 'Timestamp', 'wpframeblocks' ) }
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								label={ __( 'Timestamp', 'frame-blocks' ) }
 								value={ timestamp }
 								placeholder="2 days ago"
 								onChange={ ( value ) => setAttributes( { timestamp: value } ) }
 							/>
 							<TextareaControl
-								label={ __( 'Post text', 'wpframeblocks' ) }
+								__nextHasNoMarginBottom
+								label={ __( 'Post text', 'frame-blocks' ) }
 								help={ __(
 									'#hashtags and @mentions are highlighted automatically.',
-									'wpframeblocks'
+									'frame-blocks'
 								) }
 								value={ postText }
 								onChange={ ( value ) => setAttributes( { postText: value } ) }
@@ -262,17 +278,21 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					) : (
 						<>
 							<TextControl
-								label={ __( 'Subtitle', 'wpframeblocks' ) }
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								label={ __( 'Subtitle', 'frame-blocks' ) }
 								value={ pageSubtitle }
 								placeholder="2 hrs - Public"
 								help={ __(
 									'Shown under the page name (time, audience icon, etc.).',
-									'wpframeblocks'
+									'frame-blocks'
 								) }
 								onChange={ ( value ) => setAttributes( { pageSubtitle: value } ) }
 							/>
 							<TextControl
-								label={ __( 'Reactions count', 'wpframeblocks' ) }
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								label={ __( 'Reactions count', 'frame-blocks' ) }
 								value={ reactionsCount }
 								placeholder="1,234"
 								onChange={ ( value ) =>
@@ -280,7 +300,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								}
 							/>
 							<TextControl
-								label={ __( 'Comments count', 'wpframeblocks' ) }
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								label={ __( 'Comments count', 'frame-blocks' ) }
 								value={ commentsCount }
 								placeholder="56 comments"
 								onChange={ ( value ) =>
@@ -288,10 +310,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								}
 							/>
 							<TextareaControl
-								label={ __( 'Post text', 'wpframeblocks' ) }
+								__nextHasNoMarginBottom
+								label={ __( 'Post text', 'frame-blocks' ) }
 								help={ __(
 									'#hashtags and @mentions are highlighted automatically.',
-									'wpframeblocks'
+									'frame-blocks'
 								) }
 								value={ postText }
 								onChange={ ( value ) => setAttributes( { postText: value } ) }
@@ -314,12 +337,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					commentsCount={ commentsCount }
 					isLiked={ isLiked }
 					timestamp={ timestamp }
-					verifiedLabel={ __( 'Verified', 'wpframeblocks' ) }
-					textPlaceholder={ __( 'Write text...', 'wpframeblocks' ) }
+					verifiedLabel={ __( 'Verified', 'frame-blocks' ) }
+					textPlaceholder={ __( 'Write text...', 'frame-blocks' ) }
 					actionLabels={ {
-						like: __( 'Like', 'wpframeblocks' ),
-						comment: __( 'Comment', 'wpframeblocks' ),
-						share: __( 'Share', 'wpframeblocks' ),
+						like: __( 'Like', 'frame-blocks' ),
+						comment: __( 'Comment', 'frame-blocks' ),
+						share: __( 'Share', 'frame-blocks' ),
 					} }
 					renderMedia={ ( instagramMode ) => (
 						<SocialImageUpload
@@ -347,12 +370,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								renderAppender={ false }
 							/>
 							<AppendBlockButton
-								blockName="wpframeblocks/social-comment"
+								blockName="frameblocks/social-comment"
 								blockAttributes={ {} }
 								clientId={ clientId }
 								className="wp-block-frames-social__add-comment"
-								tooltipLabel={ __( 'Add comment', 'wpframeblocks' ) }
-								buttonText={ __( 'Add comment', 'wpframeblocks' ) }
+								tooltipLabel={ __( 'Add comment', 'frame-blocks' ) }
+								buttonText={ __( 'Add comment', 'frame-blocks' ) }
 							/>
 						</>
 					) }

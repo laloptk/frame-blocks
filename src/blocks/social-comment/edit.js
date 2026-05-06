@@ -33,8 +33,8 @@ export default function Edit( { attributes, setAttributes, context } ) {
 		avatarId,
 	} = attributes;
 
-	const contextPlatform = context?.[ 'wpframeblocks/social-platform' ];
-	const contextTheme = context?.[ 'wpframeblocks/social-theme' ];
+	const contextPlatform = context?.[ 'frameblocks/social-platform' ];
+	const contextTheme = context?.[ 'frameblocks/social-theme' ];
 	const hasContextPlatform =
 		contextPlatform === 'instagram' || contextPlatform === 'facebook';
 	const hasContextTheme = contextTheme === 'dark' || contextTheme === 'light';
@@ -71,46 +71,52 @@ export default function Edit( { attributes, setAttributes, context } ) {
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title={ __( 'Comment Settings', 'wpframeblocks' ) }>
+				<PanelBody title={ __( 'Comment Settings', 'frame-blocks' ) }>
 					{ hasContextPlatform && (
 						<ToggleControl
-							label={ __( 'Sync with parent social post', 'wpframeblocks' ) }
+							__nextHasNoMarginBottom
+							label={ __( 'Sync with parent social post', 'frame-blocks' ) }
 							checked={ syncWithContext }
 							onChange={ ( value ) => setAttributes( { syncWithContext: value } ) }
 						/>
 					) }
 					<SelectControl
-						label={ __( 'Platform', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Platform', 'frame-blocks' ) }
 						value={ platform }
 						disabled={ syncWithContext && hasContextPlatform }
 						help={
 							syncWithContext && hasContextPlatform
-								? __( 'Platform is inherited from the parent social post.', 'wpframeblocks' )
+								? __( 'Platform is inherited from the parent social post.', 'frame-blocks' )
 								: undefined
 						}
 						options={ [
-							{ label: __( 'Instagram', 'wpframeblocks' ), value: 'instagram' },
-							{ label: __( 'Facebook', 'wpframeblocks' ), value: 'facebook' },
+							{ label: __( 'Instagram', 'frame-blocks' ), value: 'instagram' },
+							{ label: __( 'Facebook', 'frame-blocks' ), value: 'facebook' },
 						] }
 						onChange={ ( value ) => setAttributes( { platform: value } ) }
 					/>
 					<SelectControl
-						label={ __( 'Theme', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Theme', 'frame-blocks' ) }
 						value={ theme }
 						disabled={ syncWithContext && hasContextTheme }
 						help={
 							syncWithContext && hasContextTheme
-								? __( 'Theme is inherited from the parent social post.', 'wpframeblocks' )
+								? __( 'Theme is inherited from the parent social post.', 'frame-blocks' )
 								: undefined
 						}
 						options={ [
-							{ label: __( 'Light', 'wpframeblocks' ), value: 'light' },
-							{ label: __( 'Dark', 'wpframeblocks' ), value: 'dark' },
+							{ label: __( 'Light', 'frame-blocks' ), value: 'light' },
+							{ label: __( 'Dark', 'frame-blocks' ), value: 'dark' },
 						] }
 						onChange={ ( value ) => setAttributes( { theme: value } ) }
 					/>
 					<BaseControl
-						label={ __( 'Avatar', 'wpframeblocks' ) }
+						__nextHasNoMarginBottom
+						label={ __( 'Avatar', 'frame-blocks' ) }
 						id="wpfb-social-comment-avatar-upload"
 					>
 						<div className="wp-block-frames-social-comment__avatar-controls">
@@ -132,8 +138,8 @@ export default function Edit( { attributes, setAttributes, context } ) {
 											size="small"
 										>
 											{ avatarUrl
-												? __( 'Change avatar', 'wpframeblocks' )
-												: __( 'Upload avatar', 'wpframeblocks' ) }
+												? __( 'Change avatar', 'frame-blocks' )
+												: __( 'Upload avatar', 'frame-blocks' ) }
 										</Button>
 									) }
 								/>
@@ -145,39 +151,48 @@ export default function Edit( { attributes, setAttributes, context } ) {
 									size="small"
 									onClick={ () => setAttributes( { avatarUrl: '', avatarId: 0 } ) }
 								>
-									{ __( 'Remove', 'wpframeblocks' ) }
+									{ __( 'Remove', 'frame-blocks' ) }
 								</Button>
 							) }
 						</div>
 					</BaseControl>
 					<TextControl
-						label={ __( 'Author name', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Author name', 'frame-blocks' ) }
 						value={ authorName }
 						onChange={ ( value ) => setAttributes( { authorName: value } ) }
 					/>
 					<TextareaControl
-						label={ __( 'Comment text', 'wpframeblocks' ) }
+						__nextHasNoMarginBottom
+						label={ __( 'Comment text', 'frame-blocks' ) }
 						value={ commentText }
 						onChange={ ( value ) => setAttributes( { commentText: value } ) }
 					/>
 					<TextControl
-						label={ __( 'Time', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Time', 'frame-blocks' ) }
 						value={ timeText }
 						onChange={ ( value ) => setAttributes( { timeText: value } ) }
 					/>
 					<TextControl
-						label={ __( 'Likes label', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Likes label', 'frame-blocks' ) }
 						value={ likesText }
 						onChange={ ( value ) => setAttributes( { likesText: value } ) }
 					/>
 					<TextControl
-						label={ __( 'Reply label', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Reply label', 'frame-blocks' ) }
 						value={ replyText }
 						onChange={ ( value ) => setAttributes( { replyText: value } ) }
 					/>
 					{ platform === 'facebook' && (
 						<TextControl
-							label={ __( 'Reaction count', 'wpframeblocks' ) }
+							label={ __( 'Reaction count', 'frame-blocks' ) }
 							value={ reactionCount }
 							onChange={ ( value ) => setAttributes( { reactionCount: value } ) }
 						/>

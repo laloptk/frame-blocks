@@ -2,11 +2,11 @@ import { __ } from '@wordpress/i18n';
 import { SelectControl, RangeControl, TextControl } from '@wordpress/components';
 
 const FONT_WEIGHTS = [
-	{ label: __( 'Default', 'wpframeblocks' ), value: '' },
-	{ label: __( 'Normal — 400', 'wpframeblocks' ), value: '400' },
-	{ label: __( 'Medium — 500', 'wpframeblocks' ), value: '500' },
-	{ label: __( 'Semibold — 600', 'wpframeblocks' ), value: '600' },
-	{ label: __( 'Bold — 700', 'wpframeblocks' ), value: '700' },
+	{ label: __( 'Default', 'frame-blocks' ), value: '' },
+	{ label: __( 'Normal — 400', 'frame-blocks' ), value: '400' },
+	{ label: __( 'Medium — 500', 'frame-blocks' ), value: '500' },
+	{ label: __( 'Semibold — 600', 'frame-blocks' ), value: '600' },
+	{ label: __( 'Bold — 700', 'frame-blocks' ), value: '700' },
 ];
 
 /**
@@ -30,10 +30,12 @@ export default function TypographyPanel( { group, setAttributes, enabled, view }
 		<>
 			{ show.fontSize && (
 				<TextControl
-					label={ __( 'Font Size', 'wpframeblocks' ) }
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={ __( 'Font Size', 'frame-blocks' ) }
 					value={ fontSize || '' }
 					placeholder="e.g. 14px, 1rem"
-					help={ __( 'Any valid CSS font-size value.', 'wpframeblocks' ) }
+					help={ __( 'Any valid CSS font-size value.', 'frame-blocks' ) }
 					onChange={ ( value ) =>
 						setAttributes({
 							typography: {
@@ -49,7 +51,9 @@ export default function TypographyPanel( { group, setAttributes, enabled, view }
 			) }
 			{ show.fontWeight && (
 				<SelectControl
-					label={ __( 'Font Weight', 'wpframeblocks' ) }
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={ __( 'Font Weight', 'frame-blocks' ) }
 					value={ fontWeight || '' }
 					options={ FONT_WEIGHTS }
 					onChange={ ( value ) =>
@@ -67,7 +71,9 @@ export default function TypographyPanel( { group, setAttributes, enabled, view }
 			) }
 			{ show.lineHeight && (
 				<RangeControl
-					label={ __( 'Line Height', 'wpframeblocks' ) }
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={ __( 'Line Height', 'frame-blocks' ) }
 					value={ lineHeight || 1.5 }
 					min={ 1 }
 					max={ 3 }

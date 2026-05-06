@@ -24,10 +24,10 @@ const AppendBlockButton = ( {
 			className={ className }
 			icon={ icon }
 			onClick={ addItem }
-			label={ tooltipLabel || __( 'Add item', 'wpframeblocks' ) }
+			label={ tooltipLabel || __( 'Add item', 'frame-blocks' ) }
 			showTooltip
 		>
-			{ buttonText || __( 'Add item', 'wpframeblocks' ) }
+			{ buttonText || __( 'Add item', 'frame-blocks' ) }
 		</Button>
 	);
 };

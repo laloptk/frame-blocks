@@ -1,6 +1,6 @@
-# WP Frame Blocks
+# FrameBlocks
 
-`wp-frame-blocks` is a WordPress plugin that provides Gutenberg blocks for rendering UI frame mockups (browser, code editor, device, social post/comment, and file tree elements).
+`frame-blocks` is a WordPress plugin that provides Gutenberg blocks for rendering UI frame mockups (browser, code editor, device, social post/comment, and file tree elements).
 
 ## Requirements
 

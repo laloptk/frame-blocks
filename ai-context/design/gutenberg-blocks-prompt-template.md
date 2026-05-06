@@ -1,4 +1,4 @@
-﻿# Gutenberg Blocks Prompt Template (Reverse-Engineered)
+# Gutenberg Blocks Prompt Template (Reverse-Engineered)
 
 This file is built by reverse engineering the current `levelupwp/code-window` implementation and walking backwards from the finished block to a prompt that can generate it in one pass (or very close).
 
@@ -7,7 +7,7 @@ This file is built by reverse engineering the current `levelupwp/code-window` im
 ```text
 You are a senior WordPress Gutenberg engineer working in a block theme.
 
-Build a static Gutenberg block named `wpframeblocks/code-syntax-heighlighter` that renders stylized syntax-highlighted code.
+Build a static Gutenberg block named `frameblocks/code-syntax-heighlighter` that renders stylized syntax-highlighted code.
 
 Use this architecture exactly:
 - `blocks/code-syntax-highlighter/block.json`

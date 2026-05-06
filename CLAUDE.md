@@ -17,11 +17,11 @@ After `build`, the `build/blocks-manifest.php` is auto-generated — do not edit
 
 ## Architecture
 
-**WP Frame Blocks** is a WordPress Gutenberg plugin providing UI frame blocks — decorative wrappers and templated social/app frames for content.
+**FrameBlocks** is a WordPress Gutenberg plugin providing UI frame blocks — decorative wrappers and templated social/app frames for content.
 
 ### Plugin entry point
 
-`wp-frame-blocks.php` registers all blocks via `wp_register_block_types_from_metadata_collection()` pointing to `build/blocks` and `build/blocks-manifest.php`. No per-block PHP registration needed.
+`frame-blocks.php` registers all blocks via `wp_register_block_types_from_metadata_collection()` pointing to `build/blocks` and `build/blocks-manifest.php`. No per-block PHP registration needed.
 
 ### Block structure
 
@@ -40,7 +40,7 @@ Webpack auto-discovers blocks: any directory under `src/blocks/` with a `block.j
 - `src/components/` — shared React components, aliased as `@wpfb/components`
 - `src/hooks/` — shared custom hooks, aliased as `@wpfb/hooks`
 - `src/helpers/` — shared utilities, aliased as `@wpfb/helpers`
-- `includes/` — PHP classes (Composer-autoloaded, namespace `wpframeblocks`) — planned, not yet scaffolded
+- `includes/` — PHP classes (Composer-autoloaded, namespace `frameblocks`) — planned, not yet scaffolded
 
 Import aliases are configured in `webpack.config.js` (`resolve.alias`) and `jsconfig.json` (for editor IntelliSense). Each directory exports from its `index.js`.
 
@@ -87,7 +87,7 @@ Pre-built HTML mockups live in `ai-context/design/`. These use BEM and WordPress
 ## Adding a New Block
 
 1. Create `src/blocks/[block-name]/` with `block.json`, `index.js`, `edit.js`, `save.js`, `style.scss`, `editor.scss`.
-2. `block.json` name must follow `wpframeblocks/[block-name]`.
+2. `block.json` name must follow `frameblocks/[block-name]`.
 3. Run `npm run build` — the block is auto-discovered.
 4. No PHP changes needed for registration.
 
@@ -95,4 +95,4 @@ Pre-built HTML mockups live in `ai-context/design/`. These use BEM and WordPress
 
 - Requires WordPress 6.8+, PHP 7.4+
 - All blocks use API version 3, static `save.js` serialization
-- Text domain: `wpframeblocks`
+- Text domain: `frameblocks`

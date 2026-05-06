@@ -112,34 +112,36 @@ export default function Edit({ attributes, setAttributes }) {
 		<>
 			<InspectorControls>
 				<ResponsiveControls
-					panelTitle={ __( 'Spacing', 'wpframeblocks' ) }
+					panelTitle={ __( 'Spacing', 'frame-blocks' ) }
 					view={ spacingView }
 					handleView={ setSpacingView }
 				>
 					<SpacingPanel
-						attributes={ spacing }
+						group={ spacing }
 						setAttributes={ setAttributes }
 						enabled={ true }
 						view={ spacingView }
 					/>
 				</ResponsiveControls>
 				<ResponsiveControls
-					panelTitle={ __( 'Border', 'wpframeblocks' ) }
+					panelTitle={ __( 'Border', 'frame-blocks' ) }
 					view={ borderView }
 					handleView={ setBorderView }
 				>
 					<BorderPanel
-						attributes={ border }
+						group={ border }
 						setAttributes={ setAttributes }
 						enabled={ true }
 						view={ borderView }
 					/>
 				</ResponsiveControls>
 				<PanelBody
-					title={__('Syntax Highlighter', 'wpframeblocks')}
+					title={__('Syntax Highlighter', 'frame-blocks')}
 				>
 					<SelectControl
-						label={__('Language', 'wpframeblocks')}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={__('Language', 'frame-blocks')}
 						value={activeLanguage}
 						options={isTerminal ? TERMINAL_LANGUAGES : LANGUAGES}
 						onChange={(value) => {
@@ -150,7 +152,9 @@ export default function Edit({ attributes, setAttributes }) {
 						}
 					/>
 					<SelectControl
-						label={__('Theme', 'wpframeblocks')}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={__('Theme', 'frame-blocks')}
 						value={theme}
 						options={THEMES}
 						onChange={(value) =>
@@ -158,6 +162,7 @@ export default function Edit({ attributes, setAttributes }) {
 						}
 					/>
 					<ToggleControl
+						__nextHasNoMarginBottom
 						label="Enable terminal syntax highlighting"
 						help={isTerminal ? 'Enabled' : 'Disabled'}
 						checked={isTerminal}
@@ -166,7 +171,9 @@ export default function Edit({ attributes, setAttributes }) {
 					{
 						isTerminal &&
 						<TextControl
-							label={__('Terminal Prompt', 'wpframeblocks')}
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
+							label={__('Terminal Prompt', 'frame-blocks')}
 							value={terminalPrompt}
 							onChange={(value) =>
 								setAttributes({ terminalPrompt: value })
@@ -174,7 +181,8 @@ export default function Edit({ attributes, setAttributes }) {
 						/>
 					}
 					<TextareaControl
-						label={isTerminal ? __('Command', 'wpframeblocks') : __('Code', 'wpframeblocks')}
+						__nextHasNoMarginBottom
+						label={isTerminal ? __('Command', 'frame-blocks') : __('Code', 'frame-blocks')}
 						value={isTerminal ? terminalCommand : code}
 						rows={12}
 						onChange={(value) =>
@@ -192,14 +200,14 @@ export default function Edit({ attributes, setAttributes }) {
 						<p className="wp-block-frames-code__warning">
 							{__(
 								'Could not refresh highlighting. Showing last valid preview.',
-								'wpframeblocks'
+								'frame-blocks'
 							)}
 						</p>
 					)}
 
 					{showLoading && (
 						<p className="wp-block-frames-code__status">
-							{__('Highlighting code…', 'wpframeblocks')}
+							{__('Highlighting code…', 'frame-blocks')}
 						</p>
 					)}
 
@@ -207,7 +215,7 @@ export default function Edit({ attributes, setAttributes }) {
 						<p className="wp-block-frames-code__status wp-block-frames-code__status--error">
 							{__(
 								'Could not highlight code. Check language/theme options.',
-								'wpframeblocks'
+								'frame-blocks'
 							)}
 						</p>
 					)}
@@ -216,7 +224,7 @@ export default function Edit({ attributes, setAttributes }) {
 						<p className="wp-block-frames-code__status">
 							{__(
 								'Add code to preview highlighted output.',
-								'wpframeblocks'
+								'frame-blocks'
 							)}
 						</p>
 					)}

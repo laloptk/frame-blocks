@@ -1,7 +1,7 @@
 {
-	"name": "wp-frame-blocks",
+	"name": "frame-blocks",
 	"version": "0.1.0",
-	"description": "WP Frame Blocks - A collection of frame blocks for WordPress.",
+	"description": "FrameBlocks - A collection of frame blocks for WordPress.",
 	"scripts": {
 		"build": "wp-scripts build && wp-scripts build-blocks-manifest --input build/blocks",
 		"format": "wp-scripts format",

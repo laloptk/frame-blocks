@@ -50,40 +50,46 @@ export default function Edit( { attributes, setAttributes } ) {
 		<>
 			<InspectorControls>
 				<ResponsiveControls
-					panelTitle={ __( 'Typography', 'wpframeblocks' ) }
+					panelTitle={ __( 'Typography', 'frame-blocks' ) }
 					view={ typographyView }
 					handleView={ setTypographyView }
 				>
 					<TypographyPanel
-						attributes={ typography }
+						group={ typography }
 						setAttributes={ setAttributes }
 						enabled={ true }
 						view={ typographyView }
 					/>
 				</ResponsiveControls>
-				<PanelBody title={ __( 'Item Settings', 'wpframeblocks' ) }>
+				<PanelBody title={ __( 'Item Settings', 'frame-blocks' ) }>
 					<TextControl
-						label={ __( 'Label', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Label', 'frame-blocks' ) }
 						value={ label }
 						onChange={ ( value ) => setAttributes( { label: value } ) }
 					/>
 					<SelectControl
-						label={ __( 'Type', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Type', 'frame-blocks' ) }
 						value={ itemType }
 						options={ [
-							{ label: __( 'File', 'wpframeblocks' ), value: 'file' },
-							{ label: __( 'Folder', 'wpframeblocks' ), value: 'folder' },
+							{ label: __( 'File', 'frame-blocks' ), value: 'file' },
+							{ label: __( 'Folder', 'frame-blocks' ), value: 'folder' },
 						] }
 						onChange={ ( value ) => setAttributes( { itemType: value } ) }
 					/>
 					{ itemType === 'file' && (
 						<TextControl
-							label={ __( 'File extension', 'wpframeblocks' ) }
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
+							label={ __( 'File extension', 'frame-blocks' ) }
 							value={ fileExt }
 							placeholder="ts"
 							help={ __(
 								'e.g. ts, tsx, js, jsx, php, css, html',
-								'wpframeblocks'
+								'frame-blocks'
 							) }
 							onChange={ ( value ) =>
 								setAttributes( { fileExt: value } )
@@ -91,21 +97,25 @@ export default function Edit( { attributes, setAttributes } ) {
 						/>
 					) }
 					<RangeControl
-						label={ __( 'Depth', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Depth', 'frame-blocks' ) }
 						value={ depth }
 						min={ 0 }
 						max={ 9 }
 						onChange={ ( value ) => setAttributes( { depth: value } ) }
 					/>
 					<ToggleControl
-						label={ __( 'Active (highlighted row)', 'wpframeblocks' ) }
+						__nextHasNoMarginBottom
+						label={ __( 'Active (highlighted row)', 'frame-blocks' ) }
 						checked={ isActive }
 						onChange={ ( value ) => setAttributes( { isActive: value } ) }
 					/>
 					{ isActive && (
 						<>
 							<BaseControl
-								label={ __( 'Highlight Color', 'wpframeblocks' ) }
+								__nextHasNoMarginBottom
+								label={ __( 'Highlight Color', 'frame-blocks' ) }
 								id="wpfb-active-color"
 							>
 								<ColorPalette
@@ -116,7 +126,8 @@ export default function Edit( { attributes, setAttributes } ) {
 								/>
 							</BaseControl>
 							<BaseControl
-								label={ __( 'Highlight Text Color', 'wpframeblocks' ) }
+								__nextHasNoMarginBottom
+								label={ __( 'Highlight Text Color', 'frame-blocks' ) }
 								id="wpfb-active-text-color"
 							>
 								<ColorPalette
@@ -130,7 +141,8 @@ export default function Edit( { attributes, setAttributes } ) {
 					) }
 					{ itemType === 'folder' && (
 						<ToggleControl
-							label={ __( 'Open (expanded arrow)', 'wpframeblocks' ) }
+							__nextHasNoMarginBottom
+							label={ __( 'Open (expanded arrow)', 'frame-blocks' ) }
 							checked={ isOpen }
 							onChange={ ( value ) =>
 								setAttributes( { isOpen: value } )

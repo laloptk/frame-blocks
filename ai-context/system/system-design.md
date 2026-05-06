@@ -1,10 +1,10 @@
-# WP Frame Blocks — System Design & Requirements
+# FrameBlocks — System Design & Requirements
 
 ## 1. Project Overview
 
 ### 1.1 What we are going to build
 
-- WordPress plugin named **“WP Frame Blocks”**.
+- WordPress plugin named **“FrameBlocks”**.
 - A set of **Gutenberg blocks** that act as **frames** (wrapper markup + styles) for other blocks (InnerBlocks) or for templated content.
 
 ### 1.2 Goals

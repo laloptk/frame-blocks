@@ -22,12 +22,12 @@ export default function ColorPanel( { attributes, setAttributes, enabled } ) {
 
 	return (
 		<PanelBody
-			title={ __( 'Color', 'wpframeblocks' ) }
+			title={ __( 'Color', 'frame-blocks' ) }
 			initialOpen={ false }
 		>
 			{ show.text && (
 				<BaseControl
-					label={ __( 'Text Color', 'wpframeblocks' ) }
+					label={ __( 'Text Color', 'frame-blocks' ) }
 					id="wpfb-text-color"
 				>
 					<ColorPalette
@@ -40,7 +40,7 @@ export default function ColorPanel( { attributes, setAttributes, enabled } ) {
 			) }
 			{ show.background && (
 				<BaseControl
-					label={ __( 'Background Color', 'wpframeblocks' ) }
+					label={ __( 'Background Color', 'frame-blocks' ) }
 					id="wpfb-bg-color"
 				>
 					<ColorPalette

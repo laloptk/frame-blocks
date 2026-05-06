@@ -21,14 +21,16 @@ export default function Edit( { attributes, setAttributes } ) {
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title={ __( 'Device Settings', 'wpframeblocks' ) }>
+				<PanelBody title={ __( 'Device Settings', 'frame-blocks' ) }>
 					<SelectControl
-						label={ __( 'Device Type', 'wpframeblocks' ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Device Type', 'frame-blocks' ) }
 						value={ normalizedDeviceType }
 						options={ [
-							{ label: __( 'Phone', 'wpframeblocks' ), value: 'phone' },
-							{ label: __( 'Tablet', 'wpframeblocks' ), value: 'tablet' },
-							{ label: __( 'Laptop', 'wpframeblocks' ), value: 'laptop' },
+							{ label: __( 'Phone', 'frame-blocks' ), value: 'phone' },
+							{ label: __( 'Tablet', 'frame-blocks' ), value: 'tablet' },
+							{ label: __( 'Laptop', 'frame-blocks' ), value: 'laptop' },
 						] }
 						onChange={ ( value ) => setAttributes( { deviceType: value } ) }
 					/>

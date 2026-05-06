@@ -7,15 +7,15 @@ import { buildResponsiveStyles, useDeviceType } from '@wpfb/helpers';
 
 import './editor.scss';
 
-const ALLOWED_BLOCKS = ['wpframeblocks/file-tree-item'];
+const ALLOWED_BLOCKS = ['frameblocks/file-tree-item'];
 
 const DEFAULT_TEMPLATE = [
-	['wpframeblocks/file-tree-item', { label: 'my-project', itemType: 'folder', depth: 0, isOpen: true }],
-	['wpframeblocks/file-tree-item', { label: 'src', itemType: 'folder', depth: 1, isOpen: true }],
-	['wpframeblocks/file-tree-item', { label: 'components', itemType: 'folder', depth: 2, isOpen: false }],
-	['wpframeblocks/file-tree-item', { label: 'index', itemType: 'file', depth: 2, fileExt: 'ts' }],
-	['wpframeblocks/file-tree-item', { label: 'App', itemType: 'file', depth: 2, fileExt: 'tsx', isActive: true }],
-	['wpframeblocks/file-tree-item', { label: 'package', itemType: 'file', depth: 1, fileExt: 'json' }],
+	['frameblocks/file-tree-item', { label: 'my-project', itemType: 'folder', depth: 0, isOpen: true }],
+	['frameblocks/file-tree-item', { label: 'src', itemType: 'folder', depth: 1, isOpen: true }],
+	['frameblocks/file-tree-item', { label: 'components', itemType: 'folder', depth: 2, isOpen: false }],
+	['frameblocks/file-tree-item', { label: 'index', itemType: 'file', depth: 2, fileExt: 'ts' }],
+	['frameblocks/file-tree-item', { label: 'App', itemType: 'file', depth: 2, fileExt: 'tsx', isActive: true }],
+	['frameblocks/file-tree-item', { label: 'package', itemType: 'file', depth: 1, fileExt: 'json' }],
 ];
 
 export default function Edit({ attributes, setAttributes, clientId }) {
@@ -46,36 +46,36 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					enabled={ { text: true, background: true } }
 				/>
 				<ResponsiveControls
-					panelTitle={ __( 'Typography', 'wpframeblocks' ) }
+					panelTitle={ __( 'Typography', 'frame-blocks' ) }
 					view={ typographyView }
 					handleView={ setTypographyView }
 				>
 					<TypographyPanel
-						attributes={ typography }
+						group={ typography }
 						setAttributes={ setAttributes }
 						enabled={ true }
 						view={ typographyView }
 					/>
 				</ResponsiveControls>
 				<ResponsiveControls
-					panelTitle={ __( 'Spacing', 'wpframeblocks' ) }
+					panelTitle={ __( 'Spacing', 'frame-blocks' ) }
 					view={ spacingView }
 					handleView={ setSpacingView }
 				>
 					<SpacingPanel
-						attributes={ spacing }
+						group={ spacing }
 						setAttributes={ setAttributes }
 						enabled={ true }
 						view={ spacingView }
 					/>
 				</ResponsiveControls>
 				<ResponsiveControls
-					panelTitle={ __( 'Border', 'wpframeblocks' ) }
+					panelTitle={ __( 'Border', 'frame-blocks' ) }
 					view={ borderView }
 					handleView={ setBorderView }
 				>
 					<BorderPanel
-						attributes={ border }
+						group={ border }
 						setAttributes={ setAttributes }
 						enabled={ true }
 						view={ borderView }
@@ -92,7 +92,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				/>
 
 				<AppendBlockButton
-					blockName="wpframeblocks/file-tree-item"
+					blockName="frameblocks/file-tree-item"
 					blockAttributes={ {
 						label: 'new-tree-item',
 						itemType: 'file',
@@ -100,8 +100,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					} }
 					clientId={ clientId }
 					className="wp-block-frames-file-tree__add-item wp-block-frames-file-tree__add-item--new-tree-item"
-					tooltipLabel={ __( 'Add tree item', 'wpframeblocks' ) }
-					buttonText={ __( 'Add item', 'wpframeblocks' ) }
+					tooltipLabel={ __( 'Add tree item', 'frame-blocks' ) }
+					buttonText={ __( 'Add item', 'frame-blocks' ) }
 				/>
 			</div>
 		</>
