@@ -3,4 +3,9 @@
 	&__screen {
 		overflow: visible;
 	}
+
+	&--laptop &__screen {
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
 }
