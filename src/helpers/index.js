@@ -218,7 +218,7 @@ export function getFileIcon(fileName) {
 
 /**
  * Returns Font Awesome and BEM modifier classes for a file-tree-item.
- * Used by wpframeblocks/file-tree-item edit.js and save.js.
+ * Used by frameblocks/file-tree-item edit.js and save.js.
  *
  * @param {string}  itemType  'file' | 'folder'
  * @param {string}  fileExt   Extension string, e.g. 'ts', '.tsx', ''
@@ -257,6 +257,26 @@ export function getTreeItemIcon(itemType, fileExt, isOpen) {
 		default:
 			return { iconFA: 'fa-regular fa-file-code', iconMod: '' };
 	}
+}
+
+/**
+ * Builds BEM modifier class strings from the visibility attribute.
+ * Only generates hide-classes for explicitly `false` values (null = inherit from parent).
+ *
+ * @param {Object} visibility  Responsive visibility attribute { desktop, tablet, mobile }.
+ * @returns {string} Space-separated class string, or empty string if nothing to hide.
+ */
+export function buildVisibilityClasses(visibility) {
+	if (!visibility) return '';
+	const { desktop = {}, tablet = {}, mobile = {} } = visibility;
+	return [
+		desktop.showSidebar === false && 'has-no-sidebar',
+		desktop.showTerminal === false && 'has-no-terminal',
+		tablet.showSidebar === false && 'has-tablet-no-sidebar',
+		tablet.showTerminal === false && 'has-tablet-no-terminal',
+		mobile.showSidebar === false && 'has-mobile-no-sidebar',
+		mobile.showTerminal === false && 'has-mobile-no-terminal',
+	].filter(Boolean).join(' ');
 }
 
 /**

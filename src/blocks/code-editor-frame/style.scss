@@ -573,6 +573,53 @@
 	padding: var(--frames-space-3) 0 var(--frames-space-3) var(--frames-space-3);
 }
 
+// ── Visibility modifier rules ──────────────────────────────────────────────
+// Descendant selectors (no >) are required so rules work through the
+// display:contents InnerBlocks wrappers in the editor. Grid-template-areas
+// is intentionally left unchanged: removing the "sidebar" named area causes
+// the file-tree (grid-area:sidebar) to auto-place and corrupt the layout.
+// Setting grid-template-columns: 0 1fr collapses the sidebar column while
+// keeping all named areas intact; display:none removes the items from the
+// grid so the 1fr column expands to full width automatically.
+@mixin vscode-hide-sidebar {
+	.wp-block-frames-vscode__inner-zones {
+		grid-template-columns: 0 1fr;
+	}
+
+	.wp-block-frames-file-tree {
+		display: none;
+	}
+}
+
+// Hiding the terminal removes both the PROBLEMS/OUTPUT/TERMINAL tab strip
+// (panel-head) and the terminal syntax-highlighter zone. The auto rows for
+// those two grid areas collapse to 0, and the 1fr code row expands.
+@mixin vscode-hide-terminal {
+	.wp-block-frames-vscode__panel-head {
+		display: none;
+	}
+
+	.wp-block-frames-vscode__terminal-zone {
+		display: none;
+	}
+}
+
+// Desktop (always applied)
+.wp-block-frames-vscode.has-no-sidebar  { @include vscode-hide-sidebar; }
+.wp-block-frames-vscode.has-no-terminal { @include vscode-hide-terminal; }
+
+// Tablet (viewport ≤ 781px)
+@media (max-width: 781px) {
+	.wp-block-frames-vscode.has-tablet-no-sidebar  { @include vscode-hide-sidebar; }
+	.wp-block-frames-vscode.has-tablet-no-terminal { @include vscode-hide-terminal; }
+}
+
+// Mobile (viewport ≤ 600px)
+@media (max-width: 600px) {
+	.wp-block-frames-vscode.has-mobile-no-sidebar  { @include vscode-hide-sidebar; }
+	.wp-block-frames-vscode.has-mobile-no-terminal { @include vscode-hide-terminal; }
+}
+
 // ── Collapse: narrow container query ───────────────────────────────────────
 // When block width < 480px: collapse activity bar + sidebar (left column → 0)
 @container (max-width: 480px) {
