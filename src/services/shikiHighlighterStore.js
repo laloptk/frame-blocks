@@ -1,101 +1,79 @@
-/**
- * Shiki Highlighter Store
- *
- * Redux-like module-level store for caching the Shiki singleton highlighter
- * and deduplicating concurrent language/theme loads across multiple block
- * instances on the same page.
- */
-import { getSingletonHighlighter, codeToTokens } from 'shiki';
+import { createHighlighterCore, createOnigurumaEngine } from 'shiki/core';
+
+// Static language imports — only these files will be bundled by webpack.
+// To add a language: import it here, add it to LANGS, and add it to
+// LANGUAGES or TERMINAL_LANGUAGES in code-syntax-highlighter/edit.js.
+import langPHP from '@shikijs/langs/php';
+import langJavaScript from '@shikijs/langs/javascript';
+import langTypeScript from '@shikijs/langs/typescript';
+import langCSS from '@shikijs/langs/css';
+import langHTML from '@shikijs/langs/html';
+import langJSON from '@shikijs/langs/json';
+import langBash from '@shikijs/langs/bash';
+import langPython from '@shikijs/langs/python';
+import langRust from '@shikijs/langs/rust';
+import langGo from '@shikijs/langs/go';
+import langSQL from '@shikijs/langs/sql';
+import langYAML from '@shikijs/langs/yaml';
+import langMarkdown from '@shikijs/langs/markdown';
+import langShellSession from '@shikijs/langs/shellsession';
+import langPowerShell from '@shikijs/langs/powershell';
+import langFish from '@shikijs/langs/fish';
+import langGitCommit from '@shikijs/langs/git-commit';
+import langGitRebase from '@shikijs/langs/git-rebase';
+
+// Static theme imports — only these files will be bundled by webpack.
+// To add a theme: import it here, add it to THEMES, and add it to
+// the THEMES array in code-syntax-highlighter/edit.js.
+import themeGithubDark from '@shikijs/themes/github-dark';
+import themeGithubLight from '@shikijs/themes/github-light';
+import themeDracula from '@shikijs/themes/dracula';
+import themeOneDarkPro from '@shikijs/themes/one-dark-pro';
+import themeNord from '@shikijs/themes/nord';
+import themeCatppuccinMocha from '@shikijs/themes/catppuccin-mocha';
+import themeSolarizedDark from '@shikijs/themes/solarized-dark';
+import themeSolarizedLight from '@shikijs/themes/solarized-light';
+import themeDarkPlus from '@shikijs/themes/dark-plus';
+import themeMinLight from '@shikijs/themes/min-light';
+import themeNightOwl from '@shikijs/themes/night-owl';
+import themeRed from '@shikijs/themes/red';
 
 const DEFAULT_LANGUAGE = 'php';
 const DEFAULT_THEME = 'github-dark';
 
-/**
- * Module-level state — shared across every block instance.
- * @type {{
- *   highlighterPromise: Promise|null,
- *   loadedLanguages: Set<string>,
- *   loadedThemes: Set<string>,
- *   pendingLoads: Map<string, Promise>
- * }}
- */
-const state = {
-	highlighterPromise: null,
-	loadedLanguages: new Set(),
-	loadedThemes: new Set(),
-	pendingLoads: new Map(), // key: "language::theme"
-};
+const LANGS = [
+	langPHP, langJavaScript, langTypeScript, langCSS, langHTML, langJSON,
+	langBash, langPython, langRust, langGo, langSQL, langYAML, langMarkdown,
+	langShellSession, langPowerShell, langFish, langGitCommit, langGitRebase,
+];
 
-/**
- * Returns (or creates) the singleton highlighter promise.
- * Clears the cached promise on failure so callers can retry.
- */
-function getOrInitHighlighter() {
-	if ( ! state.highlighterPromise ) {
-		state.highlighterPromise = getSingletonHighlighter( {
-			langs: [ DEFAULT_LANGUAGE ],
-			themes: [ DEFAULT_THEME ],
-		} )
-			.then( ( hl ) => {
-				state.loadedLanguages.add( DEFAULT_LANGUAGE );
-				state.loadedThemes.add( DEFAULT_THEME );
-				return hl;
-			} )
-			.catch( ( err ) => {
-				// Clear so the next call can retry.
-				state.highlighterPromise = null;
-				throw err;
-			} );
+const THEMES = [
+	themeGithubDark, themeGithubLight, themeDracula, themeOneDarkPro, themeNord,
+	themeCatppuccinMocha, themeSolarizedDark, themeSolarizedLight, themeDarkPlus,
+	themeMinLight, themeNightOwl, themeRed,
+];
+
+let highlighterPromise = null;
+
+function getHighlighter() {
+	if ( ! highlighterPromise ) {
+		highlighterPromise = createHighlighterCore( {
+			langs: LANGS,
+			themes: THEMES,
+			engine: createOnigurumaEngine( () => import( 'shiki/wasm' ) ),
+		} ).catch( ( err ) => {
+			highlighterPromise = null;
+			throw err;
+		} );
 	}
-	return state.highlighterPromise;
-}
-
-/**
- * Ensures the requested language and theme are loaded on the highlighter.
- * Deduplicates concurrent loads with the pendingLoads map.
- *
- * @param {object} highlighter - Shiki highlighter instance.
- * @param {string} language
- * @param {string} theme
- */
-async function ensureLoaded( highlighter, language, theme ) {
-	const langLoaded = state.loadedLanguages.has( language );
-	const themeLoaded = state.loadedThemes.has( theme );
-
-	if ( langLoaded && themeLoaded ) {
-		return;
-	}
-
-	const key = `${ language }::${ theme }`;
-
-	if ( state.pendingLoads.has( key ) ) {
-		return state.pendingLoads.get( key );
-	}
-
-	const promise = Promise.all( [
-		langLoaded
-			? Promise.resolve()
-			: highlighter
-					.loadLanguage( language )
-					.then( () => state.loadedLanguages.add( language ) ),
-		themeLoaded
-			? Promise.resolve()
-			: highlighter
-					.loadTheme( theme )
-					.then( () => state.loadedThemes.add( theme ) ),
-	] ).finally( () => {
-		state.pendingLoads.delete( key );
-	} );
-
-	state.pendingLoads.set( key, promise );
-	return promise;
+	return highlighterPromise;
 }
 
 /**
  * Tokenizes code using the cached singleton highlighter.
  *
- * Falls back to the standalone shiki `codeToTokens` if the singleton path
- * fails. Invalid language/theme values are resolved to defaults.
+ * All supported languages and themes are pre-loaded at initialization,
+ * so no per-request loading is needed.
  *
  * @param {string} code
  * @param {string} language
@@ -105,17 +83,6 @@ async function ensureLoaded( highlighter, language, theme ) {
 export async function tokenizeWithCachedHighlighter( code, language, theme ) {
 	const lang = language || DEFAULT_LANGUAGE;
 	const thm = theme || DEFAULT_THEME;
-
-	try {
-		const highlighter = await getOrInitHighlighter();
-		await ensureLoaded( highlighter, lang, thm );
-		return highlighter.codeToTokens( code, { lang, theme: thm } );
-	} catch ( primaryErr ) {
-		// Fallback: standalone codeToTokens (creates its own internal highlighter).
-		try {
-			return await codeToTokens( code, { lang, theme: thm } );
-		} catch ( fallbackErr ) {
-			throw fallbackErr;
-		}
-	}
+	const highlighter = await getHighlighter();
+	return highlighter.codeToTokens( code, { lang, theme: thm } );
 }
