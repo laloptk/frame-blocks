@@ -1,4 +1,5 @@
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
+const CopyPlugin = require( 'copy-webpack-plugin' );
 const path = require( 'path' );
 const fs = require( 'fs' );
 
@@ -46,6 +47,21 @@ function getBlockEntries() {
 
 module.exports = {
 	...defaultConfig,
+	plugins: [
+		...( defaultConfig.plugins ?? [] ),
+		new CopyPlugin( {
+			patterns: [
+				{
+					from: 'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
+					to: 'fa/css/all.min.css',
+				},
+				{
+					from: 'node_modules/@fortawesome/fontawesome-free/webfonts',
+					to: 'fa/webfonts',
+				},
+			],
+		} ),
+	],
 	entry: {
 		...getBlockEntries(),
 		'styles/global': path.resolve( __dirname, 'src/styles/index.js' ),

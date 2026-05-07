@@ -1,11 +1,13 @@
 <?php
 /**
  * Plugin Name:       FrameBlocks
- * Description:       A collection of frame blocks for WordPress.
+ * Plugin URI:        https://github.com/laloptk/frame-blocks
+ * Description:       Decorative UI frame blocks for the Gutenberg editor — browser windows, device mockups, VS Code shell, social posts, and more.
  * Version:           0.1.0
  * Requires at least: 6.8
  * Requires PHP:      7.4
- * Author:            The WordPress Contributors
+ * Author:            Eduardo Sanchez Hidalgo
+ * Author URI:        https://eduardos-portfolio.netlify.app/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       frame-blocks
@@ -41,7 +43,7 @@ function frameblocks_enqueue_block_assets() {
 	// Font Awesome 6.5 — required by blocks that use fa-* icon classes.
 	wp_enqueue_style(
 		'frameblocks-font-awesome',
-		'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css',
+		plugin_dir_url( __FILE__ ) . 'build/fa/css/all.min.css',
 		[],
 		'6.5.0'
 	);
