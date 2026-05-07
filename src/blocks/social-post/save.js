@@ -1,5 +1,6 @@
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 import { SocialPostTemplate, FrameIcon } from '@wpfb/frame-components';
+import { buildResponsiveStyles } from '@wpfb/helpers';
 
 export default function save( { attributes } ) {
 	const {
@@ -18,6 +19,8 @@ export default function save( { attributes } ) {
 		isVerified,
 		isLiked,
 		maxWidth,
+		spacing,
+		border,
 	} = attributes;
 
 	const isInstagram = platform === 'instagram';
@@ -29,6 +32,7 @@ export default function save( { attributes } ) {
 		className: blockClassName,
 		style: {
 			maxWidth: `${ maxWidth }px`,
+			...buildResponsiveStyles( { spacing, border }, 'Desktop' ),
 		},
 	} );
 

@@ -1,6 +1,6 @@
 import { useBlockProps } from '@wordpress/block-editor';
-
 import { CodeHighlighter } from '@wpfb/components';
+import { buildResponsiveStyles } from '@wpfb/helpers';
 
 /**
  * Serialize the block to static HTML.
@@ -10,12 +10,13 @@ import { CodeHighlighter } from '@wpfb/components';
  * to inline-colored spans — no JS or Shiki needed on the frontend.
  */
 export default function save( { attributes } ) {
-	const { tokens, bg, isTerminal } = attributes;
+	const { tokens, bg, isTerminal, spacing, border } = attributes;
 
 	const blockProps = useBlockProps.save( {
 		className: `wp-block-frames-code ${ isTerminal ? 'is-terminal-code' : '' }`,
 		style: {
 			'--frames-code-bg': bg,
+			...buildResponsiveStyles( { spacing, border }, 'Desktop' ),
 		},
 	} );
 
