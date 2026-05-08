@@ -54,10 +54,9 @@ The Code Syntax Highlighter block uses [Shiki](https://shiki.style/) and support
 
 == Screenshots ==
 
-1. Browser Frame block — Chrome and Safari variants.
-2. VS Code Editor Frame with File Tree and Syntax Highlighter inside.
-3. Device Frame — phone, tablet, and laptop variants.
-4. Social Post block — Instagram and Facebook mockups.
+1. Device Frame block — laptop, tablet, and phone variants with nested content.
+2. Code Editor Frame with File Tree sidebar and Syntax Highlighter, including a terminal panel.
+3. Social Post blocks — Instagram and Facebook mockups with editable content.
 
 == Changelog ==
 
